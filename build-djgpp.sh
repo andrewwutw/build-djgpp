@@ -3,12 +3,17 @@
 # target directory
 DJGPP_PREFIX=/usr/local/djgpp
 
+#enabled languages
+#ENABLE_LANGUAGES=c,c++,f95,objc,obj-c++
+ENABLE_LANGUAGES=c,c++
+
 # source tarball versions
 BINUTILS_VERSION=224
 DJCRX_VERSION=204
 SED_VERSION=4.2.2
 
 GCC_VERSION=4.8.2
+GCC_VERSION_SHORT=4.82
 GMP_VERSION=5.1.2
 MPFR_VERSION=3.1.2
 MPC_VERSION=1.0.1
@@ -51,6 +56,7 @@ for ARCHIVE in $ARCHIVE_LIST; do
     curl $ARCHIVE -L -o $FILE || exit 1
   )
 done
+cd ..
 
 # make build dir
 rm -rf build || exit 1
@@ -58,10 +64,10 @@ mkdir -p build || exit 1
 cd build
 
 # build binutils
-mkdir bnu224s
-cd bnu224s
-unzip ../../download/bnu224s.zip || exit 1
-cd gnu/bnutl-2.24/
+mkdir bnu${BINUTILS_VERSION}s
+cd bnu${BINUTILS_VERSION}s
+unzip ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
+cd gnu/bnutl-* || exit
 
 sh ./configure \
            --prefix=$DJGPP_PREFIX \
@@ -83,9 +89,9 @@ cd ../../..
 # binutils done
 
 # prepare djcrx
-mkdir djcrx204
-cd djcrx204
-unzip ../../download/djcrx204.zip || exit 1
+mkdir djcrx${DJCRX_VERSION}
+cd djcrx${DJCRX_VERSION}
+unzip ../../download/djcrx${DJCRX_VERSION}.zip || exit 1
 
 cd src/stub
 gcc -O2 stubify.c -o stubify || exit 1
@@ -103,47 +109,47 @@ cd ..
 # djcrx done
 
 # build gcc
-tar -xjvf ../download/djcross-gcc-4.8.2.tar.bz2 || exit 1
-cd djcross-gcc-4.8.2/
+tar -xjvf ../download/djcross-gcc-${GCC_VERSION}.tar.bz2 || exit 1
+cd djcross-gcc-${GCC_VERSION}/
 
 BUILDDIR=`pwd`
 
-tar xjf ../../download/autoconf-2.64.tar.bz2 || exit 1
-cd autoconf-2.64/
+tar xjf ../../download/autoconf-${AUTOCONF_VERSION}.tar.bz2 || exit 1
+cd autoconf-${AUTOCONF_VERSION}/
 ./configure --prefix=$BUILDDIR/tmpinst || exit 1
 make all install || exit 1
 
 cd $BUILDDIR
-tar xjf ../../download/automake-1.11.1.tar.bz2 || exit 1
-cd automake-1.11.1/
+tar xjf ../../download/automake-${AUTOMAKE_VERSION}.tar.bz2 || exit 1
+cd automake-${AUTOMAKE_VERSION}/
 ./configure --prefix=$BUILDDIR/tmpinst || exit 1
 make all install || exit 1
 
 # OSX built-in sed has problem, build GNU sed.
 cd $BUILDDIR
-tar xjf ../../download/sed-4.2.2.tar.bz2 || exit 1
-cd sed-4.2.2/
+tar xjf ../../download/sed-${SED_VERSION}.tar.bz2 || exit 1
+cd sed-${SED_VERSION}/
 ./configure --prefix=$BUILDDIR/tmpinst || exit 1
 make all install || exit 1
 
 cd $BUILDDIR
-tar xjf ../../download/gmp-5.1.2.tar.bz2 || exit 1
-tar xjf ../../download/mpfr-3.1.2.tar.bz2 || exit 1
-tar xzf ../../download/mpc-1.0.1.tar.gz || exit 1
+tar xjf ../../download/gmp-${GMP_VERSION}.tar.bz2 || exit 1
+tar xjf ../../download/mpfr-${MPFR_VERSION}.tar.bz2 || exit 1
+tar xzf ../../download/mpc-${MPC_VERSION}.tar.gz || exit 1
 
-PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source ../../download/gcc-4.8.2.tar.bz2
+PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source ../../download/gcc-${GCC_VERSION}.tar.bz2
 
 # copy stubify programs
 cp $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/stubify $BUILDDIR/tmpinst/bin
 
-cd $BUILDDIR/gmp-5.1.2/
+cd $BUILDDIR/gmp-${GMP_VERSION}/
 ./configure --prefix=$BUILDDIR/tmpinst --enable-static --disable-shared || exit 1
 make all || exit 1
 make check || exit 1
 make install || exit 1
 
-cd $BUILDDIR/mpfr-3.1.2/
-./configure --prefix=$BUILDDIR/tmpinst --with-gmp-build=$BUILDDIR/gmp-5.1.2 --enable-static --disable-shared || exit 1
+cd $BUILDDIR/mpfr-${MPFR_VERSION}/
+./configure --prefix=$BUILDDIR/tmpinst --with-gmp-build=$BUILDDIR/gmp-${GMP_VERSION} --enable-static --disable-shared || exit 1
 make all || exit 1
 make check || exit 1
 make install || exit 1
@@ -160,7 +166,7 @@ mkdir djcross
 cd djcross
 
 PATH=$BUILDDIR//tmpinst/bin:$PATH \
-../gnu/gcc-4.82/configure \
+../gnu/gcc-${GCC_VERSION_SHORT}/configure \
                                  --target=i586-pc-msdosdjgpp \
                                  --program-prefix=i586-pc-msdosdjgpp- \
                                  --prefix=$DJGPP_PREFIX \
@@ -171,7 +177,7 @@ PATH=$BUILDDIR//tmpinst/bin:$PATH \
                                  --with-mpfr=$BUILDDIR/tmpinst \
                                  --with-mpc=$BUILDDIR/tmpinst \
                                  --enable-version-specific-runtime-libs \
-                                 --enable-languages=c,c++,f95,objc,obj-c++ \
+                                 --enable-languages=${ENABLE_LANGUAGES} \
                                  || exit 1
 
 make j=4 PATH=$BUILDDIR/tmpinst/bin:$PATH || exit 1
