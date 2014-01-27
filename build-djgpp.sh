@@ -56,8 +56,8 @@ cd ../..
 sudo mkdir -p $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include || exit 1
 sudo cp -rp include/* $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include/ || exit 1
 sudo cp -rp lib $DJGPP_PREFIX/i586-pc-msdosdjgpp/ || exit 1
-sudo cp -p src/stub/stubify $DJGPP_PREFIX/bin/ || exit 1
-sudo cp -p src/stub/stubedit $DJGPP_PREFIX/bin/ || exit 1
+sudo cp -p src/stub/stubify $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
+sudo cp -p src/stub/stubedit $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
 
 cd ..
 # djcrx done
@@ -94,7 +94,7 @@ tar xzf ../../download/mpc-1.0.1.tar.gz || exit 1
 PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source ../../download/gcc-4.8.2.tar.bz2
 
 # copy stubify programs
-cp $DJGPP_PREFIX/bin/stubify $BUILDDIR/tmpinst/bin
+cp $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/stubify $BUILDDIR/tmpinst/bin
 
 cd $BUILDDIR/gmp-5.1.2/
 ./configure --prefix=$BUILDDIR/tmpinst --enable-static --disable-shared || exit 1
