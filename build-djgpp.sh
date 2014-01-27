@@ -3,6 +3,31 @@
 # target directory
 DJGPP_PREFIX=/usr/local/djgpp
 
+# source tarball versions
+BINUTILS_VERSION=224
+DJCRX_VERSION=204
+SED_VERSION=4.2.2
+
+GCC_VERSION=4.8.2
+GMP_VERSION=5.1.2
+MPFR_VERSION=3.1.2
+MPC_VERSION=1.0.1
+AUTOCONF_VERSION=2.64
+AUTOMAKE_VERSION=1.11.1
+
+# tarball location
+BINUTILS_ARCHIVE="ftp://ftp.delorie.com/pub/djgpp/current/v2gnu/bnu${BINUTILS_VERSION}s.zip"
+DJCRX_ARCHIVE="http://ap1.pp.fi/djgpp/djdev/djgpp/20130326/djcrx${DJCRX_VERSION}.zip"
+SED_ARCHIVE="http://ftp.gnu.org/gnu/sed/sed-${SED_VERSION}.tar.bz2"
+
+DJCROSS_GCC_ARCHIVE="ftp://ftp.delorie.com/pub/djgpp/rpms/djcross-gcc-${GCC_VERSION}/djcross-gcc-${GCC_VERSION}.tar.bz2"
+GCC_ARCHIVE="http://ftpmirror.gnu.org/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.bz2"
+GMP_ARCHIVE="http://ftpmirror.gnu.org/gmp/gmp-${GMP_VERSION}.tar.bz2"
+MPFR_ARCHIVE="http://ftpmirror.gnu.org/mpfr/mpfr-${MPFR_VERSION}.tar.bz2"
+MPC_ARCHIVE="http://ftpmirror.gnu.org/mpc/mpc-${MPC_VERSION}.tar.gz"
+AUTOCONF_ARCHIVE="http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.bz2"
+AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.bz2"
+
 # check gcc is installed
 if ! which gcc > /dev/null; then
   echo "gcc not installed"
@@ -10,11 +35,26 @@ if ! which gcc > /dev/null; then
 fi
 
 # download source files
-mkdir -p download
+ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $SED_ARCHIVE
+              $DJCROSS_GCC_ARCHIVE $GCC_ARCHIVE
+              $GMP_ARCHIVE $MPFR_ARCHIVE $MPC_ARCHIVE
+              $AUTOCONF_ARCHIVE $AUTOMAKE_ARCHIVE"
+
+echo "Download source files..."
+mkdir -p download || exit 1
+cd download
+
+for ARCHIVE in $ARCHIVE_LIST; do
+  FILE=`basename $ARCHIVE`
+  test -f $FILE || (
+    echo "Download $ARCHIVE ..."
+    curl $ARCHIVE -L -o $FILE || exit 1
+  )
+done
 
 # make build dir
-rm -rf build
-mkdir -p build
+rm -rf build || exit 1
+mkdir -p build || exit 1
 cd build
 
 # build binutils
