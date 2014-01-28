@@ -68,6 +68,7 @@ mkdir -p build || exit 1
 cd build
 
 # build binutils
+echo "Building bintuils"
 mkdir bnu${BINUTILS_VERSION}s
 cd bnu${BINUTILS_VERSION}s
 unzip ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
@@ -93,6 +94,7 @@ cd ../../..
 # binutils done
 
 # prepare djcrx
+echo "Prepare djcrx"
 mkdir djcrx${DJCRX_VERSION}
 cd djcrx${DJCRX_VERSION}
 unzip ../../download/djcrx${DJCRX_VERSION}.zip || exit 1
@@ -118,11 +120,14 @@ cd djcross-gcc-${GCC_VERSION}/
 
 BUILDDIR=`pwd`
 
+echo "Building autoconf"
+cd $BUILDDIR
 tar xjf ../../download/autoconf-${AUTOCONF_VERSION}.tar.bz2 || exit 1
 cd autoconf-${AUTOCONF_VERSION}/
 ./configure --prefix=$BUILDDIR/tmpinst || exit 1
 make all install || exit 1
 
+echo "Building automake"
 cd $BUILDDIR
 tar xjf ../../download/automake-${AUTOMAKE_VERSION}.tar.bz2 || exit 1
 cd automake-${AUTOMAKE_VERSION}/
@@ -130,6 +135,7 @@ cd automake-${AUTOMAKE_VERSION}/
 make all install || exit 1
 
 # OSX built-in sed has problem, build GNU sed.
+echo "Building sed"
 cd $BUILDDIR
 tar xjf ../../download/sed-${SED_VERSION}.tar.bz2 || exit 1
 cd sed-${SED_VERSION}/
@@ -141,29 +147,34 @@ tar xjf ../../download/gmp-${GMP_VERSION}.tar.bz2 || exit 1
 tar xjf ../../download/mpfr-${MPFR_VERSION}.tar.bz2 || exit 1
 tar xzf ../../download/mpc-${MPC_VERSION}.tar.gz || exit 1
 
+echo "Running unpack-gcc.sh"
 PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source ../../download/gcc-${GCC_VERSION}.tar.bz2
 
 # copy stubify programs
 cp $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/stubify $BUILDDIR/tmpinst/bin
 
+echo "Building gmp"
 cd $BUILDDIR/gmp-${GMP_VERSION}/
 ./configure --prefix=$BUILDDIR/tmpinst --enable-static --disable-shared || exit 1
 make all || exit 1
 make check || exit 1
 make install || exit 1
 
+echo "Building mpfr"
 cd $BUILDDIR/mpfr-${MPFR_VERSION}/
 ./configure --prefix=$BUILDDIR/tmpinst --with-gmp-build=$BUILDDIR/gmp-${GMP_VERSION} --enable-static --disable-shared || exit 1
 make all || exit 1
 make check || exit 1
 make install || exit 1
 
+echo "Building mpc"
 cd $BUILDDIR/mpc-1.0.1/
 ./configure --prefix=$BUILDDIR/tmpinst --with-gmp=$BUILDDIR/tmpinst --with-mpfr=$BUILDDIR/tmpinst --enable-static --disable-shared || exit 1
 make all || exit 1
 make check || exit 1
 make install || exit 1
 
+echo "Building gcc"
 cd $BUILDDIR/
 
 mkdir djcross
@@ -190,4 +201,9 @@ sudo make install || exit 1
 
 # gcc done
 
-echo "build-djgpp.sh done"
+echo "Use DJGPP to build a test program."
+cd $BUILDDIR
+cd ..
+$DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-c++ ../hello.cpp -o hello || exit 1
+
+echo "build-djgpp.sh done."
