@@ -149,9 +149,9 @@ echo "Building automake"
 cd $BUILDDIR
 tar xjf ../../download/automake-${AUTOMAKE_VERSION}.tar.bz2 || exit 1
 cd automake-${AUTOMAKE_VERSION}/
-PATH=$BUILDDIR//tmpinst/bin:$PATH \
+PATH="$BUILDDIR//tmpinst/bin:$PATH" \
 ./configure --prefix=$BUILDDIR/tmpinst || exit 1
-PATH=$BUILDDIR//tmpinst/bin:$PATH \
+PATH="$BUILDDIR//tmpinst/bin:$PATH" \
 make all install || exit 1
 
 # OSX built-in sed has problem, build GNU sed.
@@ -200,7 +200,7 @@ cd $BUILDDIR/
 mkdir djcross
 cd djcross
 
-PATH=$BUILDDIR//tmpinst/bin:$PATH \
+PATH="$BUILDDIR//tmpinst/bin:$PATH" \
 ../gnu/gcc-${GCC_VERSION_SHORT}/configure \
                                  --target=i586-pc-msdosdjgpp \
                                  --program-prefix=i586-pc-msdosdjgpp- \
@@ -215,7 +215,7 @@ PATH=$BUILDDIR//tmpinst/bin:$PATH \
                                  --enable-languages=${ENABLE_LANGUAGES} \
                                  || exit 1
 
-make j=4 PATH=$BUILDDIR/tmpinst/bin:$PATH || exit 1
+make j=4 "PATH=$BUILDDIR/tmpinst/bin:$PATH" || exit 1
 
 make install || exit 1
 
