@@ -33,11 +33,15 @@ MPC_ARCHIVE="http://ftpmirror.gnu.org/mpc/mpc-${MPC_VERSION}.tar.gz"
 AUTOCONF_ARCHIVE="http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.bz2"
 AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.bz2"
 
-# check gcc is installed
-if ! which gcc > /dev/null; then
-  echo "gcc not installed"
-  exit 1
-fi
+# check required programs
+REQ_PROG_LIST="gcc curl unzip"
+
+for REQ_PROG in $REQ_PROG_LIST; do
+  if ! which $REQ_PROG > /dev/null; then
+    echo "$REQ_PROG not installed"
+    exit 1
+  fi
+done
 
 # download source files
 ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $SED_ARCHIVE
