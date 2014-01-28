@@ -62,7 +62,22 @@ for ARCHIVE in $ARCHIVE_LIST; do
 done
 cd ..
 
+# create target directory, check writable.
+echo "Make prefix directory : $DJGPP_PREFIX"
+mkdir -p $DJGPP_PREFIX
+
+if ! [ -d $DJGPP_PREFIX ]; then
+  echo "Unable to create prefix directory"
+  exit 1
+fi
+
+if ! [ -w $DJGPP_PREFIX ]; then
+  echo "prefix directory is not writable."
+  exit 1
+fi
+
 # make build dir
+echo "Make build dir"
 rm -rf build || exit 1
 mkdir -p build || exit 1
 cd build
@@ -91,7 +106,7 @@ make || exit 1
 
 make check || exit 1
 
-sudo make install || exit 1
+make install || exit 1
 
 cd ../../..
 # binutils done
@@ -108,11 +123,11 @@ gcc -O2 stubedit.c -o stubedit || exit 1
 
 cd ../..
 
-sudo mkdir -p $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include || exit 1
-sudo cp -rp include/* $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include/ || exit 1
-sudo cp -rp lib $DJGPP_PREFIX/i586-pc-msdosdjgpp/ || exit 1
-sudo cp -p src/stub/stubify $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
-sudo cp -p src/stub/stubedit $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
+mkdir -p $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include || exit 1
+cp -rp include/* $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include/ || exit 1
+cp -rp lib $DJGPP_PREFIX/i586-pc-msdosdjgpp/ || exit 1
+cp -p src/stub/stubify $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
+cp -p src/stub/stubedit $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
 
 cd ..
 # djcrx done
@@ -202,7 +217,7 @@ PATH=$BUILDDIR//tmpinst/bin:$PATH \
 
 make j=4 PATH=$BUILDDIR/tmpinst/bin:$PATH || exit 1
 
-sudo make install || exit 1
+make install || exit 1
 
 # gcc done
 
