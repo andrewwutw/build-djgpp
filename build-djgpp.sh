@@ -74,6 +74,9 @@ cd bnu${BINUTILS_VERSION}s
 unzip ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
 cd gnu/bnutl-* || exit
 
+# install-sh exec permission is not set, fix it.
+chmod a+x install-sh
+
 sh ./configure \
            --prefix=$DJGPP_PREFIX \
            --target=i586-pc-msdosdjgpp \
