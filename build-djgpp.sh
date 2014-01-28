@@ -93,7 +93,7 @@ make check || exit 1
 
 sudo make install || exit 1
 
-cd ../../.. 
+cd ../../..
 # binutils done
 
 # prepare djcrx
@@ -134,7 +134,9 @@ echo "Building automake"
 cd $BUILDDIR
 tar xjf ../../download/automake-${AUTOMAKE_VERSION}.tar.bz2 || exit 1
 cd automake-${AUTOMAKE_VERSION}/
+PATH=$BUILDDIR//tmpinst/bin:$PATH \
 ./configure --prefix=$BUILDDIR/tmpinst || exit 1
+PATH=$BUILDDIR//tmpinst/bin:$PATH \
 make all install || exit 1
 
 # OSX built-in sed has problem, build GNU sed.
