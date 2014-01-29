@@ -89,8 +89,11 @@ cd bnu${BINUTILS_VERSION}s
 unzip ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
 cd gnu/bnutl-* || exit
 
-# install-sh exec permission is not set, fix it.
-chmod a+x install-sh
+# exec permission of some files are not set, fix it.
+for EXEC_FILE in install-sh missing; do
+  echo "chmod a+x $EXEC_FILE"
+  chmod a+x $EXEC_FILE || exit 1
+done
 
 sh ./configure \
            --prefix=$DJGPP_PREFIX \
