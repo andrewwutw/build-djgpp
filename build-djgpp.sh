@@ -34,7 +34,7 @@ AUTOCONF_ARCHIVE="http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.t
 AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.bz2"
 
 # check required programs
-REQ_PROG_LIST="gcc curl unzip bison flex make makeinfo g++"
+REQ_PROG_LIST="g++ gcc curl unzip bison flex make makeinfo"
 
 for REQ_PROG in $REQ_PROG_LIST; do
   if ! which $REQ_PROG > /dev/null; then
