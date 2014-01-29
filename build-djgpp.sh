@@ -55,10 +55,10 @@ cd download
 
 for ARCHIVE in $ARCHIVE_LIST; do
   FILE=`basename $ARCHIVE`
-  test -f $FILE || (
+  if ! [ -f $FILE ]; then
     echo "Download $ARCHIVE ..."
     curl $ARCHIVE -L -o $FILE || exit 1
-  )
+  fi
 done
 cd ..
 
