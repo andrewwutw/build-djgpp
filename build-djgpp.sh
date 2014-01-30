@@ -43,6 +43,13 @@ for REQ_PROG in $REQ_PROG_LIST; do
   fi
 done
 
+# check zlib is installed
+if ! gcc test-zlib.c -o test-zlib -lz; then
+  echo "zlib not installed"
+  exit 1
+fi
+rm test-zlib
+
 # download source files
 ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $SED_ARCHIVE
               $DJCROSS_GCC_ARCHIVE $GCC_ARCHIVE
