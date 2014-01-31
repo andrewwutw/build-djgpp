@@ -1,4 +1,4 @@
-# build-djgpp : Build DJGPP cross compiler on OSX/Linux/CYGWIN
+# build-djgpp : Build DJGPP cross compiler on OSX/Linux/Cygwin
 
 
 Based on spec file from DJGPP source rpm files.
@@ -21,4 +21,4 @@ Tested on :
 * 10.8.5
 * Debian 7 (32bit)
 * Ubuntu 12 (64bit)
-* CYGWIN (32bit Windows XP)
+* Cygwin (32bit Windows XP)
