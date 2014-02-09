@@ -7,31 +7,10 @@ DJGPP_PREFIX=/usr/local/djgpp
 #ENABLE_LANGUAGES=c,c++,f95,objc,obj-c++
 ENABLE_LANGUAGES=c,c++
 
-# source tarball versions
-BINUTILS_VERSION=224
-DJCRX_VERSION=204
-SED_VERSION=4.2.2
+OPT_FILE=gcc482.opt
 
-GCC_VERSION=4.8.2
-GCC_VERSION_SHORT=4.82
-GMP_VERSION=5.1.2
-MPFR_VERSION=3.1.2
-MPC_VERSION=1.0.1
-AUTOCONF_VERSION=2.64
-AUTOMAKE_VERSION=1.11.1
-
-# tarball location
-BINUTILS_ARCHIVE="ftp://ftp.delorie.com/pub/djgpp/current/v2gnu/bnu${BINUTILS_VERSION}s.zip"
-DJCRX_ARCHIVE="http://ap1.pp.fi/djgpp/djdev/djgpp/20130326/djcrx${DJCRX_VERSION}.zip"
-SED_ARCHIVE="http://ftp.gnu.org/gnu/sed/sed-${SED_VERSION}.tar.bz2"
-
-DJCROSS_GCC_ARCHIVE="ftp://ftp.delorie.com/pub/djgpp/rpms/djcross-gcc-${GCC_VERSION}/djcross-gcc-${GCC_VERSION}.tar.bz2"
-GCC_ARCHIVE="http://ftpmirror.gnu.org/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.bz2"
-GMP_ARCHIVE="http://ftpmirror.gnu.org/gmp/gmp-${GMP_VERSION}.tar.bz2"
-MPFR_ARCHIVE="http://ftpmirror.gnu.org/mpfr/mpfr-${MPFR_VERSION}.tar.bz2"
-MPC_ARCHIVE="http://ftpmirror.gnu.org/mpc/mpc-${MPC_VERSION}.tar.gz"
-AUTOCONF_ARCHIVE="http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.bz2"
-AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.bz2"
+echo "Load setting file from $OPT_FILE"
+source $OPT_FILE
 
 # check required programs
 REQ_PROG_LIST="g++ gcc curl unzip bison flex make makeinfo patch"
