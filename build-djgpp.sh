@@ -198,7 +198,7 @@ make check || exit 1
 make install || exit 1
 
 echo "Building mpc"
-cd $BUILDDIR/mpc-1.0.1/
+cd $BUILDDIR/mpc-${MPC_VERSION}/
 ./configure --prefix=$BUILDDIR/tmpinst --with-gmp=$BUILDDIR/tmpinst --with-mpfr=$BUILDDIR/tmpinst --enable-static --disable-shared || exit 1
 make all || exit 1
 make check || exit 1
