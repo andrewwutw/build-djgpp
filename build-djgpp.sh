@@ -31,7 +31,7 @@ fi
 rm test-zlib
 
 # download source files
-ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $SED_ARCHIVE
+ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $DJLSR_ARCHIVE $SED_ARCHIVE
               $DJCROSS_GCC_ARCHIVE $GCC_ARCHIVE
               $GMP_ARCHIVE $MPFR_ARCHIVE $MPC_ARCHIVE
               $AUTOCONF_ARCHIVE $AUTOMAKE_ARCHIVE"
@@ -124,6 +124,18 @@ cp -p src/stub/stubedit $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
 
 cd ..
 # djcrx done
+
+# build djlsr (for exe2coff)
+echo "Prepare djlsr"
+mkdir djlsr${DJLSR_VERSION}
+cd djlsr${DJLSR_VERSION}
+unzip ../../download/djlsr${DJLSR_VERSION}.zip || exit 1
+cd src/stub
+patch exe2coff.c ../../../../patch-exe2coff.txt || exit 1
+gcc -o exe2coff exe2coff.c || exit 1
+cp -p exe2coff $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
+cd ../../..
+# djlsr done
 
 # build gcc
 tar -xjvf ../download/djcross-gcc-${GCC_VERSION}.tar.bz2 || exit 1

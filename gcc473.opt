@@ -1,6 +1,7 @@
 # source tarball versions
 BINUTILS_VERSION=224
 DJCRX_VERSION=203
+DJLSR_VERSION=203
 SED_VERSION=4.2.2
 
 GCC_VERSION=4.7.3
@@ -14,6 +15,7 @@ AUTOMAKE_VERSION=1.11.1
 # tarball location
 BINUTILS_ARCHIVE="ftp://ftp.delorie.com/pub/djgpp/current/v2gnu/bnu${BINUTILS_VERSION}s.zip"
 DJCRX_ARCHIVE="ftp://ftp.delorie.com/pub/djgpp/current/v2/djcrx${DJCRX_VERSION}.zip"
+DJLSR_ARCHIVE="ftp://ftp.delorie.com/pub/djgpp/current/v2/djlsr${DJLSR_VERSION}.zip"
 SED_ARCHIVE="http://ftp.gnu.org/gnu/sed/sed-${SED_VERSION}.tar.bz2"
 
 DJCROSS_GCC_ARCHIVE="ftp://ftp.delorie.com/pub/djgpp/rpms/djcross-gcc-${GCC_VERSION}/djcross-gcc-${GCC_VERSION}.tar.bz2"

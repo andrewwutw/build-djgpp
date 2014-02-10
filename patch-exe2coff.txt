@@ -1,0 +1,4 @@
+8d7
+< #include <io.h>
+10a10
+> #define O_BINARY 0
