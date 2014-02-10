@@ -1,14 +1,15 @@
 #! /bin/sh
 
 # target directory
-DJGPP_PREFIX=/usr/local/djgpp
+DJGPP_PREFIX=${DJGPP_PREFIX-/usr/local/djgpp}
 
-#enabled languages
-#ENABLE_LANGUAGES=c,c++,f95,objc,obj-c++
-ENABLE_LANGUAGES=c,c++
+# enabled languages
+#ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++,f95,objc,obj-c++}
+ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
 
-OPT_FILE=gcc482.opt
+OPT_FILE=${OPT_FILE-gcc482.opt}
 
+# loading tarball version and location from option file
 echo "Load setting file from $OPT_FILE"
 source $OPT_FILE
 
