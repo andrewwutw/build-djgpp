@@ -156,6 +156,11 @@ tar xjf ../../download/gmp-${GMP_VERSION}.tar.bz2 || exit 1
 tar xjf ../../download/mpfr-${MPFR_VERSION}.tar.bz2 || exit 1
 tar xzf ../../download/mpc-${MPC_VERSION}.tar.gz || exit 1
 
+if [ ! -z $PATCH_UNPACK_GCC_SH ]; then
+  echo "Patch unpack-gcc.sh"
+  patch unpack-gcc.sh ../../${PATCH_UNPACK_GCC_SH} || exit 1
+fi
+
 echo "Running unpack-gcc.sh"
 PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source ../../download/gcc-${GCC_VERSION}.tar.bz2
 
