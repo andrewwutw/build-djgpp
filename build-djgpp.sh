@@ -94,7 +94,10 @@ make configure-bfd || exit 1
 make -C bfd stmp-lcoff-h || exit 1
 make || exit 1
 
-make check || exit 1
+if [ ! -z $MAKE_CHECK ]; then
+  echo "Run make check"
+  make check || exit 1
+fi
 
 make install || exit 1
 
@@ -172,21 +175,30 @@ echo "Building gmp"
 cd $BUILDDIR/gmp-${GMP_VERSION}/
 ./configure --prefix=$BUILDDIR/tmpinst --enable-static --disable-shared || exit 1
 make all || exit 1
-make check || exit 1
+if [ ! -z $MAKE_CHECK ]; then
+  echo "Run make check"
+  make check || exit 1
+fi
 make install || exit 1
 
 echo "Building mpfr"
 cd $BUILDDIR/mpfr-${MPFR_VERSION}/
 ./configure --prefix=$BUILDDIR/tmpinst --with-gmp-build=$BUILDDIR/gmp-${GMP_VERSION} --enable-static --disable-shared || exit 1
 make all || exit 1
-make check || exit 1
+if [ ! -z $MAKE_CHECK ]; then
+  echo "Run make check"
+  make check || exit 1
+fi
 make install || exit 1
 
 echo "Building mpc"
 cd $BUILDDIR/mpc-${MPC_VERSION}/
 ./configure --prefix=$BUILDDIR/tmpinst --with-gmp=$BUILDDIR/tmpinst --with-mpfr=$BUILDDIR/tmpinst --enable-static --disable-shared || exit 1
 make all || exit 1
-make check || exit 1
+if [ ! -z $MAKE_CHECK ]; then
+  echo "Run make check"
+  make check || exit 1
+fi
 make install || exit 1
 
 echo "Building gcc"
