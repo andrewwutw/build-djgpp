@@ -44,7 +44,10 @@ for ARCHIVE in $ARCHIVE_LIST; do
   FILE=`basename $ARCHIVE`
   if ! [ -f $FILE ]; then
     echo "Download $ARCHIVE ..."
-    curl $ARCHIVE -L -o $FILE || exit 1
+    if ! curl $ARCHIVE -L -o $FILE; then
+      rm $FILE
+      exit 1
+    fi
   fi
 done
 cd ..
