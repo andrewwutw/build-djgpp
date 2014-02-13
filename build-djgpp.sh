@@ -17,7 +17,19 @@ echo "Load setting file from $OPT_FILE"
 source $OPT_FILE
 
 # check required programs
-REQ_PROG_LIST="g++ gcc curl unzip bison flex make makeinfo patch"
+REQ_PROG_LIST="g++ gcc unzip bison flex make makeinfo patch"
+
+# MinGW doesn't have curl, so we use wget.
+if uname|grep "^MINGW32" > /dev/null; then
+  USE_WGET=1
+fi
+
+# use curl or wget?
+if [ ! -z $USE_WGET ]; then
+  REQ_PROG_LIST+=" wget"
+else
+  REQ_PROG_LIST+=" curl"
+fi
 
 for REQ_PROG in $REQ_PROG_LIST; do
   if ! which $REQ_PROG > /dev/null; then
@@ -58,9 +70,16 @@ for ARCHIVE in $ARCHIVE_LIST; do
   FILE=`basename $ARCHIVE`
   if ! [ -f $FILE ]; then
     echo "Download $ARCHIVE ..."
-    if ! curl $ARCHIVE -L -o $FILE; then
-      rm $FILE
-      exit 1
+    if [ ! -z $USE_WGET ]; then
+      if ! wget -U firefox $ARCHIVE; then
+        rm $FILE
+        exit 1
+      fi
+    else
+      if ! curl $ARCHIVE -L -o $FILE; then
+        rm $FILE
+        exit 1
+      fi
     fi
   fi
 done
