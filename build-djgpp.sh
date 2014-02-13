@@ -23,6 +23,16 @@ for REQ_PROG in $REQ_PROG_LIST; do
   fi
 done
 
+# check GNU sed is installed or not.
+# It is for OSX, which doesn't ship with GNU sed.
+if ! sed --version 2>/dev/null |grep "GNU sed" > /dev/null ;then
+  echo GNU sed is not installed, need to download.
+  SED_VERSION=4.2.2
+  SED_ARCHIVE="http://ftp.gnu.org/gnu/sed/sed-${SED_VERSION}.tar.bz2"
+else
+  SED_ARCHIVE=""
+fi
+
 # check zlib is installed
 if ! gcc test-zlib.c -o test-zlib -lz; then
   echo "zlib not installed"
@@ -162,13 +172,15 @@ PATH="$BUILDDIR//tmpinst/bin:$PATH" \
 PATH="$BUILDDIR//tmpinst/bin:$PATH" \
 make all install || exit 1
 
-# OSX built-in sed has problem, build GNU sed.
-echo "Building sed"
-cd $BUILDDIR
-tar xjf ../../download/sed-${SED_VERSION}.tar.bz2 || exit 1
-cd sed-${SED_VERSION}/
-./configure --prefix=$BUILDDIR/tmpinst || exit 1
-make all install || exit 1
+# build GNU sed if needed.
+if [ ! -z $SED_VERSION ]; then
+  echo "Building sed"
+  cd $BUILDDIR
+  tar xjf ../../download/sed-${SED_VERSION}.tar.bz2 || exit 1
+  cd sed-${SED_VERSION}/
+  ./configure --prefix=$BUILDDIR/tmpinst || exit 1
+  make all install || exit 1
+fi
 
 cd $BUILDDIR
 tar xjf ../../download/gmp-${GMP_VERSION}.tar.bz2 || exit 1
