@@ -38,7 +38,8 @@ if ! gcc test-zlib.c -o test-zlib -lz; then
   echo "zlib not installed"
   exit 1
 fi
-rm test-zlib
+rm test-zlib 2>/dev/null
+rm test-zlib.exe 2>/dev/null
 
 # download source files
 ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $DJLSR_ARCHIVE $SED_ARCHIVE
