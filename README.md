@@ -1,4 +1,4 @@
-## build-djgpp : Build DJGPP cross compiler and binutils on MinGW/Cygwin/OSX/Linux
+## build-djgpp : Build DJGPP cross compiler and binutils on Windows (MinGW/Cygwin), Mac OSX and Linux
 
 ### Prebuilt binary files
 
@@ -29,7 +29,7 @@ sudo apt-get update
 sudo apt-get install unzip curl zlib1g-dev
 ```
 
-Ubuntu 12
+Ubuntu :
 
 ```
 sudo apt-get update
