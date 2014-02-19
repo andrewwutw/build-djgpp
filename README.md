@@ -2,7 +2,7 @@
 
 ### Prebuilt binary files
 
-If you don't want build DJGPP by yourself, you can download prebuilt DJGPP binary files for OSX/MinGW from GitHub Release page.
+If you don't want build DJGPP by yourself, you can download prebuilt DJGPP binary files for MinGW, OSX and Linux from GitHub Release page.
 
 ### Requirement
 
@@ -33,7 +33,7 @@ Ubuntu :
 
 ```
 sudo apt-get update
-sudo apt-get install gcc curl unzip bison flex make texinfo g++
+sudo apt-get install gcc curl unzip bison flex make texinfo g++ zlib1g-dev
 ```
 
 Fedora :
