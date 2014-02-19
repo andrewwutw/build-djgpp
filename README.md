@@ -46,19 +46,19 @@ mingw-get install msys-wget
 
 ### Configuration
 
-Default install location is /usr/local/djgpp. You can change install location by setting environment variable DJGPP_PREFIX :
+Default install location is /usr/local/djgpp. You can change install location by setting environment variable *DJGPP_PREFIX* :
 
 ```
 DJGPP_PREFIX=/usr/local/my-djgpp
 ```
 
-Default support language is C and C++. You can change supported languages by setting environment variable ENABLE_LANGUAGES :
+Default support language is C and C++. You can change supported languages by setting environment variable *ENABLE_LANGUAGES* :
 
 ```
 ENABLE_LANGUAGES=c,c++,f95,objc,obj-c++
 ```
 
-Default installed gcc compiler version 4.8.2, You can change to gcc 4.7.3 by set environment variable OPT_FILE to ./gcc473.opt :
+Default installed gcc compiler version is 4.8.2, You can change to gcc 4.7.3 by set environment variable *OPT_FILE* to ./gcc473.opt :
 
 ```
 OPT_FILE=./gcc473.opt
@@ -76,7 +76,7 @@ It will download all necessary files, build DJGPP compiler and binutils, and ins
 
 ### Use DJGPP compiler
 
-There are 2 method to run the compiler (BASE_DIR is your DJGPP install location).
+There are 2 methods to run the compiler (*BASE_DIR* is your DJGPP install location).
 
 * Use compiler full name :
 
@@ -84,7 +84,7 @@ There are 2 method to run the compiler (BASE_DIR is your DJGPP install location)
 	BASE_DIR/bin/i586-pc-msdosdjgpp-g++ hello.cpp
 	```
 
-* Use compiler short name, you have to change environment variables.
+* Or, use compiler short name, you have to change environment variables :
 
 	```
 	PATH=BASE_DIR/i586-pc-msdosdjgpp/bin/:$PATH
@@ -102,6 +102,6 @@ There are 2 method to run the compiler (BASE_DIR is your DJGPP install location)
 
 ### Thanks
 
-This script is based on spec file from DJGPP source rpm files :
+This script is based on spec file from DJGPP source rpm files by Andris Pavenis :
 
 <http://ap1.pp.fi/djgpp/index.html>
