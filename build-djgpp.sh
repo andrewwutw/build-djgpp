@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 # target directory
 DJGPP_PREFIX=${DJGPP_PREFIX-/usr/local/djgpp}
