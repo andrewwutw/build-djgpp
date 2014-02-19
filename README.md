@@ -22,7 +22,14 @@ Before running this script, you need to install these programs first :
 
 Depend on your system, install procedure maybe different.
 
-In Debian, you can install these programs by :
+On Debian, you can install these programs by :
+
+```
+sudo apt-get update
+sudo apt-get install unzip curl zlib1g-dev
+```
+
+Ubuntu 12
 
 ```
 sudo apt-get update
