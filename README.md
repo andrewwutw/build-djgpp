@@ -94,8 +94,16 @@ There are 2 methods to run the compiler (*BASE_DIR* is your DJGPP install locati
 * Or, use compiler short name, you have to change environment variables :
 
 	```
-	PATH=BASE_DIR/i586-pc-msdosdjgpp/bin/:$PATH
-	GCC_EXEC_PREFIX=BASE_DIR/lib/gcc/
+	export PATH=BASE_DIR/i586-pc-msdosdjgpp/bin/:$PATH
+	export GCC_EXEC_PREFIX=BASE_DIR/lib/gcc/
+	g++ hello.cpp
+	```
+
+	If you are using Windows command prompt :
+
+	```
+	PATH=BASE_DIR/i586-pc-msdosdjgpp/bin;%PATH%
+	set GCC_EXEC_PREFIX=BASE_DIR/lib/gcc/
 	g++ hello.cpp
 	```
 
