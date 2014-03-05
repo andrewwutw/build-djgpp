@@ -1,4 +1,6 @@
-## build-djgpp : Build DJGPP cross compiler and binutils on Windows (MinGW/Cygwin), Mac OSX and Linux
+## Build DJGPP cross compiler on Windows, Mac OSX and Linux
+
+build-djgpp : Build DJGPP cross compiler and binutils on Windows (MinGW/Cygwin), Mac OSX and Linux
 
 ### Prebuilt binary files
 
