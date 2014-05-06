@@ -216,7 +216,7 @@ if [ ! -z $PATCH_UNPACK_GCC_SH ]; then
 fi
 
 echo "Running unpack-gcc.sh"
-PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source ../../download/gcc-${GCC_VERSION}.tar.bz2
+PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source ../../download/gcc-${GCC_VERSION}.tar.bz2 || exit 1
 
 # copy stubify programs
 cp $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/stubify $BUILDDIR/tmpinst/bin
