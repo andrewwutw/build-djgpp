@@ -298,7 +298,7 @@ PATH="$BUILDDIR//tmpinst/bin:$PATH" \
 
 make j=4 "PATH=$BUILDDIR/tmpinst/bin:$PATH" || exit 1
 
-make install || exit 1
+make install-strip || exit 1
 
 echo "Copy long name executables to short name."
 (
