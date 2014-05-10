@@ -67,18 +67,24 @@ Default support language is C and C++. You can change supported languages by set
 ENABLE_LANGUAGES=c,c++,f95,objc,obj-c++
 ```
 
-Default installed gcc compiler version is 4.8.2, You can change to gcc 4.7.3 by set environment variable *OPT_FILE* to ./gcc473.opt :
-
-```
-OPT_FILE=./gcc473.opt
-```
-
 ### Build DJGPP compiler
 
-Just run:
+To build DJGPP for gcc 4.9.0, just run:
 
 ```
-./build-djgpp.sh
+./build-djgpp-490.sh
+```
+
+Or, to build DJGPP for gcc 4.8.2 or gcc 4.7.3, run:
+
+```
+./build-djgpp-482.sh
+```
+
+or
+
+```
+./build-djgpp-473.sh
 ```
 
 It will download all necessary files, build DJGPP compiler and binutils, and install it.
