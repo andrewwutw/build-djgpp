@@ -1,4 +1,4 @@
-## Build DJGPP cross compiler on Windows, Mac OSX and Linux
+## Building DJGPP cross compiler on Windows, Mac OSX and Linux
 
 build-djgpp : Build DJGPP cross compiler and binutils on Windows (MinGW/Cygwin), Mac OSX and Linux
 
@@ -22,7 +22,7 @@ Before running this script, you need to install these programs first :
 * curl (for Cygwin/OSX/Linux)
 * wget (for MinGW)
 
-Depend on your system, install procedure maybe different.
+Depending on your system, installation procedure maybe different.
 
 On Debian, you can install these programs by :
 
@@ -48,9 +48,7 @@ MinGW :
 
 ```
 mingw-get update
-mingw-get install msys-unzip
-mingw-get install libz-dev
-mingw-get install msys-wget
+mingw-get install msys-unzip libz-dev msys-wget msys-bison msys-flex msys-patch
 ```
 
 ### Configuration
@@ -67,7 +65,7 @@ Default support language is C and C++. You can change supported languages by set
 ENABLE_LANGUAGES=c,c++,f95,objc,obj-c++
 ```
 
-### Build DJGPP compiler
+### Building DJGPP compiler
 
 To build DJGPP for gcc 4.9.0, just run:
 
@@ -89,7 +87,7 @@ or
 
 It will download all necessary files, build DJGPP compiler and binutils, and install it.
 
-### Use DJGPP compiler
+### Using DJGPP compiler
 
 There are 2 methods to run the compiler (*BASE_DIR* is your DJGPP install location).
 
@@ -121,7 +119,7 @@ There are 2 methods to run the compiler (*BASE_DIR* is your DJGPP install locati
 * Debian 7 (32bit)
 * Ubuntu 12 (64bit)
 * Cygwin (32bit Windows XP)
-* MinGW (32bit Windows XP, gcc 4.8.2 only)
+* MinGW (32bit Windows XP, gcc 4.8.2 / 4.9.0)
 
 ### Thanks
 
