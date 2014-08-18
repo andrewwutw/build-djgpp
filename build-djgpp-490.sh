@@ -316,9 +316,21 @@ echo "Copy long name executables to short name."
 
 # gcc done
 
-echo "Use DJGPP to build a test program."
+echo "Testing DJGPP."
 cd $BUILDDIR
 cd ..
-$DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-c++ ../hello.cpp -o hello || exit 1
+echo "Use DJGPP to build a test C program."
+$DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-gcc ../hello.c -o hello || exit 1
+
+for x in $(echo $ENABLE_LANGUAGES | tr "," " ")
+do
+  case $x in
+    c++)
+      echo "Use DJGPP to build a test C++ program."
+      $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-c++ ../hello-cpp.cpp -o hello-cpp || exit 1
+      ;;
+  esac
+done
+exit 1
 
 echo "build-djgpp.sh done."
