@@ -1,5 +1,7 @@
 #! /bin/bash
 
+unset CDPATH
+
 # target directory
 DJGPP_PREFIX=${DJGPP_PREFIX-/usr/local/djgpp}
 
