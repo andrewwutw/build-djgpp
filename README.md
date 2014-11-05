@@ -24,18 +24,11 @@ Before running this script, you need to install these programs first :
 
 Depending on your system, installation procedure maybe different.
 
-On Debian, you can install these programs by :
+On Debian/Ubuntu, you can install these programs by :
 
 ```
 sudo apt-get update
-sudo apt-get install bison flex curl zlib1g-dev g++ unzip
-```
-
-Ubuntu :
-
-```
-sudo apt-get update
-sudo apt-get install gcc curl unzip bison flex make texinfo g++ zlib1g-dev
+sudo apt-get install bison flex curl gcc g++ make texinfo zlib1g-dev g++ unzip
 ```
 
 Fedora :
