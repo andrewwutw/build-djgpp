@@ -28,7 +28,7 @@ On Debian, you can install these programs by :
 
 ```
 sudo apt-get update
-sudo apt-get install unzip curl zlib1g-dev
+sudo apt-get install bison flex curl zlib1g-dev g++ unzip
 ```
 
 Ubuntu :
@@ -67,13 +67,20 @@ ENABLE_LANGUAGES=c,c++,f95,objc,obj-c++
 
 ### Building DJGPP compiler
 
-To build DJGPP for gcc 4.9.1, just run:
+To build DJGPP for gcc 4.9.2, just run:
+
+```
+./build-djgpp-492.sh
+```
+
+Or, to build DJGPP for gcc 4.9.1, 4.9.0, 4.8.2 or 4.7.3, run:
+
 
 ```
 ./build-djgpp-491.sh
 ```
 
-Or, to build DJGPP for gcc 4.9.0, 4.8.2 or 4.7.3, run:
+or
 
 ```
 ./build-djgpp-490.sh
