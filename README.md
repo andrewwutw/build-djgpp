@@ -60,35 +60,22 @@ ENABLE_LANGUAGES=c,c++,f95,objc,obj-c++
 
 ### Building DJGPP compiler
 
-To build DJGPP for gcc 4.9.2, just run:
+To build DJGPP, just run :
+
+./build-djgpp.sh *djgpp-version*
+
+Currently supported djgpp-version :
+
+* 4.7.3
+* 4.8.2
+* 4.9.0
+* 4.9.1
+* 4.9.2
+
+For example, to build DJGPP for gcc 4.9.2 :
 
 ```
-./build-djgpp-492.sh
-```
-
-Or, to build DJGPP for gcc 4.9.1, 4.9.0, 4.8.2 or 4.7.3, run:
-
-
-```
-./build-djgpp-491.sh
-```
-
-or
-
-```
-./build-djgpp-490.sh
-```
-
-or
-
-```
-./build-djgpp-482.sh
-```
-
-or
-
-```
-./build-djgpp-473.sh
+./build-djgpp.sh 4.9.2
 ```
 
 It will download all necessary files, build DJGPP compiler and binutils, and install it.
@@ -125,7 +112,7 @@ There are 2 methods to run the compiler (*BASE_DIR* is your DJGPP install locati
 * Debian 7 (32bit)
 * Ubuntu 12 (64bit)
 * Cygwin (32bit Windows XP)
-* MinGW (32bit Windows XP, gcc 4.8.2 / 4.9.0)
+* MinGW (32bit Windows XP, gcc 4.8.2 / 4.9.x)
 
 ### Thanks
 
