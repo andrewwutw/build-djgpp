@@ -68,6 +68,7 @@ Currently supported djgpp-version :
 
 * 4.7.3
 * 4.8.2
+* 4.8.4
 * 4.9.0
 * 4.9.1
 * 4.9.2
