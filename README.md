@@ -67,10 +67,7 @@ To build DJGPP, just run :
 Currently supported djgpp-version :
 
 * 4.7.3
-* 4.8.2
 * 4.8.4
-* 4.9.0
-* 4.9.1
 * 4.9.2
 
 For example, to build DJGPP for gcc 4.9.2 :
@@ -109,11 +106,11 @@ There are 2 methods to run the compiler (*BASE_DIR* is your DJGPP install locati
 
 ### Successful build
 
-* OSX 10.9.5 / 10.8.5
+* OSX 10.10.4 / 10.9.5 / 10.8.5
 * Debian 7 (32bit)
 * Ubuntu 12 (64bit)
 * Cygwin (32bit Windows XP)
-* MinGW (32bit Windows XP, gcc 4.8.2 / 4.9.x)
+* MinGW (32bit Windows XP, gcc 4.8.x / 4.9.x)
 
 ### Thanks
 
