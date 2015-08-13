@@ -69,11 +69,12 @@ Currently supported djgpp-version :
 * 4.7.3
 * 4.8.4
 * 4.9.2
+* 5.2.0
 
-For example, to build DJGPP for gcc 4.9.2 :
+For example, to build DJGPP for gcc 5.2.0 :
 
 ```
-./build-djgpp.sh 4.9.2
+./build-djgpp.sh 5.2.0
 ```
 
 It will download all necessary files, build DJGPP compiler and binutils, and install it.
@@ -110,7 +111,7 @@ There are 2 methods to run the compiler (*BASE_DIR* is your DJGPP install locati
 * Debian 7 (32bit)
 * Ubuntu 12 (64bit)
 * Cygwin (32bit Windows XP)
-* MinGW (32bit Windows XP, gcc 4.8.x / 4.9.x)
+* MinGW (32bit Windows XP)
 
 ### Thanks
 
