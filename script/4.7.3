@@ -101,7 +101,7 @@ for ARCHIVE in $ARCHIVE_LIST; do
         exit 1
       fi
     else
-      if ! curl $ARCHIVE -L -o $FILE; then
+      if ! curl -f $ARCHIVE -L -o $FILE; then
         rm $FILE
         exit 1
       fi
