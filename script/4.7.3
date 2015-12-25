@@ -192,7 +192,7 @@ mkdir djlsr${DJLSR_VERSION}
 cd djlsr${DJLSR_VERSION}
 unzip ../../download/djlsr${DJLSR_VERSION}.zip || exit 1
 cd src/stub
-patch exe2coff.c ../../../../patch-exe2coff.txt || exit 1
+patch exe2coff.c ../../../../patch-exe2coff-205.txt || exit 1
 gcc -o exe2coff exe2coff.c || exit 1
 cp -p exe2coff $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
 cd ../../..
