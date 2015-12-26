@@ -306,15 +306,12 @@ make install-strip || exit 1
 echo "Copy long name executables to short name."
 (
   cd $DJGPP_PREFIX || exit 1
-  if [ -f bin/i586-pc-msdosdjgpp-gcc ]; then
-    cp bin/i586-pc-msdosdjgpp-gcc i586-pc-msdosdjgpp/bin/gcc
-  fi
-  if [ -f bin/i586-pc-msdosdjgpp-g++ ]; then
-    cp bin/i586-pc-msdosdjgpp-g++ i586-pc-msdosdjgpp/bin/g++
-  fi
-  if [ -f bin/i586-pc-msdosdjgpp-c++ ]; then
-    cp bin/i586-pc-msdosdjgpp-c++ i586-pc-msdosdjgpp/bin/c++
-  fi
+  SHORT_NAME_LIST="gcc g++ c++ addr2line c++filt cpp size strings"
+  for SHORT_NAME in $SHORT_NAME_LIST; do
+    if [ -f bin/i586-pc-msdosdjgpp-gcc ]; then
+      cp bin/i586-pc-msdosdjgpp-$SHORT_NAME i586-pc-msdosdjgpp/bin/$SHORT_NAME
+    fi
+  done
 ) || exit 1
 
 # gcc done
