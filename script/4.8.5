@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
 unset CDPATH
 
@@ -25,6 +25,18 @@ MPC_VERSION=1.0.3
 AUTOCONF_VERSION=2.64
 AUTOMAKE_VERSION=1.11.1
 
+CC=gcc
+CXX=g++
+
+# use gmake under FreeBSD
+if [ `uname` = "FreeBSD" ]; then
+  MAKE=gmake
+  export CC=clang
+  export CXX=clang++
+else
+  MAKE=make
+fi
+
 # tarball location
 BINUTILS_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/deleted/v2gnu/bnu${BINUTILS_VERSION}s.zip"
 DJCRX_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/deleted/beta/v2/djcrx${DJCRX_VERSION}.zip"
@@ -42,7 +54,7 @@ AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.t
 PATCH_UNPACK_GCC_SH="patch-unpack-gcc-490.txt"
 
 # check required programs
-REQ_PROG_LIST="g++ gcc unzip bison flex make makeinfo patch"
+REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch"
 
 # MinGW doesn't have curl, so we use wget.
 if uname|grep "^MINGW32" > /dev/null; then
@@ -74,7 +86,7 @@ else
 fi
 
 # check zlib is installed
-if ! gcc test-zlib.c -o test-zlib -lz; then
+if ! ${CC} test-zlib.c -o test-zlib -lz; then
   echo "zlib not installed"
   exit 1
 fi
@@ -151,16 +163,16 @@ sh ./configure \
            --disable-nls \
            || exit 1
 
-make configure-bfd || exit 1
-make -C bfd stmp-lcoff-h || exit 1
-make || exit 1
+${MAKE} configure-bfd || exit 1
+${MAKE} -C bfd stmp-lcoff-h || exit 1
+${MAKE} || exit 1
 
 if [ ! -z $MAKE_CHECK ]; then
-  echo "Run make check"
-  make check || exit 1
+  echo "Run ${MAKE} check"
+  ${MAKE} check || exit 1
 fi
 
-make install || exit 1
+${MAKE} install || exit 1
 
 cd ../../..
 # binutils done
@@ -172,8 +184,8 @@ cd djcrx${DJCRX_VERSION}
 unzip ../../download/djcrx${DJCRX_VERSION}.zip || exit 1
 
 cd src/stub
-gcc -O2 stubify.c -o stubify || exit 1
-gcc -O2 stubedit.c -o stubedit || exit 1
+${CC} -O2 stubify.c -o stubify || exit 1
+${CC} -O2 stubedit.c -o stubedit || exit 1
 
 cd ../..
 
@@ -193,7 +205,7 @@ cd djlsr${DJLSR_VERSION}
 unzip ../../download/djlsr${DJLSR_VERSION}.zip || exit 1
 cd src/stub
 patch exe2coff.c ../../../../patch-exe2coff.txt || exit 1
-gcc -o exe2coff exe2coff.c || exit 1
+${CC} -o exe2coff exe2coff.c || exit 1
 cp -p exe2coff $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
 cd ../../..
 # djlsr done
@@ -209,7 +221,7 @@ cd $BUILDDIR
 tar xjf ../../download/autoconf-${AUTOCONF_VERSION}.tar.bz2 || exit 1
 cd autoconf-${AUTOCONF_VERSION}/
 ./configure --prefix=$BUILDDIR/tmpinst || exit 1
-make all install || exit 1
+${MAKE} all install || exit 1
 
 echo "Building automake"
 cd $BUILDDIR
@@ -218,7 +230,7 @@ cd automake-${AUTOMAKE_VERSION}/
 PATH="$BUILDDIR//tmpinst/bin:$PATH" \
 ./configure --prefix=$BUILDDIR/tmpinst || exit 1
 PATH="$BUILDDIR//tmpinst/bin:$PATH" \
-make all install || exit 1
+${MAKE} all install || exit 1
 
 # build GNU sed if needed.
 if [ ! -z $SED_VERSION ]; then
@@ -227,7 +239,7 @@ if [ ! -z $SED_VERSION ]; then
   tar xjf ../../download/sed-${SED_VERSION}.tar.bz2 || exit 1
   cd sed-${SED_VERSION}/
   ./configure --prefix=$BUILDDIR/tmpinst || exit 1
-  make all install || exit 1
+  ${MAKE} all install || exit 1
 fi
 
 cd $BUILDDIR
@@ -238,6 +250,10 @@ tar xzf ../../download/mpc-${MPC_VERSION}.tar.gz || exit 1
 if [ ! -z $PATCH_UNPACK_GCC_SH ]; then
   echo "Patch unpack-gcc.sh"
   patch unpack-gcc.sh ../../${PATCH_UNPACK_GCC_SH} || exit 1
+  if [ `uname` = "FreeBSD" ]; then
+    # The --verbose option is not recognized by BSD patch
+    sed -i '.bsd.back' 's/patch --verbose/patch/' unpack-gcc.sh
+  fi
 fi
 
 echo "Running unpack-gcc.sh"
@@ -249,32 +265,32 @@ cp $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/stubify $BUILDDIR/tmpinst/bin
 echo "Building gmp"
 cd $BUILDDIR/gmp-*/
 ./configure --prefix=$BUILDDIR/tmpinst --enable-static --disable-shared || exit 1
-make all || exit 1
+${MAKE} all || exit 1
 if [ ! -z $MAKE_CHECK ]; then
-  echo "Run make check"
-  make check || exit 1
+  echo "Run ${MAKE} check"
+  ${MAKE} check || exit 1
 fi
-make install || exit 1
+${MAKE} install || exit 1
 
 echo "Building mpfr"
 cd $BUILDDIR/mpfr-${MPFR_VERSION}/
 ./configure --prefix=$BUILDDIR/tmpinst --with-gmp=$BUILDDIR/tmpinst --enable-static --disable-shared || exit 1
-make all || exit 1
+${MAKE} all || exit 1
 if [ ! -z $MAKE_CHECK ]; then
-  echo "Run make check"
-  make check || exit 1
+  echo "Run ${MAKE} check"
+  ${MAKE} check || exit 1
 fi
-make install || exit 1
+${MAKE} install || exit 1
 
 echo "Building mpc"
 cd $BUILDDIR/mpc-${MPC_VERSION}/
 ./configure --prefix=$BUILDDIR/tmpinst --with-gmp=$BUILDDIR/tmpinst --with-mpfr=$BUILDDIR/tmpinst --enable-static --disable-shared || exit 1
-make all || exit 1
+${MAKE} all || exit 1
 if [ ! -z $MAKE_CHECK ]; then
-  echo "Run make check"
-  make check || exit 1
+  echo "Run ${MAKE} check"
+  ${MAKE} check || exit 1
 fi
-make install || exit 1
+${MAKE} install || exit 1
 
 echo "Building gcc"
 cd $BUILDDIR/
@@ -298,9 +314,9 @@ PATH="$BUILDDIR//tmpinst/bin:$PATH" \
                                  --enable-languages=${ENABLE_LANGUAGES} \
                                  || exit 1
 
-make j=4 "PATH=$BUILDDIR/tmpinst/bin:$PATH" || exit 1
+${MAKE} j=4 "PATH=$BUILDDIR/tmpinst/bin:$PATH" || exit 1
 
-make install-strip || exit 1
+${MAKE} install-strip || exit 1
 
 echo "Copy long name executables to short name."
 (

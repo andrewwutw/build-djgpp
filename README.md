@@ -1,6 +1,6 @@
-## Building DJGPP cross compiler on Windows, Mac OSX and Linux
+## Building DJGPP cross compiler on Windows, Mac OSX, Linux and FreeBSD.
 
-build-djgpp : Build DJGPP cross compiler and binutils on Windows (MinGW/Cygwin), Mac OSX and Linux
+build-djgpp : Build DJGPP cross compiler and binutils on Windows (MinGW/Cygwin), Mac OSX, Linux and FreeBSD.
 
 ### Prebuilt binary files
 
@@ -15,12 +15,13 @@ Before running this script, you need to install these programs first :
 * unzip
 * bison
 * flex
-* make
+* make (or gmake for FreeBSD)
 * makeinfo
 * patch
 * zlib header/library
-* curl (for Cygwin/OSX/Linux)
+* curl (for Cygwin/OSX/Linux/FreeBSD)
 * wget (for MinGW)
+* bash (for FreeBSD)
 
 Depending on your system, installation procedure maybe different.
 
@@ -114,6 +115,7 @@ There are 2 methods to run the compiler (*BASE_DIR* is your DJGPP install locati
 * OSX 10.10.4 / 10.9.5 / 10.8.5
 * Debian 7 (32bit)
 * Ubuntu 12 (64bit)
+* FreeBSD-10.2 (64bit)
 * Cygwin (32bit Windows XP)
 * MinGW (32bit Windows XP)
 
