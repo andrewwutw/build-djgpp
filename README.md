@@ -75,11 +75,12 @@ Currently supported djgpp-version :
 * 5.1.0
 * 5.2.0
 * 5.3.0
+* 6.1.0
 
-For example, to build DJGPP for gcc 5.3.0 :
+For example, to build DJGPP for gcc 6.1.0 :
 
 ```
-./build-djgpp.sh 5.3.0
+./build-djgpp.sh 6.1.0
 ```
 
 It will download all necessary files, build DJGPP compiler and binutils, and install it.
