@@ -38,7 +38,7 @@ else
 fi
 
 # tarball location
-BINUTILS_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2gnu/bnu${BINUTILS_VERSION}sr3.zip"
+BINUTILS_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/deleted/v2gnu/bnu${BINUTILS_VERSION}sr3.zip"
 DJCRX_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djcrx${DJCRX_VERSION}.zip"
 DJLSR_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djlsr${DJLSR_VERSION}.zip"
 
