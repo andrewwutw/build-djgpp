@@ -13,7 +13,7 @@ ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
 DJGPP_DOWNLOAD_BASE="http://www.delorie.com/pub"
 
 # source tarball versions
-BINUTILS_VERSION=226
+BINUTILS_VERSION=227
 DJCRX_VERSION=205
 DJLSR_VERSION=205
 
@@ -38,7 +38,7 @@ else
 fi
 
 # tarball location
-BINUTILS_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/deleted/v2gnu/bnu${BINUTILS_VERSION}sr3.zip"
+BINUTILS_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2gnu/bnu${BINUTILS_VERSION}s.zip"
 DJCRX_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djcrx${DJCRX_VERSION}.zip"
 DJLSR_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djlsr${DJLSR_VERSION}.zip"
 
@@ -144,10 +144,13 @@ cd build
 
 # build binutils
 echo "Building bintuils"
-mkdir bnu${BINUTILS_VERSION}sr3
-cd bnu${BINUTILS_VERSION}sr3
-unzip ../../download/bnu${BINUTILS_VERSION}sr3.zip || exit 1
+mkdir bnu${BINUTILS_VERSION}s
+cd bnu${BINUTILS_VERSION}s
+unzip ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
 cd gnu/binutils-* || exit
+
+# patch for binutils 2.27
+patch bfd/init.c ../../../../patch-bnu27-bfd-init.txt || exit 1
 
 # exec permission of some files are not set, fix it.
 for EXEC_FILE in install-sh missing; do
