@@ -331,6 +331,9 @@ echo "Copy long name executables to short name."
 
 # gcc done
 
+# copy setenv script
+(cd $BUILDDIR/../../setenv/ && ./copyfile.sh $DJGPP_PREFIX) || exit 1
+
 echo "Testing DJGPP."
 cd $BUILDDIR
 cd ..

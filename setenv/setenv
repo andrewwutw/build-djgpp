@@ -1,0 +1,3 @@
+export PATH="$(cd "$(dirname "$0")"; pwd)"/i586-pc-msdosdjgpp/bin/:"$(cd "$(dirname "$0")"; pwd)"/bin/:$PATH
+export GCC_EXEC_PREFIX="$(cd "$(dirname "$0")"; pwd)"/lib/gcc/
+export DJDIR="$(cd "$(dirname "$0")"; pwd)"/i586-pc-msdosdjgpp

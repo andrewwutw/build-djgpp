@@ -345,6 +345,9 @@ cp -p exe2coff $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
 cd ../../..
 # djlsr done
 
+# copy setenv script
+(cd $BUILDDIR/../../setenv/ && ./copyfile.sh $DJGPP_PREFIX) || exit 1
+
 echo "Testing DJGPP."
 cd $BUILDDIR
 cd ..
