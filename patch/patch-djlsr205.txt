@@ -1,6 +1,6 @@
 diff -ur djlsr205-orig/src/makefile djlsr205/src/makefile
 --- djlsr205-orig/src/makefile	2017-04-24 19:00:19.000000000 +0800
-+++ djlsr205/src/makefile	2017-04-24 19:00:29.000000000 +0800
++++ djlsr205/src/makefile	2017-04-25 13:35:37.000000000 +0800
 @@ -40,17 +40,18 @@
  	$(MAKE) -C stub native
  	$(MAKE) -C utils native
@@ -33,7 +33,7 @@ diff -ur djlsr205-orig/src/makefile djlsr205/src/makefile
  .PHONY : clean
 diff -ur djlsr205-orig/src/misc.c djlsr205/src/misc.c
 --- djlsr205-orig/src/misc.c	2017-04-24 19:00:19.000000000 +0800
-+++ djlsr205/src/misc.c	2017-04-24 19:01:06.000000000 +0800
++++ djlsr205/src/misc.c	2017-04-25 13:35:37.000000000 +0800
 @@ -14,7 +14,11 @@
  {
    /* MS-DOS uses \, unix uses / */
@@ -48,8 +48,8 @@ diff -ur djlsr205-orig/src/misc.c djlsr205/src/misc.c
       mix well under MS-DOS */
 diff -ur djlsr205-orig/src/stub/exe2coff.c djlsr205/src/stub/exe2coff.c
 --- djlsr205-orig/src/stub/exe2coff.c	2017-04-24 19:00:19.000000000 +0800
-+++ djlsr205/src/stub/exe2coff.c	2017-04-24 19:00:29.000000000 +0800
-@@ -5,10 +5,10 @@
++++ djlsr205/src/stub/exe2coff.c	2017-04-25 13:36:19.000000000 +0800
+@@ -5,10 +5,12 @@
  #include <fcntl.h>
  #include <sys/stat.h>
  #include <string.h>
@@ -57,7 +57,9 @@ diff -ur djlsr205-orig/src/stub/exe2coff.c djlsr205/src/stub/exe2coff.c
  #include <unistd.h>
  #include <ctype.h>
  
++#if !defined(O_BINARY)
 +#define O_BINARY 0
++#endif
  
  static void
  exe2aout(char *fname)
