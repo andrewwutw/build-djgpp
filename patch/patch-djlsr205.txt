@@ -1,6 +1,83 @@
+diff -ur djlsr205-orig/src/dxe/dxe3gen.c djlsr205/src/dxe/dxe3gen.c
+--- djlsr205-orig/src/dxe/dxe3gen.c	2017-04-29 14:32:47.000000000 +0800
++++ djlsr205/src/dxe/dxe3gen.c	2017-04-29 14:33:27.000000000 +0800
+@@ -193,7 +193,7 @@
+ #include "../../include/sys/dxe.h"
+ #include "../../include/coff.h"
+ 
+-#define VERSION  "1.0.3"
++#define VERSION  "1.0.4"
+ 
+ #define TEMP_BASE    "dxe_tmp"       /* 7 chars, 1 char suffix */
+ #define TEMP_O_FILE  TEMP_BASE".o"
+@@ -937,6 +937,7 @@
+   char *strings;
+   RELOC *relocs;
+   unsigned int i, j, errcount;
++  ULONG32 real_nrelocs;
+   size_t hdrsize;
+ 
+   /* Exported symbols table */
+@@ -985,9 +986,18 @@
+   strings[0] = 0;
+ 
+   /* Read the relocation table */
+-  relocs = (RELOC *)malloc(sc.s_nreloc * sizeof(RELOC));
+   fseek(inf, sc.s_relptr, SEEK_SET);
+-  fread(relocs, RELSZ, sc.s_nreloc, inf);
++  if (sc.s_flags & STYP_NRELOC_OVFL) {
++    fread(&real_nrelocs, 4, 1, inf); /* read r_vaddr */
++    fseek(inf, RELSZ - 4, SEEK_CUR); /* skip the rest */
++    dh.nrelocs = --real_nrelocs; /* lose the '+1' */
++    if (opt.verbose)
++      printf("%s: real nrelocs: %lu\n", progname, (unsigned long)real_nrelocs);
++  } else {
++    real_nrelocs = dh.nrelocs;
++  }
++  relocs = (RELOC *)malloc(real_nrelocs * sizeof(RELOC));
++  fread(relocs, RELSZ, real_nrelocs, inf);
+ 
+   /* Close input file */
+   fclose(inf);
+@@ -1042,7 +1052,7 @@
+       int n_abs_relocs = 0, n_rel_relocs = 0;
+ 
+       /* count the amount of relocations pointing to this symbol */
+-      for (j = 0; j < sc.s_nreloc; j++)
++      for (j = 0; j < real_nrelocs; j++)
+       {
+         if (relocs[j].r_symndx == i)
+         {
+@@ -1101,7 +1111,7 @@
+ 
+       unres_size = newsize;
+ 
+-      for (j = 0; j < sc.s_nreloc; j++)
++      for (j = 0; j < real_nrelocs; j++)
+       {
+         if (relocs[j].r_symndx == i)
+         {
+@@ -1202,7 +1212,7 @@
+ 
+   /* Compute the amount of valid relocations */
+   DEBUG_PRINT_RELOCATION_DIRECTIVE_PROLOG();
+-  for (i = 0; i < sc.s_nreloc; i++)
++  for (i = 0; i < real_nrelocs; i++)
+   {
+     DEBUG_PRINT_RELOCATION_DIRECTIVE(i, relocs);
+     if (!VALID_RELOC(relocs[i]))
+@@ -1278,7 +1288,7 @@
+   free(data);
+ 
+   /* Output the relocations */
+-  for (i = 0; i < sc.s_nreloc; i++)
++  for (i = 0; i < real_nrelocs; i++)
+   {
+     if (VALID_RELOC(relocs[i]))
+       fwrite(&relocs[i].r_vaddr, 1, sizeof(relocs[0].r_vaddr), outf);
 diff -ur djlsr205-orig/src/makefile djlsr205/src/makefile
---- djlsr205-orig/src/makefile	2017-04-24 19:00:19.000000000 +0800
-+++ djlsr205/src/makefile	2017-04-25 13:35:37.000000000 +0800
+--- djlsr205-orig/src/makefile	2017-04-29 14:32:47.000000000 +0800
++++ djlsr205/src/makefile	2017-04-29 14:32:57.000000000 +0800
 @@ -40,17 +40,18 @@
  	$(MAKE) -C stub native
  	$(MAKE) -C utils native
@@ -32,8 +109,8 @@ diff -ur djlsr205-orig/src/makefile djlsr205/src/makefile
  
  .PHONY : clean
 diff -ur djlsr205-orig/src/misc.c djlsr205/src/misc.c
---- djlsr205-orig/src/misc.c	2017-04-24 19:00:19.000000000 +0800
-+++ djlsr205/src/misc.c	2017-04-25 13:35:37.000000000 +0800
+--- djlsr205-orig/src/misc.c	2017-04-29 14:32:47.000000000 +0800
++++ djlsr205/src/misc.c	2017-04-29 14:32:57.000000000 +0800
 @@ -14,7 +14,11 @@
  {
    /* MS-DOS uses \, unix uses / */
@@ -47,8 +124,8 @@ diff -ur djlsr205-orig/src/misc.c djlsr205/src/misc.c
    /* redirection and long command lines don't always
       mix well under MS-DOS */
 diff -ur djlsr205-orig/src/stub/exe2coff.c djlsr205/src/stub/exe2coff.c
---- djlsr205-orig/src/stub/exe2coff.c	2017-04-24 19:00:19.000000000 +0800
-+++ djlsr205/src/stub/exe2coff.c	2017-04-25 13:36:19.000000000 +0800
+--- djlsr205-orig/src/stub/exe2coff.c	2017-04-29 14:32:47.000000000 +0800
++++ djlsr205/src/stub/exe2coff.c	2017-04-29 14:32:57.000000000 +0800
 @@ -5,10 +5,12 @@
  #include <fcntl.h>
  #include <sys/stat.h>
