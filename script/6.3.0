@@ -187,6 +187,7 @@ echo "Prepare djcrx"
 mkdir djcrx${DJCRX_VERSION}
 cd djcrx${DJCRX_VERSION}
 unzip ../../download/djcrx${DJCRX_VERSION}.zip || exit 1
+patch -p1 -u < ../../patch/patch-djcrx205.txt || exit 1
 
 cd src/stub
 ${CC} -O2 stubify.c -o stubify || exit 1

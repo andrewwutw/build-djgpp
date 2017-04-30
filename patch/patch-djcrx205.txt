@@ -1,0 +1,13 @@
+diff -ur djcrx205-orig/lib/dxe.ld djcrx205/lib/dxe.ld
+--- djcrx205-orig/lib/dxe.ld	2017-04-30 14:04:14.000000000 +0800
++++ djcrx205/lib/dxe.ld	2017-04-30 14:04:40.000000000 +0800
+@@ -28,7 +28,8 @@
+     ___EH_FRAME_END__ = . ;
+     LONG(0);
+     *(.gnu.linkonce.d*)
+-    *(.bss)
++    *(.bss .bss.* .gnu.linkonce.b.*)
+     *(COMMON)
+   }
++  /DISCARD/ : { *(gnu.lto_*) }
+ }
