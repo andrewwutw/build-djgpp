@@ -80,11 +80,12 @@ Currently supported djgpp-version :
 * 6.1.0
 * 6.2.0
 * 6.3.0
+* 7.1.0
 
-For example, to build DJGPP for gcc 6.3.0 :
+For example, to build DJGPP for gcc 7.1.0 :
 
 ```
-./build-djgpp.sh 6.3.0
+./build-djgpp.sh 7.1.0
 ```
 
 It will download all necessary files, build DJGPP compiler and binutils, and install it.
@@ -95,29 +96,49 @@ There are 2 methods to run the compiler (*BASE_DIR* is your DJGPP install locati
 
 * Use compiler full name :
 
-    ```
-	BASE_DIR/bin/i586-pc-msdosdjgpp-g++ hello.cpp
-	```
+```
+BASE_DIR/bin/i586-pc-msdosdjgpp-g++ hello.cpp
+```
 
-* Or, use compiler short name, you have to change environment variables :
+* Or, use compiler short name, you have to change environment variables.
 
-	```
-	export PATH=BASE_DIR/i586-pc-msdosdjgpp/bin/:$PATH
-	export GCC_EXEC_PREFIX=BASE_DIR/lib/gcc/
-	g++ hello.cpp
-	```
+If you are using Linux :
+```
+export PATH=BASE_DIR/i586-pc-msdosdjgpp/bin/:$PATH
+export GCC_EXEC_PREFIX=BASE_DIR/lib/gcc/
+g++ hello.cpp
+```
+Or, run :
 
-	If you are using Windows command prompt :
+```
+source BASE_DIR/setenv
+```
 
-	```
-	PATH=BASE_DIR/i586-pc-msdosdjgpp/bin;%PATH%
-	set GCC_EXEC_PREFIX=BASE_DIR/lib/gcc/
-	g++ hello.cpp
-	```
+If you are using Windows command prompt :
+
+```
+PATH=BASE_DIR/i586-pc-msdosdjgpp/bin;%PATH%
+set GCC_EXEC_PREFIX=BASE_DIR/lib/gcc/
+g++ hello.cpp
+```
+
+Or, run :
+
+```
+BASE_DIR/setenv.bat
+```
+
+### Supported DJGPP Utilities
+* dxe3gen
+* dxe3res
+* dxegen
+* exe2coff
+* stubedit
+* stubify
 
 ### Successful build
 
-* OSX 10.10.4 / 10.9.5 / 10.8.5
+* OSX 10.12.4
 * Debian 7 (32bit)
 * Ubuntu 12 (64bit)
 * FreeBSD-10.2 (64bit)
