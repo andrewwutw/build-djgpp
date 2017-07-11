@@ -80,6 +80,7 @@ Currently supported djgpp-version :
 * 6.1.0
 * 6.2.0
 * 6.3.0
+* 6.4.0
 * 7.1.0
 
 For example, to build DJGPP for gcc 7.1.0 :
@@ -138,7 +139,7 @@ BASE_DIR/setenv.bat
 
 ### Successful build
 
-* OSX 10.12.4
+* OSX 10.12.5
 * Debian 7 (32bit)
 * Ubuntu 12 (64bit)
 * FreeBSD-10.2 (64bit)
