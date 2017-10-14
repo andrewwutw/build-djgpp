@@ -32,11 +32,14 @@ CXX=g++
 # use gmake under FreeBSD
 if [ `uname` = "FreeBSD" ]; then
   MAKE=gmake
-  export CC=clang
-  export CXX=clang++
+  CC=clang
+  CXX=clang++
 else
   MAKE=make
 fi
+#CFLAGS="-O2 -g $CFLAGS -std=gnu11"
+
+export CC CXX CFLAGS MAKE
 
 # tarball location
 BINUTILS_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/deleted/v2gnu/bnu${BINUTILS_VERSION}sr3.zip"
