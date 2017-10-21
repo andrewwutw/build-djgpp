@@ -227,6 +227,7 @@ PATH="$BUILDDIR//tmpinst/bin:$PATH" \
 ${MAKE} all install || exit 1
 
 # build GNU sed if needed.
+SED=sed
 if [ ! -z $SED_VERSION ]; then
   echo "Building sed"
   cd $BUILDDIR
@@ -234,6 +235,7 @@ if [ ! -z $SED_VERSION ]; then
   cd sed-${SED_VERSION}/
   ./configure --prefix=$BUILDDIR/tmpinst || exit 1
   ${MAKE} all install || exit 1
+  SED=$BUILDDIR/tmpinst/bin/sed
 fi
 
 cd $BUILDDIR
@@ -256,7 +258,7 @@ PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source ../../down
 # patch gnu/gcc-X.XX/gcc/doc/gcc.texi
 echo "Patch gcc/doc/gcc.texi"
 cd gnu/gcc-*/gcc/doc || exit 1
-patch gcc.texi < ../../../../../../patch/patch-gcc-texi.txt || exit 1
+$SED -i "s/[^^]@\(\(tex\)\|\(end\)\)/\n@\1/g" gcc.texi || exit 1
 cd -
 
 # copy stubify programs
