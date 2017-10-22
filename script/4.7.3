@@ -340,7 +340,7 @@ rm -rf djlsr${DJLSR_VERSION}
 mkdir djlsr${DJLSR_VERSION}
 cd djlsr${DJLSR_VERSION}
 unzip ../../download/djlsr${DJLSR_VERSION}.zip || exit 1
-unzip ../../download/djdev${DJDEV_VERSION}.zip "include/*" || exit 1
+unzip ../../download/djdev${DJDEV_VERSION}.zip "include/*" "include/*/*" || exit 1
 patch -p1 -u < ../../patch/patch-djlsr205.txt || exit 1
 cd src
 PATH=$DJGPP_PREFIX/bin/:$PATH make || exit 1
