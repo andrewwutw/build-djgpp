@@ -251,7 +251,7 @@ if [ ! -z $PATCH_UNPACK_GCC_SH ]; then
   patch unpack-gcc.sh ../../${PATCH_UNPACK_GCC_SH} || exit 1
   if [ `uname` = "FreeBSD" ]; then
     # The --verbose option is not recognized by BSD patch
-    sed -i '.bsd.back' 's/patch --verbose/patch/' unpack-gcc.sh
+    $SED -i 's/patch --verbose/patch/' unpack-gcc.sh || exit 1
   fi
 fi
 
