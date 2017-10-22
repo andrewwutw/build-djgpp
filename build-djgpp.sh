@@ -11,7 +11,8 @@ fi
 
 if [ -x script/$BUILD_VER ]; then
   echo "Building version : $BUILD_VER"
-  script/$BUILD_VER
+  script/$BUILD_VER || exit 1
 else
   echo "Unsupported version : $BUILD_VER"
+  exit 1
 fi
