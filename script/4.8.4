@@ -266,7 +266,9 @@ cp $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/stubify $BUILDDIR/tmpinst/bin
 
 echo "Building gmp"
 cd $BUILDDIR/gmp-*/
-./configure --prefix=$BUILDDIR/tmpinst --enable-static --disable-shared || exit 1
+# On some systems, building gmp will fail if CFLAGS is set.
+# Unset CFLAGS during building gmp.
+env -u CFLAGS ./configure --prefix=$BUILDDIR/tmpinst --enable-static --disable-shared || exit 1
 ${MAKE} all || exit 1
 if [ ! -z $MAKE_CHECK ]; then
   echo "Run ${MAKE} check"
