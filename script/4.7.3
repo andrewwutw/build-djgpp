@@ -55,9 +55,6 @@ MPC_ARCHIVE="http://www.multiprecision.org/mpc/download/mpc-${MPC_VERSION}.tar.g
 AUTOCONF_ARCHIVE="http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.bz2"
 AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.bz2"
 
-# gcc 4.7.3 unpack-gcc.sh needs to be patched for OSX
-PATCH_UNPACK_GCC_SH="patch-unpack-gcc.txt"
-
 # check required programs
 REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch"
 
@@ -243,13 +240,16 @@ tar xjf ../../download/gmp-${GMP_VERSION}.tar.bz2 || exit 1
 tar xjf ../../download/mpfr-${MPFR_VERSION}.tar.bz2 || exit 1
 tar xzf ../../download/mpc-${MPC_VERSION}.tar.gz || exit 1
 
-if [ ! -z $PATCH_UNPACK_GCC_SH ]; then
-  echo "Patch unpack-gcc.sh"
-  patch unpack-gcc.sh ../../${PATCH_UNPACK_GCC_SH} || exit 1
-  if [ `uname` = "FreeBSD" ]; then
-    # The --verbose option is not recognized by BSD patch
-    $SED -i 's/patch --verbose/patch/' unpack-gcc.sh || exit 1
-  fi
+# gcc 4.7.3 unpack-gcc.sh needs to be patched for OSX
+# patch from :
+#   ( cd gnu && tar xf $top/$archive --use=`case $archive in *.gz|*.tgz) echo 'gzip';; *.bz2) echo 'bzip2';; *.xz) echo 'xz';; esac` && echo $archive >$top/s-sources )
+# to :
+#   ( cd gnu && tar xjf $top/$archive && echo $archive >$top/s-sources )
+echo "Patch unpack-gcc.sh"
+$SED -i "s/\(cd gnu && tar x\)\([^-]*\)\([^&]*\)/\1j\2/" unpack-gcc.sh || exit 1
+if [ `uname` = "FreeBSD" ]; then
+  # The --verbose option is not recognized by BSD patch
+  $SED -i 's/patch --verbose/patch/' unpack-gcc.sh || exit 1
 fi
 
 echo "Running unpack-gcc.sh"

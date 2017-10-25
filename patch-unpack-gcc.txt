@@ -1,4 +1,0 @@
-45c45
-< ( cd gnu && tar xf $top/$archive --use=`case $archive in *.gz|*.tgz) echo 'gzip';; *.bz2) echo 'bzip2';; *.xz) echo 'xz';; esac` && echo $archive >$top/s-sources )
----
-> ( cd gnu && tar xjf $top/$archive && echo $archive >$top/s-sources )
