@@ -1,4 +1,0 @@
-53c53
-< ( cd gnu && tar xf $top/$archive $tar_param && echo $archive >$top/s-sources )
----
-> ( cd gnu && tar xjf $top/$archive && echo $archive >$top/s-sources )
