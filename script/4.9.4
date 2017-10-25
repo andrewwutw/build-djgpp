@@ -95,9 +95,12 @@ fi
 rm test-zlib 2>/dev/null
 rm test-zlib.exe 2>/dev/null
 
+# djcross-gcc-X.XX-tar.* maybe moved from /djgpp/rpms/ to /djgpp/deleted/rpms/ directory.
+OLD_DJCROSS_GCC_ARCHIVE=${DJCROSS_GCC_ARCHIVE/rpms\//deleted\/rpms\/}
+
 # download source files
 ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $DJLSR_ARCHIVE $DJDEV_ARCHIVE
-              $SED_ARCHIVE $DJCROSS_GCC_ARCHIVE $GCC_ARCHIVE
+              $SED_ARCHIVE $DJCROSS_GCC_ARCHIVE $OLD_DJCROSS_GCC_ARCHIVE $GCC_ARCHIVE
               $GMP_ARCHIVE $MPFR_ARCHIVE $MPC_ARCHIVE
               $AUTOCONF_ARCHIVE $AUTOMAKE_ARCHIVE"
 
@@ -110,13 +113,17 @@ for ARCHIVE in $ARCHIVE_LIST; do
   if ! [ -f $FILE ]; then
     echo "Download $ARCHIVE ..."
     if [ ! -z $USE_WGET ]; then
-      if ! wget -U firefox $ARCHIVE; then
-        rm $FILE
-        exit 1
-      fi
+      DL_CMD="wget -U firefox $ARCHIVE"
     else
-      if ! curl -f $ARCHIVE -L -o $FILE; then
+      DL_CMD="curl -f $ARCHIVE -L -o $FILE"
+    fi
+    echo "Command : $DL_CMD"
+    if ! eval $DL_CMD; then
+      if [ "$ARCHIVE" == "$DJCROSS_GCC_ARCHIVE" ]; then
+        echo "$FILE maybe moved to deleted/ directory."
+      else
         rm $FILE
+        echo "Download $ARCHIVE failed."
         exit 1
       fi
     fi
