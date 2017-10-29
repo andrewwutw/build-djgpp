@@ -145,7 +145,7 @@ mkdir -p build || exit 1
 cd build
 
 # build binutils
-echo "Building bintuils"
+echo "Building binutils"
 mkdir bnu${BINUTILS_VERSION}sr3
 cd bnu${BINUTILS_VERSION}sr3
 unzip ../../download/bnu${BINUTILS_VERSION}sr3.zip || exit 1
