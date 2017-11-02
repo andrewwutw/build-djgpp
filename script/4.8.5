@@ -350,8 +350,8 @@ rm -rf djlsr${DJLSR_VERSION}
 mkdir djlsr${DJLSR_VERSION}
 cd djlsr${DJLSR_VERSION}
 unzip ../../download/djlsr${DJLSR_VERSION}.zip || exit 1
-unzip -o ../../download/djdev${DJDEV_VERSION}.zip ../djdev205.zip "include/*/*"
-unzip -o ../../download/djdev${DJDEV_VERSION}.zip ../djdev205.zip "include/*"
+unzip -o ../../download/djdev${DJDEV_VERSION}.zip "include/*/*" || exit 1
+unzip -o ../../download/djdev${DJDEV_VERSION}.zip "include/*" || exit 1
 patch -p1 -u < ../../patch/patch-djlsr205.txt || exit 1
 if [ "$CC" == "gcc" ]; then
   echo "Building DXE tools."
