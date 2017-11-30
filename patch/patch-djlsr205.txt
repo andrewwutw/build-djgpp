@@ -57,6 +57,24 @@ diff -ur djlsr205-orig/src/dxe/dxe3gen.c djlsr205/src/dxe/dxe3gen.c
        {
          if (relocs[j].r_symndx == i)
          {
+@@ -1145,7 +1155,7 @@
+         BOOL ok = FALSE;
+         for (j = 0; j < opt.num_excl; j++)
+         {
+-          if (memcmp(opt.excl_prefix[j], name, strlen(opt.excl_prefix[j])) == 0)
++          if (strncmp(opt.excl_prefix[j], name, strlen(opt.excl_prefix[j])) == 0)
+           {
+             ok = TRUE;
+             break;
+@@ -1160,7 +1170,7 @@
+         BOOL ok = FALSE;
+         for (j = 0; j < opt.num_prefix; j++)
+         {
+-          if (memcmp(opt.export_prefix[j], name, strlen(opt.export_prefix[j])) == 0)
++          if (strncmp(opt.export_prefix[j], name, strlen(opt.export_prefix[j])) == 0)
+           {
+             ok = TRUE;
+             break;
 @@ -1202,7 +1212,7 @@
  
    /* Compute the amount of valid relocations */
