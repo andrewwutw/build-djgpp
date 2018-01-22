@@ -351,7 +351,7 @@ patch -p1 -u < ../../patch/patch-djlsr205.txt || exit 1
 if [ "$CC" == "gcc" ]; then
   echo "Building DXE tools."
   cd src
-  PATH=$DJGPP_PREFIX/bin/:$PATH ${MAKE} -j${MAKE_JOBS} || exit 1
+  PATH=$DJGPP_PREFIX/bin/:$PATH ${MAKE} || exit 1
   cp dxe/dxegen dxe/dxe3gen dxe/dxe3res $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
   cd ..
 else
