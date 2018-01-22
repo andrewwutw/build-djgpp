@@ -143,7 +143,7 @@ echo "Make build dir"
 mkdir -p build || exit 1
 cd build
 
-if [ ! -e binutils-${BINUTILS_VERSION}-installed ]
+if [ ! -e binutils-${BINUTILS_VERSION}-installed ]; then
   # build binutils
   echo "Building binutils"
   mkdir bnu${BINUTILS_VERSION}s
@@ -209,7 +209,7 @@ cd djcross-gcc-${GCC_VERSION}/
 
 BUILDDIR=`pwd`
 
-if [ ! -e gcc-unpacked ]
+if [ ! -e gcc-unpacked ]; then
   echo "Building autoconf"
   cd $BUILDDIR
   tar xJf ../../download/autoconf-${AUTOCONF_VERSION}.tar.xz || exit 1
