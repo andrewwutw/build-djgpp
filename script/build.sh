@@ -263,7 +263,7 @@ echo "Building gcc"
 mkdir -p djcross || exit 1
 cd djcross
 
-if [ ! -e Makefile ]; then
+if [ ! `cat gcc-configure-prefix` = "${DJGPP_PREFIX}" ]; then
   PATH="$BUILDDIR//tmpinst/bin:$PATH" \
   ../gnu/gcc-${GCC_VERSION_SHORT}/configure \
                                    --target=i586-pc-msdosdjgpp \
@@ -277,6 +277,7 @@ if [ ! -e Makefile ]; then
                                    --enable-version-specific-runtime-libs \
                                    --enable-languages=${ENABLE_LANGUAGES} \
                                    || exit 1
+  echo ${DJGPP_PREFIX} > gcc-configure-prefix
 else
   echo "Note: gcc already configured. To force a rebuild, use: rm -rf ${BUILDDIR}/djcross/"
   sleep 5
