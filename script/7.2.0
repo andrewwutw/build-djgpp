@@ -382,4 +382,4 @@ do
   esac
 done
 
-echo "build-djgpp.sh done."
+echo "build-djgpp.sh done. To remove temporary build files, use: rm -rf build/"
