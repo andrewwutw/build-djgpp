@@ -298,23 +298,27 @@ fi
 
 echo "Building gcc"
 
-rm -rf djcross || exit 1
 mkdir -p djcross || exit 1
 cd djcross
 
-PATH="$BUILDDIR//tmpinst/bin:$PATH" \
-../gnu/gcc-${GCC_VERSION_SHORT}/configure \
-                                 --target=i586-pc-msdosdjgpp \
-                                 --program-prefix=i586-pc-msdosdjgpp- \
-                                 --prefix=$DJGPP_PREFIX \
-                                 --disable-nls \
-                                 --disable-plugin \
-                                 --enable-lto \
-                                 --enable-libstdcxx-filesystem-ts \
-                                 --enable-libquadmath-support \
-                                 --enable-version-specific-runtime-libs \
-                                 --enable-languages=${ENABLE_LANGUAGES} \
-                                 || exit 1
+if [ ! -e Makefile ]; then
+  PATH="$BUILDDIR//tmpinst/bin:$PATH" \
+  ../gnu/gcc-${GCC_VERSION_SHORT}/configure \
+                                   --target=i586-pc-msdosdjgpp \
+                                   --program-prefix=i586-pc-msdosdjgpp- \
+                                   --prefix=$DJGPP_PREFIX \
+                                   --disable-nls \
+                                   --disable-plugin \
+                                   --enable-lto \
+                                   --enable-libstdcxx-filesystem-ts \
+                                   --enable-libquadmath-support \
+                                   --enable-version-specific-runtime-libs \
+                                   --enable-languages=${ENABLE_LANGUAGES} \
+                                   || exit 1
+else
+  echo "Note: gcc already configured. To force a rebuild, use: rm -rf ${BUILDDIR}/djcross/"
+  sleep 5
+fi
 
 ${MAKE} -j${MAKE_JOBS} "PATH=$BUILDDIR/tmpinst/bin:$PATH" || exit 1
 
