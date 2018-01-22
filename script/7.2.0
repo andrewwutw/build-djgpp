@@ -267,7 +267,9 @@ cd $BUILDDIR/
 mkdir djcross
 cd djcross
 
-../gnu/gcc-${GCC_VERSION_SHORT}/contrib/download_prerequisites --directory=../gnu/gcc-${GCC_VERSION_SHORT}
+pushd ../gnu/gcc-${GCC_VERSION_SHORT}
+./contrib/download_prerequisites
+popd
 
 PATH="$BUILDDIR//tmpinst/bin:$PATH" \
 ../gnu/gcc-${GCC_VERSION_SHORT}/configure \
