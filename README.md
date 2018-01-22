@@ -59,6 +59,12 @@ Default support language is C and C++. You can change supported languages by set
 ENABLE_LANGUAGES=c,c++,f95,objc,obj-c++
 ```
 
+Default number of parallel builds is 4. You can change this number by setting environment variable *MAKE_JOBS* :
+
+```
+MAKE_JOBS=8
+```
+
 ### Building DJGPP compiler
 
 To build DJGPP, just run :
