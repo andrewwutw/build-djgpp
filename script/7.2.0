@@ -179,6 +179,8 @@ if [ ! -e binutils-${BINUTILS_VERSION}-installed ]; then
   cd ../../..
   touch binutils-${BINUTILS_VERSION}-installed
   # binutils done
+else
+  echo "Current binutils version already installed, skipping."
 fi
 
 # prepare djcrx
@@ -271,11 +273,14 @@ if [ ! -e gcc-unpacked ]; then
   cd $BUILDDIR/
   
   # download mpc/gmp/mpfr/isl libraries
+  echo "Downloading gcc dependencies"
   cd gnu/gcc-${GCC_VERSION_SHORT}
   ./contrib/download_prerequisites
   cd -
   
   touch gcc-unpacked
+else
+  echo "gcc already unpacked, skipping."
 fi
 
 echo "Building gcc"
