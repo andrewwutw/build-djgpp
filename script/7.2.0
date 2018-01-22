@@ -181,6 +181,7 @@ if [ ! -e binutils-${BINUTILS_VERSION}-installed ]; then
   ${MAKE} -j${MAKE_JOBS} install || exit 1
   
   cd ../../..
+  rm binutils-*-installed
   touch binutils-${BINUTILS_VERSION}-installed
   # binutils done
 else
@@ -222,6 +223,7 @@ if [ ! -e ${BUILDDIR}/tmpinst/autoconf-${AUTOCONF_VERSION}-built ]; then
   cd autoconf-${AUTOCONF_VERSION}/
   ./configure --prefix=$BUILDDIR/tmpinst || exit 1
   ${MAKE} -j${MAKE_JOBS} all install || exit 1
+  rm ${BUILDDIR}/tmpinst/autoconf-*-built
   touch ${BUILDDIR}/tmpinst/autoconf-${AUTOCONF_VERSION}-built
 else
   echo "autoconf already built, skipping."
@@ -236,6 +238,7 @@ if [ ! -e ${BUILDDIR}/tmpinst/automake-${AUTOMAKE_VERSION}-built ]; then
   ./configure --prefix=$BUILDDIR/tmpinst || exit 1
   PATH="$BUILDDIR//tmpinst/bin:$PATH" \
   ${MAKE} all install || exit 1
+  rm ${BUILDDIR}/tmpinst/automake-*-built
   touch ${BUILDDIR}/tmpinst/automake-${AUTOMAKE_VERSION}-built
 else
   echo "automake already built, skipping."
