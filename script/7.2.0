@@ -147,7 +147,7 @@ echo "Make build dir"
 mkdir -p build || exit 1
 cd build
 
-if [ ! -e binutils-${BINUTILS_VERSION}-installed ]; then
+if [ ! -e ${DJGPP_PREFIX}/etc/binutils-${BINUTILS_VERSION}-installed ]; then
   # build binutils
   echo "Building binutils"
   mkdir bnu${BINUTILS_VERSION}s
@@ -181,8 +181,8 @@ if [ ! -e binutils-${BINUTILS_VERSION}-installed ]; then
   ${MAKE} -j${MAKE_JOBS} install || exit 1
   
   cd ../../..
-  rm binutils-*-installed
-  touch binutils-${BINUTILS_VERSION}-installed
+  rm ${DJGPP_PREFIX}/etc/binutils-*-installed
+  touch ${DJGPP_PREFIX}/etc/binutils-${BINUTILS_VERSION}-installed
   # binutils done
 else
   echo "Current binutils version already installed, skipping."
