@@ -140,50 +140,52 @@ fi
 
 # make build dir
 echo "Make build dir"
-rm -rf build || exit 1
 mkdir -p build || exit 1
 cd build
 
-# build binutils
-echo "Building binutils"
-mkdir bnu${BINUTILS_VERSION}s
-cd bnu${BINUTILS_VERSION}s
-unzip ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
-cd gnu/binutils-* || exit
-
-# exec permission of some files are not set, fix it.
-for EXEC_FILE in install-sh missing; do
-  echo "chmod a+x $EXEC_FILE"
-  chmod a+x $EXEC_FILE || exit 1
-done
-
-sh ./configure \
-           --prefix=$DJGPP_PREFIX \
-           --target=i586-pc-msdosdjgpp \
-           --program-prefix=i586-pc-msdosdjgpp- \
-           --disable-werror \
-           --disable-nls \
-           || exit 1
-
-${MAKE} configure-bfd || exit 1
-${MAKE} -C bfd stmp-lcoff-h || exit 1
-${MAKE} || exit 1
-
-if [ ! -z $MAKE_CHECK ]; then
-  echo "Run ${MAKE} check"
-  ${MAKE} check || exit 1
+if [ ! -e binutils-${BINUTILS_VERSION}-installed ]
+  # build binutils
+  echo "Building binutils"
+  mkdir bnu${BINUTILS_VERSION}s
+  cd bnu${BINUTILS_VERSION}s
+  unzip ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
+  cd gnu/binutils-* || exit
+  
+  # exec permission of some files are not set, fix it.
+  for EXEC_FILE in install-sh missing; do
+    echo "chmod a+x $EXEC_FILE"
+    chmod a+x $EXEC_FILE || exit 1
+  done
+  
+  sh ./configure \
+             --prefix=$DJGPP_PREFIX \
+             --target=i586-pc-msdosdjgpp \
+             --program-prefix=i586-pc-msdosdjgpp- \
+             --disable-werror \
+             --disable-nls \
+             || exit 1
+  
+  ${MAKE} configure-bfd || exit 1
+  ${MAKE} -C bfd stmp-lcoff-h || exit 1
+  ${MAKE} || exit 1
+  
+  if [ ! -z $MAKE_CHECK ]; then
+    echo "Run ${MAKE} check"
+    ${MAKE} check || exit 1
+  fi
+  
+  ${MAKE} install || exit 1
+  
+  cd ../../..
+  touch binutils-${BINUTILS_VERSION}-installed
+  # binutils done
 fi
-
-${MAKE} install || exit 1
-
-cd ../../..
-# binutils done
 
 # prepare djcrx
 echo "Prepare djcrx"
 mkdir djcrx${DJCRX_VERSION}
 cd djcrx${DJCRX_VERSION}
-unzip ../../download/djcrx${DJCRX_VERSION}.zip || exit 1
+unzip -o ../../download/djcrx${DJCRX_VERSION}.zip || exit 1
 patch -p1 -u < ../../patch/patch-djcrx205.txt || exit 1
 
 cd src/stub
@@ -207,69 +209,75 @@ cd djcross-gcc-${GCC_VERSION}/
 
 BUILDDIR=`pwd`
 
-echo "Building autoconf"
-cd $BUILDDIR
-tar xJf ../../download/autoconf-${AUTOCONF_VERSION}.tar.xz || exit 1
-cd autoconf-${AUTOCONF_VERSION}/
-./configure --prefix=$BUILDDIR/tmpinst || exit 1
-${MAKE} all install || exit 1
-
-echo "Building automake"
-cd $BUILDDIR
-tar xJf ../../download/automake-${AUTOMAKE_VERSION}.tar.xz || exit 1
-cd automake-${AUTOMAKE_VERSION}/
-PATH="$BUILDDIR//tmpinst/bin:$PATH" \
-./configure --prefix=$BUILDDIR/tmpinst || exit 1
-PATH="$BUILDDIR//tmpinst/bin:$PATH" \
-${MAKE} all install || exit 1
-
-# build GNU sed if needed.
-SED=sed
-if [ ! -z $SED_VERSION ]; then
-  echo "Building sed"
+if [ ! -e gcc-unpacked ]
+  echo "Building autoconf"
   cd $BUILDDIR
-  tar xjf ../../download/sed-${SED_VERSION}.tar.bz2 || exit 1
-  cd sed-${SED_VERSION}/
+  tar xJf ../../download/autoconf-${AUTOCONF_VERSION}.tar.xz || exit 1
+  cd autoconf-${AUTOCONF_VERSION}/
   ./configure --prefix=$BUILDDIR/tmpinst || exit 1
   ${MAKE} all install || exit 1
-  SED=$BUILDDIR/tmpinst/bin/sed
+  
+  echo "Building automake"
+  cd $BUILDDIR
+  tar xJf ../../download/automake-${AUTOMAKE_VERSION}.tar.xz || exit 1
+  cd automake-${AUTOMAKE_VERSION}/
+  PATH="$BUILDDIR//tmpinst/bin:$PATH" \
+  ./configure --prefix=$BUILDDIR/tmpinst || exit 1
+  PATH="$BUILDDIR//tmpinst/bin:$PATH" \
+  ${MAKE} all install || exit 1
+  
+  # build GNU sed if needed.
+  SED=sed
+  if [ ! -z $SED_VERSION ]; then
+    echo "Building sed"
+    cd $BUILDDIR
+    tar xjf ../../download/sed-${SED_VERSION}.tar.bz2 || exit 1
+    cd sed-${SED_VERSION}/
+    ./configure --prefix=$BUILDDIR/tmpinst || exit 1
+    ${MAKE} all install || exit 1
+    SED=$BUILDDIR/tmpinst/bin/sed
+  fi
+  
+  cd $BUILDDIR
+  
+  # gcc 4.8 or above unpack-gcc.sh needs to be patched for OSX
+  # patch from :
+  #   ( cd gnu && tar xf $top/$archive $tar_param && echo $archive >$top/s-sources )
+  # to :
+  #   ( cd gnu && tar xJf $top/$archive && echo $archive >$top/s-sources )
+  echo "Patch unpack-gcc.sh"
+  $SED -i "s/\(cd gnu && tar x\)\(f [^ ]* \)\([^ ]* \)/\1J\2/" unpack-gcc.sh || exit 1
+  if [ `uname` = "FreeBSD" ]; then
+    # The --verbose option is not recognized by BSD patch
+    $SED -i 's/patch --verbose/patch/' unpack-gcc.sh || exit 1
+  fi
+  
+  echo "Running unpack-gcc.sh"
+  PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source ../../download/gcc-${GCC_VERSION}.tar.xz || exit 1
+  
+  # patch gnu/gcc-X.XX/gcc/doc/gcc.texi
+  echo "Patch gcc/doc/gcc.texi"
+  cd gnu/gcc-*/gcc/doc || exit 1
+  $SED -i "s/[^^]@\(\(tex\)\|\(end\)\)/\n@\1/g" gcc.texi || exit 1
+  cd -
+  
+  # copy stubify programs
+  cp $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/stubify $BUILDDIR/tmpinst/bin
+  
+  echo "Building gcc"
+  cd $BUILDDIR/
+  
+  # download mpc/gmp/mpfr/isl libraries
+  cd gnu/gcc-${GCC_VERSION_SHORT}
+  ./contrib/download_prerequisites
+  cd -
+  
+  touch gcc-unpacked
 fi
 
-cd $BUILDDIR
-
-# gcc 4.8 or above unpack-gcc.sh needs to be patched for OSX
-# patch from :
-#   ( cd gnu && tar xf $top/$archive $tar_param && echo $archive >$top/s-sources )
-# to :
-#   ( cd gnu && tar xJf $top/$archive && echo $archive >$top/s-sources )
-echo "Patch unpack-gcc.sh"
-$SED -i "s/\(cd gnu && tar x\)\(f [^ ]* \)\([^ ]* \)/\1J\2/" unpack-gcc.sh || exit 1
-if [ `uname` = "FreeBSD" ]; then
-  # The --verbose option is not recognized by BSD patch
-  $SED -i 's/patch --verbose/patch/' unpack-gcc.sh || exit 1
-fi
-
-echo "Running unpack-gcc.sh"
-PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source ../../download/gcc-${GCC_VERSION}.tar.xz || exit 1
-
-# patch gnu/gcc-X.XX/gcc/doc/gcc.texi
-echo "Patch gcc/doc/gcc.texi"
-cd gnu/gcc-*/gcc/doc || exit 1
-$SED -i "s/[^^]@\(\(tex\)\|\(end\)\)/\n@\1/g" gcc.texi || exit 1
-cd -
-
-# copy stubify programs
-cp $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/stubify $BUILDDIR/tmpinst/bin
-
-echo "Building gcc"
-cd $BUILDDIR/
-
-mkdir djcross
+rm -rf djcross || exit 1
+mkdir -p djcross || exit 1
 cd djcross
-
-cd ../gnu/gcc-${GCC_VERSION_SHORT}
-./contrib/download_prerequisites
-cd -
 
 PATH="$BUILDDIR//tmpinst/bin:$PATH" \
 ../gnu/gcc-${GCC_VERSION_SHORT}/configure \
