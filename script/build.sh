@@ -111,6 +111,7 @@ cd build
 if [ ! -e ${DJGPP_PREFIX}/etc/binutils-${BINUTILS_VERSION}-installed ]; then
   # build binutils
   echo "Building binutils"
+  rm -rf bnu${BINUTILS_VERSION}s
   mkdir bnu${BINUTILS_VERSION}s
   cd bnu${BINUTILS_VERSION}s
   unzip -o ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
