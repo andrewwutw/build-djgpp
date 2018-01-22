@@ -9,6 +9,9 @@ DJGPP_PREFIX=${DJGPP_PREFIX-/usr/local/djgpp}
 #ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++,f95,objc,obj-c++}
 ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
 
+# number of parallel build threads
+MAKE_JOBS=${MAKE_JOBS-4}
+
 #DJGPP_DOWNLOAD_BASE="ftp://ftp.delorie.com/pub"
 DJGPP_DOWNLOAD_BASE="http://www.delorie.com/pub"
 
@@ -34,6 +37,7 @@ if [ `uname` = "FreeBSD" ]; then
 else
   MAKE=make
 fi
+
 #CFLAGS="-O2 -g $CFLAGS -std=gnu11"
 
 export CC CXX CFLAGS MAKE
@@ -165,16 +169,16 @@ if [ ! -e binutils-${BINUTILS_VERSION}-installed ]; then
              --disable-nls \
              || exit 1
   
-  ${MAKE} configure-bfd || exit 1
-  ${MAKE} -C bfd stmp-lcoff-h || exit 1
-  ${MAKE} || exit 1
+  ${MAKE} -j${MAKE_JOBS} configure-bfd || exit 1
+  ${MAKE} -j${MAKE_JOBS} -C bfd stmp-lcoff-h || exit 1
+  ${MAKE} -j${MAKE_JOBS} || exit 1
   
   if [ ! -z $MAKE_CHECK ]; then
     echo "Run ${MAKE} check"
-    ${MAKE} check || exit 1
+    ${MAKE} -j${MAKE_JOBS} check || exit 1
   fi
   
-  ${MAKE} install || exit 1
+  ${MAKE} -j${MAKE_JOBS} install || exit 1
   
   cd ../../..
   touch binutils-${BINUTILS_VERSION}-installed
@@ -217,7 +221,7 @@ if [ ! -e autoconf-${AUTOCONF_VERSION}-built ]; then
   tar xJf ../../download/autoconf-${AUTOCONF_VERSION}.tar.xz || exit 1
   cd autoconf-${AUTOCONF_VERSION}/
   ./configure --prefix=$BUILDDIR/tmpinst || exit 1
-  ${MAKE} all install || exit 1
+  ${MAKE} -j${MAKE_JOBS} all install || exit 1
 fi
 
 if [ ! -e automake-${AUTOMAKE_VERSION}-built ]; then
@@ -239,7 +243,7 @@ if [ ! -z $SED_VERSION ]; then
   tar xjf ../../download/sed-${SED_VERSION}.tar.bz2 || exit 1
   cd sed-${SED_VERSION}/
   ./configure --prefix=$BUILDDIR/tmpinst || exit 1
-  ${MAKE} all install || exit 1
+  ${MAKE} -j${MAKE_JOBS} all install || exit 1
   SED=$BUILDDIR/tmpinst/bin/sed
 fi
 
@@ -303,9 +307,9 @@ PATH="$BUILDDIR//tmpinst/bin:$PATH" \
                                  --enable-languages=${ENABLE_LANGUAGES} \
                                  || exit 1
 
-${MAKE} j=4 "PATH=$BUILDDIR/tmpinst/bin:$PATH" || exit 1
+${MAKE} -j${MAKE_JOBS} "PATH=$BUILDDIR/tmpinst/bin:$PATH" || exit 1
 
-${MAKE} install-strip || exit 1
+${MAKE} -j${MAKE_JOBS} install-strip || exit 1
 
 echo "Copy long name executables to short name."
 (
@@ -334,7 +338,7 @@ patch -p1 -u < ../../patch/patch-djlsr205.txt || exit 1
 if [ "$CC" == "gcc" ]; then
   echo "Building DXE tools."
   cd src
-  PATH=$DJGPP_PREFIX/bin/:$PATH make || exit 1
+  PATH=$DJGPP_PREFIX/bin/:$PATH ${MAKE} -j${MAKE_JOBS} || exit 1
   cp dxe/dxegen dxe/dxe3gen dxe/dxe3res $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
   cd ..
 else
