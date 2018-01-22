@@ -20,9 +20,6 @@ DJDEV_VERSION=205
 
 GCC_VERSION=7.2.0
 GCC_VERSION_SHORT=7.20
-GMP_VERSION=6.1.2
-MPFR_VERSION=3.1.5
-MPC_VERSION=1.0.3
 AUTOCONF_VERSION=2.64
 AUTOMAKE_VERSION=1.11.6
 
@@ -49,9 +46,6 @@ DJDEV_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djdev${DJDEV_VERSION}.zip
 
 DJCROSS_GCC_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/rpms/djcross-gcc-${GCC_VERSION}/djcross-gcc-${GCC_VERSION}.tar.bz2"
 GCC_ARCHIVE="http://ftpmirror.gnu.org/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz"
-GMP_ARCHIVE="http://ftpmirror.gnu.org/gmp/gmp-${GMP_VERSION}.tar.xz"
-MPFR_ARCHIVE="http://ftpmirror.gnu.org/mpfr/mpfr-${MPFR_VERSION}.tar.xz"
-MPC_ARCHIVE="http://ftpmirror.gnu.org/mpc/mpc-${MPC_VERSION}.tar.gz"
 AUTOCONF_ARCHIVE="http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.xz"
 AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.xz"
 
@@ -101,7 +95,6 @@ OLD_DJCROSS_GCC_ARCHIVE=${DJCROSS_GCC_ARCHIVE/rpms\//deleted\/rpms\/}
 # download source files
 ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $DJLSR_ARCHIVE $DJDEV_ARCHIVE
               $SED_ARCHIVE $DJCROSS_GCC_ARCHIVE $OLD_DJCROSS_GCC_ARCHIVE $GCC_ARCHIVE
-              $GMP_ARCHIVE $MPFR_ARCHIVE $MPC_ARCHIVE
               $AUTOCONF_ARCHIVE $AUTOMAKE_ARCHIVE"
 
 echo "Download source files..."
@@ -243,9 +236,6 @@ if [ ! -z $SED_VERSION ]; then
 fi
 
 cd $BUILDDIR
-tar xJf ../../download/gmp-${GMP_VERSION}.tar.xz || exit 1
-tar xJf ../../download/mpfr-${MPFR_VERSION}.tar.xz || exit 1
-tar xzf ../../download/mpc-${MPC_VERSION}.tar.gz || exit 1
 
 # gcc 4.8 or above unpack-gcc.sh needs to be patched for OSX
 # patch from :
@@ -271,43 +261,13 @@ cd -
 # copy stubify programs
 cp $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/stubify $BUILDDIR/tmpinst/bin
 
-echo "Building gmp"
-cd $BUILDDIR/gmp-*/
-# On some systems, building gmp will fail if CFLAGS is set.
-# Unset CFLAGS during building gmp.
-env -u CFLAGS ./configure --enable-fat --prefix=$BUILDDIR/tmpinst --enable-static --disable-shared || exit 1
-${MAKE} all || exit 1
-if [ ! -z $MAKE_CHECK ]; then
-  echo "Run ${MAKE} check"
-  ${MAKE} check || exit 1
-fi
-${MAKE} install || exit 1
-
-echo "Building mpfr"
-cd $BUILDDIR/mpfr-${MPFR_VERSION}/
-./configure --prefix=$BUILDDIR/tmpinst --with-gmp=$BUILDDIR/tmpinst --enable-static --disable-shared || exit 1
-${MAKE} all || exit 1
-if [ ! -z $MAKE_CHECK ]; then
-  echo "Run ${MAKE} check"
-  ${MAKE} check || exit 1
-fi
-${MAKE} install || exit 1
-
-echo "Building mpc"
-cd $BUILDDIR/mpc-${MPC_VERSION}/
-./configure --prefix=$BUILDDIR/tmpinst --with-gmp=$BUILDDIR/tmpinst --with-mpfr=$BUILDDIR/tmpinst --enable-static --disable-shared || exit 1
-${MAKE} all || exit 1
-if [ ! -z $MAKE_CHECK ]; then
-  echo "Run ${MAKE} check"
-  ${MAKE} check || exit 1
-fi
-${MAKE} install || exit 1
-
 echo "Building gcc"
 cd $BUILDDIR/
 
 mkdir djcross
 cd djcross
+
+../gnu/gcc-${GCC_VERSION_SHORT}/contrib/download_prerequisites --directory=../gnu/gcc-${GCC_VERSION_SHORT}
 
 PATH="$BUILDDIR//tmpinst/bin:$PATH" \
 ../gnu/gcc-${GCC_VERSION_SHORT}/configure \
@@ -316,13 +276,9 @@ PATH="$BUILDDIR//tmpinst/bin:$PATH" \
                                  --prefix=$DJGPP_PREFIX \
                                  --disable-nls \
                                  --disable-plugin \
-                                 --disable-lto \
                                  --enable-lto \
                                  --enable-libstdcxx-filesystem-ts \
                                  --enable-libquadmath-support \
-                                 --with-gmp=$BUILDDIR/tmpinst \
-                                 --with-mpfr=$BUILDDIR/tmpinst \
-                                 --with-mpc=$BUILDDIR/tmpinst \
                                  --enable-version-specific-runtime-libs \
                                  --enable-languages=${ENABLE_LANGUAGES} \
                                  || exit 1
