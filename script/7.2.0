@@ -209,14 +209,16 @@ cd djcross-gcc-${GCC_VERSION}/
 
 BUILDDIR=`pwd`
 
-if [ ! -e gcc-unpacked ]; then
+if [ ! -e autoconf-${AUTOCONF_VERSION}-built ]; then
   echo "Building autoconf"
   cd $BUILDDIR
   tar xJf ../../download/autoconf-${AUTOCONF_VERSION}.tar.xz || exit 1
   cd autoconf-${AUTOCONF_VERSION}/
   ./configure --prefix=$BUILDDIR/tmpinst || exit 1
   ${MAKE} all install || exit 1
-  
+fi
+
+if [ ! -e automake-${AUTOMAKE_VERSION}-built ]; then
   echo "Building automake"
   cd $BUILDDIR
   tar xJf ../../download/automake-${AUTOMAKE_VERSION}.tar.xz || exit 1
@@ -225,21 +227,23 @@ if [ ! -e gcc-unpacked ]; then
   ./configure --prefix=$BUILDDIR/tmpinst || exit 1
   PATH="$BUILDDIR//tmpinst/bin:$PATH" \
   ${MAKE} all install || exit 1
-  
-  # build GNU sed if needed.
-  SED=sed
-  if [ ! -z $SED_VERSION ]; then
-    echo "Building sed"
-    cd $BUILDDIR
-    tar xjf ../../download/sed-${SED_VERSION}.tar.bz2 || exit 1
-    cd sed-${SED_VERSION}/
-    ./configure --prefix=$BUILDDIR/tmpinst || exit 1
-    ${MAKE} all install || exit 1
-    SED=$BUILDDIR/tmpinst/bin/sed
-  fi
-  
+fi
+
+# build GNU sed if needed.
+SED=sed
+if [ ! -z $SED_VERSION ]; then
+  echo "Building sed"
   cd $BUILDDIR
-  
+  tar xjf ../../download/sed-${SED_VERSION}.tar.bz2 || exit 1
+  cd sed-${SED_VERSION}/
+  ./configure --prefix=$BUILDDIR/tmpinst || exit 1
+  ${MAKE} all install || exit 1
+  SED=$BUILDDIR/tmpinst/bin/sed
+fi
+
+cd $BUILDDIR
+
+if [ ! -e gcc-unpacked ]; then
   # gcc 4.8 or above unpack-gcc.sh needs to be patched for OSX
   # patch from :
   #   ( cd gnu && tar xf $top/$archive $tar_param && echo $archive >$top/s-sources )
@@ -264,7 +268,6 @@ if [ ! -e gcc-unpacked ]; then
   # copy stubify programs
   cp $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/stubify $BUILDDIR/tmpinst/bin
   
-  echo "Building gcc"
   cd $BUILDDIR/
   
   # download mpc/gmp/mpfr/isl libraries
@@ -274,6 +277,8 @@ if [ ! -e gcc-unpacked ]; then
   
   touch gcc-unpacked
 fi
+
+echo "Building gcc"
 
 rm -rf djcross || exit 1
 mkdir -p djcross || exit 1
