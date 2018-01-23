@@ -10,9 +10,9 @@ export GCC_ARCHIVE="http://ftpmirror.gnu.org/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VE
 export AUTOCONF_ARCHIVE="http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.xz"
 export AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.xz"
 
-export GCC_CONFIGURE_OPTIONS="${GCC_CONFIGURE_OPTIONS} \
-                              --disable-plugin \
+export GCC_CONFIGURE_OPTIONS="--disable-plugin \
                               --enable-lto \
-                              --enable-libstdcxx-filesystem-ts"
+                              --enable-libstdcxx-filesystem-ts \
+                              ${GCC_CONFIGURE_OPTIONS}"
 
 ./script/build.sh
