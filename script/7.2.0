@@ -142,6 +142,8 @@ if ! [ -w $DJGPP_PREFIX ]; then
   exit 1
 fi
 
+mkdir -p ${DJGPP_PREFIX}/etc/ || exit 1
+
 # make build dir
 echo "Make build dir"
 mkdir -p build || exit 1
