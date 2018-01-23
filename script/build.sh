@@ -175,7 +175,7 @@ cd ..
 # djcrx done
 
 # build gcc
-tar -xjvf ../download/djcross-gcc-${GCC_VERSION}.tar.bz2 || exit 1
+tar -xavf ../download/djcross-gcc-${GCC_VERSION}.tar.* || exit 1
 cd djcross-gcc-${GCC_VERSION}/
 
 BUILDDIR=`pwd`
@@ -183,7 +183,7 @@ BUILDDIR=`pwd`
 if [ ! -e ${BUILDDIR}/tmpinst/autoconf-${AUTOCONF_VERSION}-built ]; then
   echo "Building autoconf"
   cd $BUILDDIR
-  tar xJf ../../download/autoconf-${AUTOCONF_VERSION}.tar.xz || exit 1
+  tar -xavf ../../download/autoconf-${AUTOCONF_VERSION}.tar.* || exit 1
   cd autoconf-${AUTOCONF_VERSION}/
   ./configure --prefix=$BUILDDIR/tmpinst || exit 1
   ${MAKE} -j${MAKE_JOBS} all install || exit 1
@@ -196,7 +196,7 @@ fi
 if [ ! -e ${BUILDDIR}/tmpinst/automake-${AUTOMAKE_VERSION}-built ]; then
   echo "Building automake"
   cd $BUILDDIR
-  tar xJf ../../download/automake-${AUTOMAKE_VERSION}.tar.xz || exit 1
+  tar -xavf ../../download/automake-${AUTOMAKE_VERSION}.tar.* || exit 1
   cd automake-${AUTOMAKE_VERSION}/
   PATH="$BUILDDIR//tmpinst/bin:$PATH" \
   ./configure --prefix=$BUILDDIR/tmpinst || exit 1
@@ -213,7 +213,7 @@ SED=sed
 if [ ! -z $SED_VERSION ]; then
   echo "Building sed"
   cd $BUILDDIR
-  tar xjf ../../download/sed-${SED_VERSION}.tar.bz2 || exit 1
+  tar -xavf ../../download/sed-${SED_VERSION}.tar.* || exit 1
   cd sed-${SED_VERSION}/
   ./configure --prefix=$BUILDDIR/tmpinst || exit 1
   ${MAKE} -j${MAKE_JOBS} all install || exit 1
@@ -229,14 +229,14 @@ if [ ! -e gcc-unpacked ]; then
   # to :
   #   ( cd gnu && tar xJf $top/$archive && echo $archive >$top/s-sources )
   echo "Patch unpack-gcc.sh"
-  $SED -i "s/\(cd gnu && tar x\)\(f [^ ]* \)\([^ ]* \)/\1J\2/" unpack-gcc.sh || exit 1
+  $SED -i "s/\(cd gnu && tar x\)\(f [^ ]* \)\([^ ]* \)/\1a\2/" unpack-gcc.sh || exit 1
   if [ `uname` = "FreeBSD" ]; then
     # The --verbose option is not recognized by BSD patch
     $SED -i 's/patch --verbose/patch/' unpack-gcc.sh || exit 1
   fi
   
   echo "Running unpack-gcc.sh"
-  PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source ../../download/gcc-${GCC_VERSION}.tar.xz || exit 1
+  PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source ../../download/gcc-${GCC_VERSION}.tar.* || exit 1
   
   # patch gnu/gcc-X.XX/gcc/doc/gcc.texi
   echo "Patch gcc/doc/gcc.texi"
