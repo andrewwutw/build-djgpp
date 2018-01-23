@@ -19,8 +19,7 @@ Before running this script, you need to install these programs first :
 * makeinfo
 * patch
 * zlib header/library
-* curl (for Cygwin/OSX/Linux/FreeBSD)
-* wget (for MinGW)
+* curl or wget
 * bash (for FreeBSD)
 
 Depending on your system, installation procedure maybe different.
@@ -43,6 +42,12 @@ MinGW :
 ```
 mingw-get update
 mingw-get install msys-unzip libz-dev msys-wget msys-bison msys-flex msys-patch
+```
+
+MinGW64 :
+
+```
+pacman -Syuu base-devel mingw-w64-x86_64-toolchain mingw-w64-x86_64-curl mingw-w64-x86_64-zlib unzip
 ```
 
 ### Configuration
@@ -159,6 +164,7 @@ BASE_DIR/setenv.bat
 * FreeBSD-10.2 (64bit)
 * Cygwin (32bit Windows XP)
 * MinGW (32bit Windows XP)
+* MinGW64 (64bit Windows 7)
 
 ### Thanks
 
