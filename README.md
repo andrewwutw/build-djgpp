@@ -65,6 +65,12 @@ Default number of parallel builds is 4. You can change this number by setting en
 MAKE_JOBS=8
 ```
 
+To configure gcc with additional options, add your custom flags to environment variable *GCC_CONFIGURE_OPTIONS* :
+
+```
+GCC_CONFIGURE_OPTIONS="--enable-nls"
+```
+
 ### Building DJGPP compiler
 
 To build DJGPP, just run :
