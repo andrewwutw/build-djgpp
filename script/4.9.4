@@ -13,6 +13,6 @@ export AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VER
 export GCC_CONFIGURE_OPTIONS="--enable-lto \
                               ${GCC_CONFIGURE_OPTIONS}"
 
-export CFLAGS="${CFLAGS} -std=gnu90"
+export GCC_EXTRA_CFLAGS="-std=gnu90"
 
 ./script/build.sh

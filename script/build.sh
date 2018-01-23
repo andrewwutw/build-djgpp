@@ -271,6 +271,9 @@ echo "Building gcc"
 mkdir -p djcross || exit 1
 cd djcross
 
+TEMP_CFLAGS="$CFLAGS"
+export CFLAGS="$CFLAGS $GCC_EXTRA_CFLAGS"
+
 if [ ! -e gcc-configure-prefix ] || [ ! `cat gcc-configure-prefix` = "${DJGPP_PREFIX}" ]; then
   ${MAKE} distclean
   PATH="$BUILDDIR//tmpinst/bin:$PATH" \
@@ -292,6 +295,8 @@ fi
 ${MAKE} -j${MAKE_JOBS} "PATH=$BUILDDIR/tmpinst/bin:$PATH" || exit 1
 
 ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
+
+export CFLAGS="$TEMP_CFLAGS"
 
 echo "Copy long name executables to short name."
 (
