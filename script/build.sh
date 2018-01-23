@@ -18,7 +18,7 @@ export CC CXX CFLAGS MAKE
 REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch"
 
 # MinGW doesn't have curl, so we use wget.
-if uname|grep "^MINGW32" > /dev/null; then
+if ! which curl > /dev/null; then
   USE_WGET=1
 fi
 
