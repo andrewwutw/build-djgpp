@@ -134,7 +134,7 @@ diff -ur djlsr205-orig/src/misc.c djlsr205/src/misc.c
    /* MS-DOS uses \, unix uses / */
    if (argc > 2 && strcmp(argv[1], "mkdir") == 0)
 +#if defined(__MINGW32__) || defined(__MINGW64__)
-+    _mkdir(argv[2]);
++    mkdir(argv[2]);
 +#else
      mkdir(argv[2], 0777);
 +#endif
