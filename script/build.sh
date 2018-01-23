@@ -265,7 +265,8 @@ echo "Building gcc"
 mkdir -p djcross || exit 1
 cd djcross
 
-if [ ! `cat gcc-configure-prefix` = "${DJGPP_PREFIX}" ]; then
+if [ ! -e gcc-configure-prefix ] || [ ! `cat gcc-configure-prefix` = "${DJGPP_PREFIX}" ]; then
+  ${MAKE} distclean
   PATH="$BUILDDIR//tmpinst/bin:$PATH" \
   ../gnu/gcc-${GCC_VERSION_SHORT}/configure \
                                    --target=i586-pc-msdosdjgpp \
