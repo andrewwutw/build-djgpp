@@ -120,6 +120,9 @@ if [ ! -e ${DJGPP_PREFIX}/etc/binutils-${BINUTILS_VERSION}-installed ]; then
   unzip -o ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
   cd gnu/binutils-* || exit
   
+  # patch for binutils 2.27
+  ([ ${BINUTILS_VERSION} == 227 ] && patch bfd/init.c ../../../../patch/patch-bnu27-bfd-init.txt) || exit 1
+  
   # exec permission of some files are not set, fix it.
   for EXEC_FILE in install-sh missing; do
     echo "chmod a+x $EXEC_FILE"
