@@ -274,13 +274,10 @@ if [ ! -e gcc-configure-prefix ] || [ ! `cat gcc-configure-prefix` = "${DJGPP_PR
                                    --program-prefix=i586-pc-msdosdjgpp- \
                                    --prefix=$DJGPP_PREFIX \
                                    --disable-nls \
-                                   --disable-plugin \
-                                   --enable-lto \
-                                   --enable-libstdcxx-filesystem-ts \
                                    --enable-libquadmath-support \
                                    --enable-version-specific-runtime-libs \
                                    --enable-languages=${ENABLE_LANGUAGES} \
-                                   || exit 1
+                                   ${GCC_CONFIGURE_OPTIONS} || exit 1
   echo ${DJGPP_PREFIX} > gcc-configure-prefix
 else
   echo "Note: gcc already configured. To force a rebuild, use: rm -rf ${BUILDDIR}/djcross/"
