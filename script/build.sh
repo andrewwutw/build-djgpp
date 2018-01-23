@@ -166,8 +166,8 @@ unzip -o ../../download/djcrx${DJCRX_VERSION}.zip || exit 1
 patch -p1 -u < ../../patch/patch-djcrx205.txt || exit 1
 
 cd src/stub
-${CC} -O2 stubify.c -o stubify || exit 1
-${CC} -O2 stubedit.c -o stubedit || exit 1
+${CC} -O2 ${CFLAGS} stubify.c -o stubify || exit 1
+${CC} -O2 ${CFLAGS} stubedit.c -o stubedit || exit 1
 
 cd ../..
 
@@ -327,7 +327,7 @@ else
   echo "Building DXE tools requires gcc, skip."
 fi
 cd src/stub
-${CC} -o exe2coff exe2coff.c || exit 1
+${CC} -O2 ${CFLAGS} -o exe2coff exe2coff.c || exit 1
 cp -p exe2coff $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
 cd ../../..
 # djlsr done
