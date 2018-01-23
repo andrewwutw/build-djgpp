@@ -151,6 +151,8 @@ if [ ! -e ${DJGPP_PREFIX}/etc/binutils-${BINUTILS_VERSION}-installed ]; then
   # binutils done
 else
   echo "Current binutils version already installed, skipping."
+  echo "To force a rebuild, use: rm ${DJGPP_PREFIX}/etc/binutils-${BINUTILS_VERSION}-installed"
+  sleep 5
 fi
 
 # prepare djcrx
@@ -347,3 +349,4 @@ do
 done
 
 echo "build-djgpp.sh done. To remove temporary build files, use: rm -rf build/"
+echo "To remove downloaded source tarballs, use: rm -rf download/"
