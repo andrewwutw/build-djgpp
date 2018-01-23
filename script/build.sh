@@ -163,7 +163,7 @@ echo "Prepare djcrx"
 mkdir djcrx${DJCRX_VERSION}
 cd djcrx${DJCRX_VERSION}
 unzip -o ../../download/djcrx${DJCRX_VERSION}.zip || exit 1
-patch -p1 -u < ../../patch/patch-djcrx205.txt || exit 1
+patch -p1 -u < ../../patch/patch-djcrx${DJCRX_VERSION}.txt || exit 1
 
 cd src/stub
 ${CC} -O2 ${CFLAGS} stubify.c -o stubify || exit 1
@@ -316,7 +316,7 @@ cd djlsr${DJLSR_VERSION}
 unzip ../../download/djlsr${DJLSR_VERSION}.zip || exit 1
 unzip -o ../../download/djdev${DJDEV_VERSION}.zip "include/*/*" || exit 1
 unzip -o ../../download/djdev${DJDEV_VERSION}.zip "include/*" || exit 1
-patch -p1 -u < ../../patch/patch-djlsr205.txt || exit 1
+patch -p1 -u < ../../patch/patch-djlsr${DJLSR_VERSION}.txt || exit 1
 if [ "$CC" == "gcc" ]; then
   echo "Building DXE tools."
   cd src
