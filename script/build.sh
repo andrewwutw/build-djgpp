@@ -176,7 +176,7 @@ cd ..
 # djcrx done
 
 # build gcc
-tar -xavf ../download/djcross-gcc-${GCC_VERSION}.tar.* || exit 1
+tar -xavf $(ls -t ../download/djcross-gcc-${GCC_VERSION}.tar.* | head -n 1) || exit 1
 cd djcross-gcc-${GCC_VERSION}/
 
 BUILDDIR=`pwd`
@@ -184,7 +184,7 @@ BUILDDIR=`pwd`
 if [ ! -e ${BUILDDIR}/tmpinst/autoconf-${AUTOCONF_VERSION}-built ]; then
   echo "Building autoconf"
   cd $BUILDDIR
-  tar -xavf ../../download/autoconf-${AUTOCONF_VERSION}.tar.* || exit 1
+  tar -xavf $(ls -t ../../download/autoconf-${AUTOCONF_VERSION}.tar.* | head -n 1) || exit 1
   cd autoconf-${AUTOCONF_VERSION}/
   ./configure --prefix=$BUILDDIR/tmpinst || exit 1
   ${MAKE} -j${MAKE_JOBS} all install || exit 1
@@ -197,7 +197,7 @@ fi
 if [ ! -e ${BUILDDIR}/tmpinst/automake-${AUTOMAKE_VERSION}-built ]; then
   echo "Building automake"
   cd $BUILDDIR
-  tar -xavf ../../download/automake-${AUTOMAKE_VERSION}.tar.* || exit 1
+  tar -xavf $(ls -t ../../download/automake-${AUTOMAKE_VERSION}.tar.* | head -n 1) || exit 1
   cd automake-${AUTOMAKE_VERSION}/
   PATH="$BUILDDIR//tmpinst/bin:$PATH" \
   ./configure --prefix=$BUILDDIR/tmpinst || exit 1
@@ -214,7 +214,7 @@ SED=sed
 if [ ! -z $SED_VERSION ]; then
   echo "Building sed"
   cd $BUILDDIR
-  tar -xavf ../../download/sed-${SED_VERSION}.tar.* || exit 1
+  tar -xavf $(ls -t ../../download/sed-${SED_VERSION}.tar.* | head -n 1) || exit 1
   cd sed-${SED_VERSION}/
   ./configure --prefix=$BUILDDIR/tmpinst || exit 1
   ${MAKE} -j${MAKE_JOBS} all install || exit 1
@@ -237,7 +237,7 @@ if [ ! -e gcc-unpacked ]; then
   fi
   
   echo "Running unpack-gcc.sh"
-  PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source ../../download/gcc-${GCC_VERSION}.tar.* || exit 1
+  PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source $(ls -t ../../download/gcc-${GCC_VERSION}.tar.* | head -n 1) || exit 1
   
   # patch gnu/gcc-X.XX/gcc/doc/gcc.texi
   echo "Patch gcc/doc/gcc.texi"
