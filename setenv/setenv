@@ -1,3 +1,4 @@
-export PATH="$(cd "$(dirname "$0")"; pwd)"/i586-pc-msdosdjgpp/bin/:"$(cd "$(dirname "$0")"; pwd)"/bin/:$PATH
-export GCC_EXEC_PREFIX="$(cd "$(dirname "$0")"; pwd)"/lib/gcc/
-export DJDIR="$(cd "$(dirname "$0")"; pwd)"/i586-pc-msdosdjgpp
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export PATH="$DIR/i586-pc-msdosdjgpp/bin/:$DIR/bin/:$PATH"
+export GCC_EXEC_PREFIX="$DIR/lib/gcc/"
+export DJDIR="$DIR/i586-pc-msdosdjgpp"
