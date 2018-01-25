@@ -296,6 +296,7 @@ if [ ! -e gcc-configure-prefix ] || [ ! `cat gcc-configure-prefix` = "${DJGPP_PR
                                    --enable-libquadmath-support \
                                    --enable-version-specific-runtime-libs \
                                    --enable-languages=${ENABLE_LANGUAGES} \
+                                   --enable-fat \
                                    ${GCC_CONFIGURE_OPTIONS} || exit 1
   echo ${DJGPP_PREFIX} > gcc-configure-prefix
 else
