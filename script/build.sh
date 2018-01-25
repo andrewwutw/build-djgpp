@@ -104,7 +104,7 @@ if ! [ -w $DJGPP_PREFIX ]; then
   exit 1
 fi
 
-mkdir -p ${DJGPP_PREFIX}/etc/ || exit 1
+mkdir -p ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/ || exit 1
 
 # make build dir
 echo "Make build dir"
@@ -154,7 +154,7 @@ if [ ! -e ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/binutils-${BINUTILS_VERSION}-in
   # binutils done
 else
   echo "Current binutils version already installed, skipping."
-  echo "To force a rebuild, use: rm ${DJGPP_PREFIX}/etc/binutils-${BINUTILS_VERSION}-installed"
+  echo "To force a rebuild, use: rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/binutils-${BINUTILS_VERSION}-installed"
   sleep 5
 fi
 
