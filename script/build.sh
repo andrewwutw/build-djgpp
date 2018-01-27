@@ -121,7 +121,7 @@ if [ ! -e ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/binutils-${BINUTILS_VERSION}-in
   cd gnu/binutils-* || exit
   
   # patch for binutils 2.27
-  ([ ${BINUTILS_VERSION} == 227 ] && patch bfd/init.c ../../../../patch/patch-bnu27-bfd-init.txt) || exit 1
+  [ ${BINUTILS_VERSION} == 227 ] && ( patch bfd/init.c ../../../../patch/patch-bnu27-bfd-init.txt || exit 1 )
   
   # exec permission of some files are not set, fix it.
   for EXEC_FILE in install-sh missing; do
