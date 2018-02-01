@@ -15,16 +15,6 @@ MAKE_JOBS=${MAKE_JOBS-4}
 #DJGPP_DOWNLOAD_BASE="ftp://ftp.delorie.com/pub"
 export DJGPP_DOWNLOAD_BASE="http://www.delorie.com/pub"
 
-# source tarball versions
-DJCRX_VERSION=205
-DJLSR_VERSION=205
-DJDEV_VERSION=205
-
-# source tarball locations
-DJCRX_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djcrx${DJCRX_VERSION}.zip"
-DJLSR_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djlsr${DJLSR_VERSION}.zip"
-DJDEV_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djdev${DJDEV_VERSION}.zip"
-
 BASE=`pwd`
 
 if [ -z $1 ]; then
@@ -229,27 +219,29 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
   fi
 fi
 
-# prepare djcrx
-echo "Prepare djcrx"
-mkdir -p ${BASE}/build/djcrx${DJCRX_VERSION}
-cd ${BASE}/build/djcrx${DJCRX_VERSION}
-unzip -o ../../download/djcrx${DJCRX_VERSION}.zip || exit 1
-patch -p1 -u < ../../patch/patch-djcrx${DJCRX_VERSION}.txt || exit 1
-
-cd src/stub
-${CC} -O2 ${CFLAGS} stubify.c -o stubify || exit 1
-${CC} -O2 ${CFLAGS} stubedit.c -o stubedit || exit 1
-
-cd ../..
-
-mkdir -p $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include || exit 1
-cp -rp include/* $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include/ || exit 1
-cp -rp lib $DJGPP_PREFIX/i586-pc-msdosdjgpp/ || exit 1
-cp -p src/stub/stubify $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
-cp -p src/stub/stubedit $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
-
-cd ..
-# djcrx done
+if [ ! -z ${DJCRX_VERSION} ]; then
+  # prepare djcrx
+  echo "Prepare djcrx"
+  mkdir -p ${BASE}/build/djcrx${DJCRX_VERSION}
+  cd ${BASE}/build/djcrx${DJCRX_VERSION}
+  unzip -o ../../download/djcrx${DJCRX_VERSION}.zip || exit 1
+  patch -p1 -u < ../../patch/patch-djcrx${DJCRX_VERSION}.txt || exit 1
+  
+  cd src/stub
+  ${CC} -O2 ${CFLAGS} stubify.c -o stubify || exit 1
+  ${CC} -O2 ${CFLAGS} stubedit.c -o stubedit || exit 1
+  
+  cd ../..
+  
+  mkdir -p $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include || exit 1
+  cp -rp include/* $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include/ || exit 1
+  cp -rp lib $DJGPP_PREFIX/i586-pc-msdosdjgpp/ || exit 1
+  cp -p src/stub/stubify $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
+  cp -p src/stub/stubedit $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
+  
+  cd ..
+  # djcrx done
+fi
 
 if [ ! -z ${GCC_VERSION} ]; then
   # build gcc
@@ -383,6 +375,35 @@ if [ ! -z ${GCC_VERSION} ]; then
   export CFLAGS="$TEMP_CFLAGS"
 fi
 
+# gcc done
+
+if [ ! -z ${DJLSR_VERSION} ]; then
+  # build djlsr (for dxegen / exe2coff)
+  echo "Prepare djlsr"
+  cd ${BASE}/build/
+  rm -rf djlsr${DJLSR_VERSION}
+  mkdir djlsr${DJLSR_VERSION}
+  cd djlsr${DJLSR_VERSION}
+  unzip ../../download/djlsr${DJLSR_VERSION}.zip || exit 1
+  unzip -o ../../download/djdev${DJDEV_VERSION}.zip "include/*/*" || exit 1
+  unzip -o ../../download/djdev${DJDEV_VERSION}.zip "include/*" || exit 1
+  patch -p1 -u < ../../patch/patch-djlsr${DJLSR_VERSION}.txt || exit 1
+  if [ "$CC" == "gcc" ]; then
+    echo "Building DXE tools."
+    cd src
+    PATH=$DJGPP_PREFIX/bin/:$PATH ${MAKE} || exit 1
+    cp dxe/dxegen dxe/dxe3gen dxe/dxe3res $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
+    cd ..
+  else
+    echo "Building DXE tools requires gcc, skip."
+  fi
+  cd src/stub
+  ${CC} -O2 ${CFLAGS} -o exe2coff exe2coff.c || exit 1
+  cp -p exe2coff $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
+  cd ${BASE}
+  # djlsr done
+fi
+
 echo "Copy long name executables to short name."
 (
   cd $DJGPP_PREFIX || exit 1
@@ -393,33 +414,6 @@ echo "Copy long name executables to short name."
     fi
   done
 ) || exit 1
-
-# gcc done
-
-# build djlsr (for dxegen / exe2coff)
-echo "Prepare djlsr"
-cd ${BASE}/build/
-rm -rf djlsr${DJLSR_VERSION}
-mkdir djlsr${DJLSR_VERSION}
-cd djlsr${DJLSR_VERSION}
-unzip ../../download/djlsr${DJLSR_VERSION}.zip || exit 1
-unzip -o ../../download/djdev${DJDEV_VERSION}.zip "include/*/*" || exit 1
-unzip -o ../../download/djdev${DJDEV_VERSION}.zip "include/*" || exit 1
-patch -p1 -u < ../../patch/patch-djlsr${DJLSR_VERSION}.txt || exit 1
-if [ "$CC" == "gcc" ]; then
-  echo "Building DXE tools."
-  cd src
-  PATH=$DJGPP_PREFIX/bin/:$PATH ${MAKE} || exit 1
-  cp dxe/dxegen dxe/dxe3gen dxe/dxe3res $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
-  cd ..
-else
-  echo "Building DXE tools requires gcc, skip."
-fi
-cd src/stub
-${CC} -O2 ${CFLAGS} -o exe2coff exe2coff.c || exit 1
-cp -p exe2coff $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
-cd ${BASE}
-# djlsr done
 
 # copy setenv script
 (cd ${BASE}/setenv/ && ./copyfile.sh $DJGPP_PREFIX) || exit 1
