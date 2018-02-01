@@ -42,16 +42,15 @@ while [ ! -z $1 ]; do
   shift
 done
 
-CC=gcc
-CXX=g++
-
-# use gmake under FreeBSD
+# use gmake/clang under FreeBSD
 if [ `uname` = "FreeBSD" ]; then
-  MAKE=gmake
-  CC=clang
-  CXX=clang++
+  MAKE=${MAKE-gmake}
+  CC=${CC-clang}
+  CXX=${CXX-clang++}
 else
-  MAKE=make
+  MAKE=${MAKE-make}
+  CC=${CC-gcc}
+  CXX=${CXX-g++}
 fi
 
 export CC CXX CFLAGS MAKE
