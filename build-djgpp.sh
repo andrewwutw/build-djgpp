@@ -3,27 +3,27 @@
 unset CDPATH
 
 # target directory
-export DJGPP_PREFIX=${DJGPP_PREFIX-/usr/local/djgpp}
+DJGPP_PREFIX=${DJGPP_PREFIX-/usr/local/djgpp}
 
 # enabled languages
 #ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++,f95,objc,obj-c++}
-export ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
+ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
 
 # number of parallel build threads
-export MAKE_JOBS=${MAKE_JOBS-4}
+MAKE_JOBS=${MAKE_JOBS-4}
 
 #DJGPP_DOWNLOAD_BASE="ftp://ftp.delorie.com/pub"
 export DJGPP_DOWNLOAD_BASE="http://www.delorie.com/pub"
 
 # source tarball versions
-export DJCRX_VERSION=205
-export DJLSR_VERSION=205
-export DJDEV_VERSION=205
+DJCRX_VERSION=205
+DJLSR_VERSION=205
+DJDEV_VERSION=205
 
 # source tarball locations
-export DJCRX_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djcrx${DJCRX_VERSION}.zip"
-export DJLSR_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djlsr${DJLSR_VERSION}.zip"
-export DJDEV_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djdev${DJDEV_VERSION}.zip"
+DJCRX_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djcrx${DJCRX_VERSION}.zip"
+DJLSR_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djlsr${DJLSR_VERSION}.zip"
+DJDEV_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djdev${DJDEV_VERSION}.zip"
 
 if [ -z $1 ]; then
   echo "Usage: $0 [packages...]"
