@@ -448,7 +448,7 @@ echo "Copy long name executables to short name."
   cd $DJGPP_PREFIX || exit 1
   SHORT_NAME_LIST="gcc g++ c++ addr2line c++filt cpp size strings dxegen dxe3gen dxe3res exe2coff stubify stubedit gdb"
   for SHORT_NAME in $SHORT_NAME_LIST; do
-    if [ -f bin/i586-pc-msdosdjgpp-gcc ]; then
+    if [ -f bin/i586-pc-msdosdjgpp-$SHORT_NAME ]; then
       cp -p bin/i586-pc-msdosdjgpp-$SHORT_NAME i586-pc-msdosdjgpp/bin/$SHORT_NAME
     fi
   done
