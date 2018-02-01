@@ -48,6 +48,7 @@ fi
 export CC CXX MAKE
 
 echo "You are about to build and install:"
+[ -z ${DJCRX_VERSION} ] || echo "    - DJGPP base library ${DJCRX_VERSION}"
 [ -z ${BINUTILS_VERSION} ] || echo "    - binutils ${BINUTILS_VERSION}"
 [ -z ${GCC_VERSION} ] || echo "    - gcc ${GCC_VERSION}"
 echo ""
@@ -228,16 +229,16 @@ if [ ! -z ${DJCRX_VERSION} ]; then
   patch -p1 -u < ../../patch/patch-djcrx${DJCRX_VERSION}.txt || exit 1
   
   cd src/stub
-  ${CC} -O2 ${CFLAGS} stubify.c -o stubify || exit 1
-  ${CC} -O2 ${CFLAGS} stubedit.c -o stubedit || exit 1
+  ${CC} -O2 ${CFLAGS} stubify.c -o i586-pc-msdosdjgpp-stubify || exit 1
+  ${CC} -O2 ${CFLAGS} stubedit.c -o i586-pc-msdosdjgpp-stubedit || exit 1
   
   cd ../..
   
   mkdir -p $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include || exit 1
   cp -rp include/* $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include/ || exit 1
   cp -rp lib $DJGPP_PREFIX/i586-pc-msdosdjgpp/ || exit 1
-  cp -p src/stub/stubify $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
-  cp -p src/stub/stubedit $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
+  cp -p src/stub/i586-pc-msdosdjgpp-stubify $DJGPP_PREFIX/bin/ || exit 1
+  cp -p src/stub/i586-pc-msdosdjgpp-stubedit $DJGPP_PREFIX/bin/ || exit 1
   
   cd ..
   # djcrx done
@@ -326,7 +327,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     cd -
     
     # copy stubify programs
-    cp $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/stubify $BUILDDIR/tmpinst/bin
+    cp -p $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-stubify $BUILDDIR/tmpinst/bin/stubify
     
     cd $BUILDDIR/
     
@@ -392,14 +393,17 @@ if [ ! -z ${DJLSR_VERSION} ]; then
     echo "Building DXE tools."
     cd src
     PATH=$DJGPP_PREFIX/bin/:$PATH ${MAKE} || exit 1
-    cp dxe/dxegen dxe/dxe3gen dxe/dxe3res $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
-    cd ..
+    cd dxe
+    cp -p dxegen  $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-dxegen || exit 1
+    cp -p dxe3gen $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-dxe3gen || exit 1
+    cp -p dxe3res $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-dxe3res || exit 1
+    cd ../..
   else
     echo "Building DXE tools requires gcc, skip."
   fi
   cd src/stub
   ${CC} -O2 ${CFLAGS} -o exe2coff exe2coff.c || exit 1
-  cp -p exe2coff $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
+  cp -p exe2coff $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-exe2coff || exit 1
   cd ${BASE}
   # djlsr done
 fi
@@ -407,10 +411,10 @@ fi
 echo "Copy long name executables to short name."
 (
   cd $DJGPP_PREFIX || exit 1
-  SHORT_NAME_LIST="gcc g++ c++ addr2line c++filt cpp size strings"
+  SHORT_NAME_LIST="gcc g++ c++ addr2line c++filt cpp size strings dxegen dxe3gen dxe3res exe2coff stubify stubedit"
   for SHORT_NAME in $SHORT_NAME_LIST; do
     if [ -f bin/i586-pc-msdosdjgpp-gcc ]; then
-      cp bin/i586-pc-msdosdjgpp-$SHORT_NAME i586-pc-msdosdjgpp/bin/$SHORT_NAME
+      cp -p bin/i586-pc-msdosdjgpp-$SHORT_NAME i586-pc-msdosdjgpp/bin/$SHORT_NAME
     fi
   done
 ) || exit 1
