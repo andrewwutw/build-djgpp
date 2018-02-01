@@ -55,6 +55,24 @@ fi
 
 export CC CXX CFLAGS MAKE
 
+echo "You are about to build and install:"
+[ -z ${BINUTILS_VERSION} ] || echo "    - binutils ${BINUTILS_VERSION}"
+[ -z ${GCC_VERSION} ] || echo "    - gcc ${GCC_VERSION}"
+echo ""
+echo "With the following options:"
+echo "    DJGPP_PREFIX=${DJGPP_PREFIX}"
+echo "    MAKE_JOBS=${MAKE_JOBS}"
+if [ ! -z ${GCC_VERSION} ]; then
+  echo "    GCC_CONFIGURE_OPTIONS=`echo ${GCC_CONFIGURE_OPTIONS}`"
+  echo "    ENABLE_LANGUAGES=${ENABLE_LANGUAGES}"
+fi
+if [ ! -z ${BINUTILS_VERSION} ]; then
+  echo "    BINUTILS_CONFIGURE_OPTIONS=${BINUTILS_CONFIGURE_OPTIONS}"
+fi
+echo ""
+echo "If you wish to change anything, press CTRL-C now. Otherwise, press any other key to continue."
+read -s -n 1
+
 # check required programs
 REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch"
 
