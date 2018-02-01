@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+source script/binutils
+source script/gcc
