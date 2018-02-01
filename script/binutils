@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+source script/binutils-2.29.1
