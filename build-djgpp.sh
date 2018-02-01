@@ -177,7 +177,7 @@ cd build || exit 1
 
 if [ ! -z ${BINUTILS_VERSION} ]; then
   echo "Building binutils"
-  mkdir bnu${BINUTILS_VERSION}s
+  mkdir -p bnu${BINUTILS_VERSION}s
   cd bnu${BINUTILS_VERSION}s
   if [ ! -e binutils-unpacked ]; then
     unzip -o ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
@@ -195,10 +195,10 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
     chmod a+x $EXEC_FILE || exit 1
   done
 
-  mkdir build
+  mkdir -p build
   cd build || exit 1
   if [ ! -e binutils-configure-prefix ] || [ ! `cat binutils-configure-prefix` = "${DJGPP_PREFIX}" ]; then
-    sh ../configure \
+    ../configure \
                --prefix=$DJGPP_PREFIX \
                --target=i586-pc-msdosdjgpp \
                --program-prefix=i586-pc-msdosdjgpp- \
@@ -374,7 +374,7 @@ if [ ! -z ${GCC_VERSION} ]; then
                                      ${GCC_CONFIGURE_OPTIONS} || exit 1
     echo ${DJGPP_PREFIX} > gcc-configure-prefix
   else
-    echo "Note: gcc already configured. To force a rebuild, use: rm -rf ${BUILDDIR}/djcross/"
+    echo "Note: gcc already configured. To force a rebuild, use: rm -rf $(pwd)"
     sleep 5
   fi
 
@@ -459,8 +459,7 @@ echo "Copy long name executables to short name."
 (cd ${BASE}/setenv/ && ./copyfile.sh $DJGPP_PREFIX) || exit 1
 
 echo "Testing DJGPP."
-cd $BUILDDIR
-cd ..
+cd ${BASE}/build
 echo "Use DJGPP to build a test C program."
 $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-gcc ../hello.c -o hello || echo "FAILED: C"
 
