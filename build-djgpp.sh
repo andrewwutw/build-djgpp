@@ -25,6 +25,8 @@ DJCRX_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djcrx${DJCRX_VERSION}.zip
 DJLSR_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djlsr${DJLSR_VERSION}.zip"
 DJDEV_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djdev${DJDEV_VERSION}.zip"
 
+BASE=`pwd`
+
 if [ -z $1 ]; then
   echo "Usage: $0 [packages...]"
   echo "Supported packages:"
@@ -229,8 +231,8 @@ fi
 
 # prepare djcrx
 echo "Prepare djcrx"
-mkdir djcrx${DJCRX_VERSION}
-cd djcrx${DJCRX_VERSION}
+mkdir -p ${BASE}/build/djcrx${DJCRX_VERSION}
+cd ${BASE}/build/djcrx${DJCRX_VERSION}
 unzip -o ../../download/djcrx${DJCRX_VERSION}.zip || exit 1
 patch -p1 -u < ../../patch/patch-djcrx${DJCRX_VERSION}.txt || exit 1
 
@@ -396,8 +398,7 @@ echo "Copy long name executables to short name."
 
 # build djlsr (for dxegen / exe2coff)
 echo "Prepare djlsr"
-cd $BUILDDIR
-cd ..
+cd ${BASE}/build/
 rm -rf djlsr${DJLSR_VERSION}
 mkdir djlsr${DJLSR_VERSION}
 cd djlsr${DJLSR_VERSION}
@@ -417,11 +418,11 @@ fi
 cd src/stub
 ${CC} -O2 ${CFLAGS} -o exe2coff exe2coff.c || exit 1
 cp -p exe2coff $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/ || exit 1
-cd ../../..
+cd ${BASE}
 # djlsr done
 
 # copy setenv script
-(cd $BUILDDIR/../../setenv/ && ./copyfile.sh $DJGPP_PREFIX) || exit 1
+(cd ${BASE}/setenv/ && ./copyfile.sh $DJGPP_PREFIX) || exit 1
 
 if [ ! -z ${GCC_VERSION} ]; then
   echo "Testing DJGPP."
