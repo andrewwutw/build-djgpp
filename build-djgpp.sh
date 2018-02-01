@@ -226,11 +226,13 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
 fi
 
 if [ ! -z ${DJGPP_VERSION} ]; then
-  # prepare djcrx
-  echo "Prepare djcrx"
-  mkdir -p ${BASE}/build/djcrx${DJGPP_VERSION}
-  cd ${BASE}/build/djcrx${DJGPP_VERSION}
+  echo "Prepare djgpp"
+  mkdir -p ${BASE}/build/djgpp-${DJGPP_VERSION}
+  cd ${BASE}/build/djgpp-${DJGPP_VERSION} || exit 1
+  unzip -o ../../download/djdev${DJGPP_VERSION}.zip || exit 1
+  unzip -o ../../download/djlsr${DJGPP_VERSION}.zip || exit 1
   unzip -o ../../download/djcrx${DJGPP_VERSION}.zip || exit 1
+  patch -p1 -u < ../../patch/patch-djlsr${DJGPP_VERSION}.txt || exit 1
   patch -p1 -u < ../../patch/patch-djcrx${DJGPP_VERSION}.txt || exit 1
   
   cd src/stub
@@ -246,7 +248,6 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   cp -p src/stub/i586-pc-msdosdjgpp-stubedit $DJGPP_PREFIX/bin/ || exit 1
   
   cd ..
-  # djcrx done
 fi
 
 if [ ! -z ${GCC_VERSION} ]; then
@@ -385,15 +386,7 @@ fi
 
 if [ ! -z ${DJGPP_VERSION} ]; then
   # build djlsr (for dxegen / exe2coff)
-  echo "Prepare djlsr"
-  cd ${BASE}/build/
-  rm -rf djlsr${DJGPP_VERSION}
-  mkdir djlsr${DJGPP_VERSION}
-  cd djlsr${DJGPP_VERSION}
-  unzip ../../download/djlsr${DJGPP_VERSION}.zip || exit 1
-  unzip -o ../../download/djdev${DJGPP_VERSION}.zip "include/*/*" || exit 1
-  unzip -o ../../download/djdev${DJGPP_VERSION}.zip "include/*" || exit 1
-  patch -p1 -u < ../../patch/patch-djlsr${DJGPP_VERSION}.txt || exit 1
+  cd ${BASE}/build/djgpp-${DJGPP_VERSION}
   if [ "$CC" == "gcc" ]; then
     echo "Building DXE tools."
     cd src
