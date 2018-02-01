@@ -53,7 +53,7 @@ else
   CXX=${CXX-g++}
 fi
 
-export CC CXX CFLAGS MAKE
+export CC CXX MAKE
 
 echo "You are about to build and install:"
 [ -z ${BINUTILS_VERSION} ] || echo "    - binutils ${BINUTILS_VERSION}"
@@ -61,13 +61,19 @@ echo "You are about to build and install:"
 echo ""
 echo "With the following options:"
 echo "    DJGPP_PREFIX=${DJGPP_PREFIX}"
+echo "    CC=${CC}"
+echo "    CXX=${CXX}"
+echo "    CFLAGS=${CFLAGS}"
+echo "    CXXFLAGS=${CXXFLAGS}"
+echo "    LDFLAGS=${LDFLAGS}"
+echo "    MAKE=${MAKE}"
 echo "    MAKE_JOBS=${MAKE_JOBS}"
 if [ ! -z ${GCC_VERSION} ]; then
   echo "    GCC_CONFIGURE_OPTIONS=`echo ${GCC_CONFIGURE_OPTIONS}`"
   echo "    ENABLE_LANGUAGES=${ENABLE_LANGUAGES}"
 fi
 if [ ! -z ${BINUTILS_VERSION} ]; then
-  echo "    BINUTILS_CONFIGURE_OPTIONS=${BINUTILS_CONFIGURE_OPTIONS}"
+  echo "    BINUTILS_CONFIGURE_OPTIONS=`echo ${BINUTILS_CONFIGURE_OPTIONS}`"
 fi
 echo ""
 echo "If you wish to change anything, press CTRL-C now. Otherwise, press any other key to continue."
