@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+source script/gcc-7.3.0

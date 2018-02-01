@@ -13,5 +13,3 @@ export AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VER
 export GCC_CONFIGURE_OPTIONS="--disable-plugin \
                               --enable-lto \
                               ${GCC_CONFIGURE_OPTIONS}"
-
-./script/build.sh
