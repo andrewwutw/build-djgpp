@@ -48,7 +48,7 @@ fi
 export CC CXX MAKE
 
 echo "You are about to build and install:"
-[ -z ${DJCRX_VERSION} ] || echo "    - DJGPP base library ${DJCRX_VERSION}"
+[ -z ${DJGPP_VERSION} ] || echo "    - DJGPP base library ${DJGPP_VERSION}"
 [ -z ${BINUTILS_VERSION} ] || echo "    - binutils ${BINUTILS_VERSION}"
 [ -z ${GCC_VERSION} ] || echo "    - gcc ${GCC_VERSION}"
 [ -z ${GDB_VERSION} ] || echo "    - gdb ${GDB_VERSION}"
@@ -225,13 +225,13 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
   fi
 fi
 
-if [ ! -z ${DJCRX_VERSION} ]; then
+if [ ! -z ${DJGPP_VERSION} ]; then
   # prepare djcrx
   echo "Prepare djcrx"
-  mkdir -p ${BASE}/build/djcrx${DJCRX_VERSION}
-  cd ${BASE}/build/djcrx${DJCRX_VERSION}
-  unzip -o ../../download/djcrx${DJCRX_VERSION}.zip || exit 1
-  patch -p1 -u < ../../patch/patch-djcrx${DJCRX_VERSION}.txt || exit 1
+  mkdir -p ${BASE}/build/djcrx${DJGPP_VERSION}
+  cd ${BASE}/build/djcrx${DJGPP_VERSION}
+  unzip -o ../../download/djcrx${DJGPP_VERSION}.zip || exit 1
+  patch -p1 -u < ../../patch/patch-djcrx${DJGPP_VERSION}.txt || exit 1
   
   cd src/stub
   ${CC} -O2 ${CFLAGS} stubify.c -o i586-pc-msdosdjgpp-stubify || exit 1
@@ -383,17 +383,17 @@ fi
 
 # gcc done
 
-if [ ! -z ${DJLSR_VERSION} ]; then
+if [ ! -z ${DJGPP_VERSION} ]; then
   # build djlsr (for dxegen / exe2coff)
   echo "Prepare djlsr"
   cd ${BASE}/build/
-  rm -rf djlsr${DJLSR_VERSION}
-  mkdir djlsr${DJLSR_VERSION}
-  cd djlsr${DJLSR_VERSION}
-  unzip ../../download/djlsr${DJLSR_VERSION}.zip || exit 1
-  unzip -o ../../download/djdev${DJDEV_VERSION}.zip "include/*/*" || exit 1
-  unzip -o ../../download/djdev${DJDEV_VERSION}.zip "include/*" || exit 1
-  patch -p1 -u < ../../patch/patch-djlsr${DJLSR_VERSION}.txt || exit 1
+  rm -rf djlsr${DJGPP_VERSION}
+  mkdir djlsr${DJGPP_VERSION}
+  cd djlsr${DJGPP_VERSION}
+  unzip ../../download/djlsr${DJGPP_VERSION}.zip || exit 1
+  unzip -o ../../download/djdev${DJGPP_VERSION}.zip "include/*/*" || exit 1
+  unzip -o ../../download/djdev${DJGPP_VERSION}.zip "include/*" || exit 1
+  patch -p1 -u < ../../patch/patch-djlsr${DJGPP_VERSION}.txt || exit 1
   if [ "$CC" == "gcc" ]; then
     echo "Building DXE tools."
     cd src
