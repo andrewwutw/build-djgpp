@@ -51,6 +51,7 @@ echo "You are about to build and install:"
 [ -z ${DJCRX_VERSION} ] || echo "    - DJGPP base library ${DJCRX_VERSION}"
 [ -z ${BINUTILS_VERSION} ] || echo "    - binutils ${BINUTILS_VERSION}"
 [ -z ${GCC_VERSION} ] || echo "    - gcc ${GCC_VERSION}"
+[ -z ${GDB_VERSION} ] || echo "    - gdb ${GDB_VERSION}"
 echo ""
 echo "With the following options:"
 echo "    DJGPP_PREFIX=${DJGPP_PREFIX}"
@@ -67,6 +68,9 @@ if [ ! -z ${GCC_VERSION} ]; then
 fi
 if [ ! -z ${BINUTILS_VERSION} ]; then
   echo "    BINUTILS_CONFIGURE_OPTIONS=`echo ${BINUTILS_CONFIGURE_OPTIONS}`"
+fi
+if [ ! -z ${GDB_VERSION} ]; then
+  echo "    GDB_CONFIGURE_OPTIONS=`echo ${GDB_CONFIGURE_OPTIONS}`"
 fi
 echo ""
 echo "If you wish to change anything, press CTRL-C now. Otherwise, press any other key to continue."
@@ -121,7 +125,7 @@ fi
 # download source files
 ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $DJLSR_ARCHIVE $DJDEV_ARCHIVE
               $SED_ARCHIVE $DJCROSS_GCC_ARCHIVE $OLD_DJCROSS_GCC_ARCHIVE $GCC_ARCHIVE
-              $AUTOCONF_ARCHIVE $AUTOMAKE_ARCHIVE"
+              $AUTOCONF_ARCHIVE $AUTOMAKE_ARCHIVE $GDB_ARCHIVE"
 
 echo "Download source files..."
 mkdir -p download || exit 1
@@ -409,10 +413,40 @@ if [ ! -z ${DJLSR_VERSION} ]; then
   # djlsr done
 fi
 
+if [ ! -z ${GDB_VERSION} ]; then
+  if [ ! -e ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-${GDB_VERSION}-installed ]; then
+    cd ${BASE}/build
+    if [ ! -e gdb-${GDB_VERSION}/gdb-unpacked ]; then
+      echo "Unpacking gdb."
+      tar -xavf $(ls -t ../download/gdb-${GDB_VERSION}.tar.* | head -n 1) || exit 1
+      touch gdb-${GDB_VERSION}/gdb-unpacked
+    fi
+    rm -rf gdb-${GDB_VERSION}/build
+    mkdir -p gdb-${GDB_VERSION}/build
+    cd gdb-${GDB_VERSION}/build || exit 1
+    echo "Building gdb."
+    ../configure \
+          --prefix=${DJGPP_PREFIX} \
+          --target=i586-pc-msdosdjgpp \
+          --disable-werror \
+          --disable-nls \
+          ${GDB_CONFIGURE_OPTIONS} \
+          || exit 1
+    ${MAKE} -j${MAKE_JOBS} || exit 1
+    ${MAKE} -j${MAKE_JOBS} install || exit 1
+    rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-*-installed
+    touch ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-${GDB_VERSION}-installed
+  else
+    echo "Current gdb version already installed, skipping."
+    echo "To force a rebuild, use: rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-${GDB_VERSION}-installed"
+    sleep 5
+  fi
+fi
+
 echo "Copy long name executables to short name."
 (
   cd $DJGPP_PREFIX || exit 1
-  SHORT_NAME_LIST="gcc g++ c++ addr2line c++filt cpp size strings dxegen dxe3gen dxe3res exe2coff stubify stubedit"
+  SHORT_NAME_LIST="gcc g++ c++ addr2line c++filt cpp size strings dxegen dxe3gen dxe3res exe2coff stubify stubedit gdb"
   for SHORT_NAME in $SHORT_NAME_LIST; do
     if [ -f bin/i586-pc-msdosdjgpp-gcc ]; then
       cp -p bin/i586-pc-msdosdjgpp-$SHORT_NAME i586-pc-msdosdjgpp/bin/$SHORT_NAME

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+source script/gdb-8.0.1
