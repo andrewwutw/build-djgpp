@@ -196,6 +196,7 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
                --program-prefix=i586-pc-msdosdjgpp- \
                --disable-werror \
                --disable-nls \
+               ${BINUTILS_CONFIGURE_OPTIONS} \
                || exit 1
     
     ${MAKE} -j${MAKE_JOBS} configure-bfd || exit 1
