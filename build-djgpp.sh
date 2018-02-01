@@ -458,23 +458,21 @@ echo "Copy long name executables to short name."
 # copy setenv script
 (cd ${BASE}/setenv/ && ./copyfile.sh $DJGPP_PREFIX) || exit 1
 
-if [ ! -z ${GCC_VERSION} ]; then
-  echo "Testing DJGPP."
-  cd $BUILDDIR
-  cd ..
-  echo "Use DJGPP to build a test C program."
-  $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-gcc ../hello.c -o hello || exit 1
+echo "Testing DJGPP."
+cd $BUILDDIR
+cd ..
+echo "Use DJGPP to build a test C program."
+$DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-gcc ../hello.c -o hello || echo "FAILED: C"
 
-  for x in $(echo $ENABLE_LANGUAGES | tr "," " ")
-  do
-    case $x in
-      c++)
-        echo "Use DJGPP to build a test C++ program."
-        $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-c++ ../hello-cpp.cpp -o hello-cpp || exit 1
-        ;;
-    esac
-  done
-fi
+for x in $(echo $ENABLE_LANGUAGES | tr "," " ")
+do
+  case $x in
+    c++)
+      echo "Use DJGPP to build a test C++ program."
+      $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-c++ ../hello-cpp.cpp -o hello-cpp || echo "FAILED: C++"
+      ;;
+  esac
+done
 
 echo "build-djgpp.sh done."
 echo "To remove temporary build files, use: rm -rf build/"
