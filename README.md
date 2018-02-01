@@ -70,42 +70,53 @@ Default number of parallel builds is 4. You can change this number by setting en
 MAKE_JOBS=8
 ```
 
-To configure gcc with additional options, add your custom flags to environment variable *GCC_CONFIGURE_OPTIONS* :
+To configure packages with additional options, add your custom flags to one of the following environment variables:
 
 ```
-GCC_CONFIGURE_OPTIONS="--enable-nls"
+GCC_CONFIGURE_OPTIONS="--enable-feature"
+GDB_CONFIGURE_OPTIONS="--enable-feature"
+BINUTILS_CONFIGURE_OPTIONS="--enable-feature"
 ```
 
 ### Building DJGPP compiler
 
 To build DJGPP, just run :
 
-./build-djgpp.sh *djgpp-version*
+./build-djgpp.sh [packages...]
 
-Currently supported djgpp-version :
+Currently supported packages :
 
-* 4.7.3
-* 4.8.4
-* 4.8.5
-* 4.9.2
-* 4.9.3
-* 4.9.4
-* 5.1.0
-* 5.2.0
-* 5.3.0
-* 5.4.0
-* 5.5.0
-* 6.1.0
-* 6.2.0
-* 6.3.0
-* 6.4.0
-* 7.1.0
-* 7.2.0
+* gcc-4.7.3
+* gcc-4.8.4
+* gcc-4.8.5
+* gcc-4.9.2
+* gcc-4.9.3
+* gcc-4.9.4
+* gcc-5.1.0
+* gcc-5.2.0
+* gcc-5.3.0
+* gcc-5.4.0
+* gcc-5.5.0
+* gcc-6.1.0
+* gcc-6.2.0
+* gcc-6.3.0
+* gcc-6.4.0
+* gcc-7.1.0
+* gcc-7.2.0
+* gcc-7.3.0
+* binutils-2.29.1
+* gdb-8.0.1
 
-For example, to build DJGPP for gcc 7.2.0 :
+For example, to build gcc 7.2.0 with the base library and latest binutils:
 
 ```
-./build-djgpp.sh 7.2.0
+./build-djgpp.sh base binutils gcc-7.2.0
+```
+
+To install or upgrade all packages:
+
+```
+./build-djgpp.sh all
 ```
 
 It will download all necessary files, build DJGPP compiler and binutils, and install it.
