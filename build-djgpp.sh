@@ -172,29 +172,33 @@ mkdir -p ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/ || exit 1
 
 # make build dir
 echo "Make build dir"
-mkdir -p build || exit 1
-cd build
+mkdir -p ${BASE}/build
+cd build || exit 1
 
 if [ ! -z ${BINUTILS_VERSION} ]; then
-  if [ ! -e ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/binutils-${BINUTILS_VERSION}-installed ]; then
-    # build binutils
-    echo "Building binutils"
-    rm -rf bnu${BINUTILS_VERSION}s
-    mkdir bnu${BINUTILS_VERSION}s
-    cd bnu${BINUTILS_VERSION}s
+  echo "Building binutils"
+  mkdir bnu${BINUTILS_VERSION}s
+  cd bnu${BINUTILS_VERSION}s
+  if [ ! -e binutils-unpacked ]; then
     unzip -o ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
-    cd gnu/binutils-* || exit
-    
+
     # patch for binutils 2.27
-    [ ${BINUTILS_VERSION} == 227 ] && ( patch bfd/init.c ../../../../patch/patch-bnu27-bfd-init.txt || exit 1 )
-    
-    # exec permission of some files are not set, fix it.
-    for EXEC_FILE in install-sh missing; do
-      echo "chmod a+x $EXEC_FILE"
-      chmod a+x $EXEC_FILE || exit 1
-    done
-    
-    sh ./configure \
+    [ ${BINUTILS_VERSION} == 227 ] && (patch gnu/binutils-*/bfd/init.c ${BASE}/patch/patch-bnu27-bfd-init.txt || exit 1 )
+
+    touch binutils-unpacked
+  fi
+  cd gnu/binutils-* || exit 1
+  
+  # exec permission of some files are not set, fix it.
+  for EXEC_FILE in install-sh missing; do
+    echo "chmod a+x $EXEC_FILE"
+    chmod a+x $EXEC_FILE || exit 1
+  done
+  
+  mkdir build
+  cd build || exit 1
+  if [ ! -e binutils-configure-prefix ] || [ ! `cat binutils-configure-prefix` = "${DJGPP_PREFIX}" ]; then
+    sh ../configure \
                --prefix=$DJGPP_PREFIX \
                --target=i586-pc-msdosdjgpp \
                --program-prefix=i586-pc-msdosdjgpp- \
@@ -202,28 +206,27 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
                --disable-nls \
                ${BINUTILS_CONFIGURE_OPTIONS} \
                || exit 1
-    
-    ${MAKE} -j${MAKE_JOBS} configure-bfd || exit 1
-    ${MAKE} -j${MAKE_JOBS} -C bfd stmp-lcoff-h || exit 1
-    ${MAKE} -j${MAKE_JOBS} || exit 1
-    
-    if [ ! -z $MAKE_CHECK ]; then
-      echo "Run ${MAKE} check"
-      ${MAKE} -j${MAKE_JOBS} check || exit 1
-    fi
-    
-    ${MAKE} -j${MAKE_JOBS} install || exit 1
-    
-    cd ../../..
-    rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/binutils-*-installed
-    touch ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/binutils-${BINUTILS_VERSION}-installed
-    # binutils done
+    echo ${DJGPP_PREFIX} > binutils-configure-prefix
   else
-    echo "Current binutils version already installed, skipping."
-    echo "To force a rebuild, use: rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/binutils-${BINUTILS_VERSION}-installed"
+    echo "Note: binutils already configured. To force a rebuild, use: rm -rf $(pwd)"
     sleep 5
   fi
+  
+  ${MAKE} -j${MAKE_JOBS} configure-bfd || exit 1
+  ${MAKE} -j${MAKE_JOBS} -C bfd stmp-lcoff-h || exit 1
+  ${MAKE} -j${MAKE_JOBS} || exit 1
+  
+  if [ ! -z $MAKE_CHECK ]; then
+    echo "Run ${MAKE} check"
+    ${MAKE} -j${MAKE_JOBS} check || exit 1
+  fi
+  
+  ${MAKE} -j${MAKE_JOBS} install || exit 1
+  
+  # binutils done
 fi
+
+cd ${BASE}/build/
 
 if [ ! -z ${DJGPP_VERSION} ]; then
   echo "Prepare djgpp"
@@ -406,9 +409,10 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   # djlsr done
 fi
 
+cd ${BASE}/build
+
 if [ ! -z ${GDB_VERSION} ]; then
   if [ ! -e ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-${GDB_VERSION}-installed ]; then
-    cd ${BASE}/build
     if [ ! -e gdb-${GDB_VERSION}/gdb-unpacked ]; then
       echo "Unpacking gdb."
       tar -xavf $(ls -t ../download/gdb-${GDB_VERSION}.tar.* | head -n 1) || exit 1
@@ -426,7 +430,14 @@ if [ ! -z ${GDB_VERSION} ]; then
           ${GDB_CONFIGURE_OPTIONS} \
           || exit 1
     ${MAKE} -j${MAKE_JOBS} || exit 1
+
+    if [ ! -z $MAKE_CHECK ]; then
+      echo "Run ${MAKE} check"
+      ${MAKE} -j${MAKE_JOBS} check || exit 1
+    fi
+
     ${MAKE} -j${MAKE_JOBS} install || exit 1
+
     rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-*-installed
     touch ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-${GDB_VERSION}-installed
   else
