@@ -29,7 +29,7 @@ while [ ! -z $1 ]; do
     echo "Unsupported package: $1"
     exit 1
   fi
-  
+
   source script/$1
   shift
 done
@@ -188,13 +188,13 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
     touch binutils-unpacked
   fi
   cd gnu/binutils-* || exit 1
-  
+
   # exec permission of some files are not set, fix it.
   for EXEC_FILE in install-sh missing; do
     echo "chmod a+x $EXEC_FILE"
     chmod a+x $EXEC_FILE || exit 1
   done
-  
+
   mkdir build
   cd build || exit 1
   if [ ! -e binutils-configure-prefix ] || [ ! `cat binutils-configure-prefix` = "${DJGPP_PREFIX}" ]; then
@@ -211,18 +211,18 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
     echo "Note: binutils already configured. To force a rebuild, use: rm -rf $(pwd)"
     sleep 5
   fi
-  
+
   ${MAKE} -j${MAKE_JOBS} configure-bfd || exit 1
   ${MAKE} -j${MAKE_JOBS} -C bfd stmp-lcoff-h || exit 1
   ${MAKE} -j${MAKE_JOBS} || exit 1
-  
+
   if [ ! -z $MAKE_CHECK ]; then
     echo "Run ${MAKE} check"
     ${MAKE} -j${MAKE_JOBS} check || exit 1
   fi
-  
+
   ${MAKE} -j${MAKE_JOBS} install || exit 1
-  
+
   # binutils done
 fi
 
@@ -237,19 +237,19 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   unzip -o ../../download/djcrx${DJGPP_VERSION}.zip || exit 1
   patch -p1 -u < ../../patch/patch-djlsr${DJGPP_VERSION}.txt || exit 1
   patch -p1 -u < ../../patch/patch-djcrx${DJGPP_VERSION}.txt || exit 1
-  
+
   cd src/stub
   ${CC} -O2 ${CFLAGS} stubify.c -o i586-pc-msdosdjgpp-stubify || exit 1
   ${CC} -O2 ${CFLAGS} stubedit.c -o i586-pc-msdosdjgpp-stubedit || exit 1
-  
+
   cd ../..
-  
+
   mkdir -p $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include || exit 1
   cp -rp include/* $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include/ || exit 1
   cp -rp lib $DJGPP_PREFIX/i586-pc-msdosdjgpp/ || exit 1
   cp -p src/stub/i586-pc-msdosdjgpp-stubify $DJGPP_PREFIX/bin/ || exit 1
   cp -p src/stub/i586-pc-msdosdjgpp-stubedit $DJGPP_PREFIX/bin/ || exit 1
-  
+
   cd ..
 fi
 
@@ -257,9 +257,9 @@ if [ ! -z ${GCC_VERSION} ]; then
   # build gcc
   tar -xavf $(ls -t ../download/djcross-gcc-${GCC_VERSION}.tar.* | head -n 1) || exit 1
   cd djcross-gcc-${GCC_VERSION}/
-  
+
   BUILDDIR=`pwd`
-  
+
   if [ ! -e ${BUILDDIR}/tmpinst/autoconf-${AUTOCONF_VERSION}-built ]; then
     echo "Building autoconf"
     cd $BUILDDIR
@@ -272,7 +272,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   else
     echo "autoconf already built, skipping."
   fi
-  
+
   if [ ! -e ${BUILDDIR}/tmpinst/automake-${AUTOMAKE_VERSION}-built ]; then
     echo "Building automake"
     cd $BUILDDIR
@@ -287,7 +287,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   else
     echo "automake already built, skipping."
   fi
-  
+
   # build GNU sed if needed.
   SED=sed
   if [ ! -z $SED_VERSION ]; then
@@ -299,12 +299,12 @@ if [ ! -z ${GCC_VERSION} ]; then
     ${MAKE} -j${MAKE_JOBS} all install || exit 1
     SED=$BUILDDIR/tmpinst/bin/sed
   fi
-  
+
   cd $BUILDDIR
-  
+
   if [ ! -e gcc-unpacked ]; then
     echo "Patch unpack-gcc.sh"
-    
+
     if [ ${GCC_VERSION} == "4.7.3" ]; then
       # gcc 4.7.3 unpack-gcc.sh needs to be patched for OSX
       # patch from :
@@ -320,45 +320,45 @@ if [ ! -z ${GCC_VERSION} ]; then
       #   ( cd gnu && tar xJf $top/$archive && echo $archive >$top/s-sources )
       $SED -i "s/\(cd gnu && tar x\)\(f [^ ]* \)\([^ ]* \)/\1a\2/" unpack-gcc.sh || exit 1
     fi
-    
+
     if [ `uname` = "FreeBSD" ]; then
       # The --verbose option is not recognized by BSD patch
       $SED -i 's/patch --verbose/patch/' unpack-gcc.sh || exit 1
     fi
-    
+
     echo "Running unpack-gcc.sh"
     PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source $(ls -t ../../download/gcc-${GCC_VERSION}.tar.* | head -n 1) || exit 1
-    
+
     # patch gnu/gcc-X.XX/gcc/doc/gcc.texi
     echo "Patch gcc/doc/gcc.texi"
     cd gnu/gcc-*/gcc/doc || exit 1
     $SED -i "s/[^^]@\(\(tex\)\|\(end\)\)/\n@\1/g" gcc.texi || exit 1
     cd -
-    
+
     # copy stubify programs
     cp -p $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-stubify $BUILDDIR/tmpinst/bin/stubify
-    
+
     cd $BUILDDIR/
-    
+
     # download mpc/gmp/mpfr/isl libraries
     echo "Downloading gcc dependencies"
     cd gnu/gcc-${GCC_VERSION_SHORT}
     ./contrib/download_prerequisites
     cd -
-    
+
     touch gcc-unpacked
   else
     echo "gcc already unpacked, skipping."
   fi
-  
+
   echo "Building gcc"
-  
+
   mkdir -p djcross || exit 1
   cd djcross
-  
+
   TEMP_CFLAGS="$CFLAGS"
   export CFLAGS="$CFLAGS $GCC_EXTRA_CFLAGS"
-  
+
   if [ ! -e gcc-configure-prefix ] || [ ! `cat gcc-configure-prefix` = "${DJGPP_PREFIX}" ]; then
     ${MAKE} distclean
     PATH="$BUILDDIR//tmpinst/bin:$PATH" \
@@ -377,11 +377,11 @@ if [ ! -z ${GCC_VERSION} ]; then
     echo "Note: gcc already configured. To force a rebuild, use: rm -rf ${BUILDDIR}/djcross/"
     sleep 5
   fi
-  
+
   ${MAKE} -j${MAKE_JOBS} "PATH=$BUILDDIR/tmpinst/bin:$PATH" || exit 1
-  
+
   ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
-  
+
   export CFLAGS="$TEMP_CFLAGS"
 fi
 
@@ -412,16 +412,16 @@ fi
 cd ${BASE}/build
 
 if [ ! -z ${GDB_VERSION} ]; then
-  if [ ! -e ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-${GDB_VERSION}-installed ]; then
-    if [ ! -e gdb-${GDB_VERSION}/gdb-unpacked ]; then
-      echo "Unpacking gdb."
-      tar -xavf $(ls -t ../download/gdb-${GDB_VERSION}.tar.* | head -n 1) || exit 1
-      touch gdb-${GDB_VERSION}/gdb-unpacked
-    fi
-    rm -rf gdb-${GDB_VERSION}/build
-    mkdir -p gdb-${GDB_VERSION}/build
-    cd gdb-${GDB_VERSION}/build || exit 1
-    echo "Building gdb."
+  if [ ! -e gdb-${GDB_VERSION}/gdb-unpacked ]; then
+    echo "Unpacking gdb."
+    tar -xavf $(ls -t ../download/gdb-${GDB_VERSION}.tar.* | head -n 1) || exit 1
+    touch gdb-${GDB_VERSION}/gdb-unpacked
+  fi
+  mkdir -p gdb-${GDB_VERSION}/build
+  cd gdb-${GDB_VERSION}/build || exit 1
+
+  echo "Building gdb."
+  if [ ! -e gdb-configure-prefix ] || [ ! `cat gdb-configure-prefix` = "${DJGPP_PREFIX}" ]; then
     ../configure \
           --prefix=${DJGPP_PREFIX} \
           --target=i586-pc-msdosdjgpp \
@@ -429,22 +429,19 @@ if [ ! -z ${GDB_VERSION} ]; then
           --disable-nls \
           ${GDB_CONFIGURE_OPTIONS} \
           || exit 1
-    ${MAKE} -j${MAKE_JOBS} || exit 1
-
-    if [ ! -z $MAKE_CHECK ]; then
-      echo "Run ${MAKE} check"
-      ${MAKE} -j${MAKE_JOBS} check || exit 1
-    fi
-
-    ${MAKE} -j${MAKE_JOBS} install || exit 1
-
-    rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-*-installed
-    touch ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-${GDB_VERSION}-installed
+    echo ${DJGPP_PREFIX} > gdb-configure-prefix
   else
-    echo "Current gdb version already installed, skipping."
-    echo "To force a rebuild, use: rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-${GDB_VERSION}-installed"
+    echo "Note: gdb already configured. To force a rebuild, use: rm -rf $(pwd)"
     sleep 5
   fi
+  ${MAKE} -j${MAKE_JOBS} || exit 1
+
+  if [ ! -z $MAKE_CHECK ]; then
+    echo "Run ${MAKE} check"
+    ${MAKE} -j${MAKE_JOBS} check || exit 1
+  fi
+
+  ${MAKE} -j${MAKE_JOBS} install || exit 1
 fi
 
 echo "Copy long name executables to short name."
@@ -467,7 +464,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   cd ..
   echo "Use DJGPP to build a test C program."
   $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-gcc ../hello.c -o hello || exit 1
-  
+
   for x in $(echo $ENABLE_LANGUAGES | tr "," " ")
   do
     case $x in
