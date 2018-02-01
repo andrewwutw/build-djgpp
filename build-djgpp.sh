@@ -63,8 +63,8 @@ echo "    LDFLAGS=${LDFLAGS}"
 echo "    MAKE=${MAKE}"
 echo "    MAKE_JOBS=${MAKE_JOBS}"
 if [ ! -z ${GCC_VERSION} ]; then
-  echo "    GCC_CONFIGURE_OPTIONS=`echo ${GCC_CONFIGURE_OPTIONS}`"
   echo "    ENABLE_LANGUAGES=${ENABLE_LANGUAGES}"
+  echo "    GCC_CONFIGURE_OPTIONS=`echo ${GCC_CONFIGURE_OPTIONS}`"
 fi
 if [ ! -z ${BINUTILS_VERSION} ]; then
   echo "    BINUTILS_CONFIGURE_OPTIONS=`echo ${BINUTILS_CONFIGURE_OPTIONS}`"
@@ -452,7 +452,7 @@ echo "Copy long name executables to short name."
       cp -p bin/i586-pc-msdosdjgpp-$SHORT_NAME i586-pc-msdosdjgpp/bin/$SHORT_NAME
     fi
   done
-) || exit 1
+)
 
 # copy setenv script
 (cd ${BASE}/setenv/ && ./copyfile.sh $DJGPP_PREFIX) || exit 1
@@ -475,6 +475,6 @@ if [ ! -z ${GCC_VERSION} ]; then
   done
 fi
 
-echo "build-djgpp.sh done. To remove temporary build files, use: rm -rf build/"
-echo "To remove downloaded source tarballs, use: rm -rf download/"
-
+echo "build-djgpp.sh done."
+echo "To remove temporary build files, use: rm -rf build/"
+echo "To remove downloaded source packages, use: rm -rf download/"
