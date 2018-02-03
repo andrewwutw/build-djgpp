@@ -45,8 +45,7 @@ DEPS=""
 for DEP in ${DEPS}; do
   case $DEP in
     base)
-      [ -z "`ls ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/djgpp-*-installed 2> /dev/null`" ] \
-        && [ -z ${DJGPP_VERSION} ] \
+      [ -z ${DJGPP_VERSION} ] \
         && source script/base
       ;;
     binutils)
