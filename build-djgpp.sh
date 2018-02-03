@@ -220,6 +220,7 @@ mkdir -p ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/ || exit 1
 # make build dir
 echo "Make build dir"
 mkdir -p ${BASE}/build
+mkdir -p ${BASE}/build/tmpinst
 cd ${BASE}/build || exit 1
 
 # build GNU tar if needed.
@@ -230,9 +231,10 @@ if [ ! -z $TAR_VERSION ]; then
     tar -xJvf ${BASE}/download/tar-${TAR_VERSION}.tar.xz || exit 1
     cd tar-${TAR_VERSION}/
     ./configure --prefix=${BASE}/build/tmpinst || exit 1
+    ${MAKE} -j${MAKE_JOBS} || exit 1
+    ${MAKE} -j${MAKE_JOBS} install || exit 1
     touch ${BASE}/build/tmpinst/tar-${TAR_VERSION}-installed
   fi
-  ${MAKE} -j${MAKE_JOBS} all install || exit 1
   TAR=${BASE}/build/tmpinst/bin/tar
 fi
 
@@ -251,9 +253,10 @@ if [ ! -z $SED_VERSION ]; then
     untar sed-${SED_VERSION} || exit 1
     cd sed-${SED_VERSION}/
     ./configure --prefix=${BASE}/build/tmpinst || exit 1
+    ${MAKE} -j${MAKE_JOBS} || exit 1
+    ${MAKE} -j${MAKE_JOBS} install || exit 1
     touch ${BASE}/build/tmpinst/sed-${SED_VERSION}-installed
   fi
-  ${MAKE} -j${MAKE_JOBS} all install || exit 1
   SED=${BASE}/build/tmpinst/bin/sed
 fi
 
