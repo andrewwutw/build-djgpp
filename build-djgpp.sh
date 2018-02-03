@@ -28,7 +28,7 @@ if [ -z $1 ]; then
 fi
 
 while [ ! -z $1 ]; do
-  if [ ! -x script/$1 ]; then
+  if [ ! -x djgpp/$1 ] && [ ! -x script/$1 ]; then
     echo "Unsupported package: $1"
     exit 1
   fi
@@ -74,196 +74,9 @@ for DEP in ${DEPS}; do
   esac
 done
 
-# use gmake/clang under FreeBSD
-if [ `uname` = "FreeBSD" ]; then
-  MAKE=${MAKE-gmake}
-  CC=${CC-clang}
-  CXX=${CXX-clang++}
-else
-  MAKE=${MAKE-make}
-  CC=${CC-gcc}
-  CXX=${CXX-g++}
-fi
+source script/stage1.sh
 
-export CC CXX MAKE
-
-echo "You are about to build and install:"
-[ -z ${DJGPP_VERSION} ] || echo "    - DJGPP base library ${DJGPP_VERSION}"
-[ -z ${BINUTILS_VERSION} ] || echo "    - binutils ${BINUTILS_VERSION}"
-[ -z ${GCC_VERSION} ] || echo "    - gcc ${GCC_VERSION}"
-[ -z ${GDB_VERSION} ] || echo "    - gdb ${GDB_VERSION}"
-[ -z ${BUILD_DXEGEN} ] || echo "    - DXE tools ${DJGPP_VERSION}"
-echo ""
-echo "With the following options:"
-echo "    PREFIX=${PREFIX}"
-echo "    CC=${CC}"
-echo "    CXX=${CXX}"
-echo "    CFLAGS=${CFLAGS}"
-echo "    CXXFLAGS=${CXXFLAGS}"
-echo "    LDFLAGS=${LDFLAGS}"
-echo "    MAKE=${MAKE}"
-echo "    MAKE_JOBS=${MAKE_JOBS}"
-if [ ! -z ${GCC_VERSION} ]; then
-  echo "    ENABLE_LANGUAGES=${ENABLE_LANGUAGES}"
-  echo "    GCC_CONFIGURE_OPTIONS=`echo ${GCC_CONFIGURE_OPTIONS}`"
-fi
-if [ ! -z ${BINUTILS_VERSION} ]; then
-  echo "    BINUTILS_CONFIGURE_OPTIONS=`echo ${BINUTILS_CONFIGURE_OPTIONS}`"
-fi
-if [ ! -z ${GDB_VERSION} ]; then
-  echo "    GDB_CONFIGURE_OPTIONS=`echo ${GDB_CONFIGURE_OPTIONS}`"
-fi
-echo ""
-echo "If you wish to change anything, press CTRL-C now. Otherwise, press any other key to continue."
-read -s -n 1
-
-# check required programs
-REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch"
-
-# MinGW doesn't have curl, so we use wget.
-if ! which curl > /dev/null; then
-  USE_WGET=1
-fi
-
-# use curl or wget?
-if [ ! -z $USE_WGET ]; then
-  REQ_PROG_LIST+=" wget"
-else
-  REQ_PROG_LIST+=" curl"
-fi
-
-for REQ_PROG in $REQ_PROG_LIST; do
-  if ! which $REQ_PROG > /dev/null; then
-    echo "$REQ_PROG not installed"
-    exit 1
-  fi
-done
-
-# check GNU sed is installed or not.
-# It is for OSX, which doesn't ship with GNU sed.
-if ! sed --version 2>/dev/null |grep "GNU sed" > /dev/null ;then
-  echo GNU sed is not installed, need to download.
-  SED_VERSION=4.4
-  SED_ARCHIVE="http://ftpmirror.gnu.org/sed/sed-${SED_VERSION}.tar.xz"
-else
-  SED_ARCHIVE=""
-fi
-
-# check for GNU tar and download if necessary.
-if ! tar --version 2>/dev/null |grep "GNU tar" > /dev/null ;then
-  echo GNU tar is not installed, need to download.
-  TAR_VERSION=1.30
-  TAR_ARCHIVE="http://ftpmirror.gnu.org/tar/tar-${TAR_VERSION}.tar.xz"
-else
-  TAR_ARCHIVE=""
-fi
-
-# check zlib is installed
-if ! ${CC} test-zlib.c -o test-zlib -lz; then
-  echo "zlib not installed"
-  exit 1
-fi
-rm test-zlib 2>/dev/null
-rm test-zlib.exe 2>/dev/null
-
-if [ ! -z ${GCC_VERSION} ]; then
-  DJCROSS_GCC_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/rpms/djcross-gcc-${GCC_VERSION}/djcross-gcc-${GCC_VERSION}.tar.bz2"
-  # djcross-gcc-X.XX-tar.* maybe moved from /djgpp/rpms/ to /djgpp/deleted/rpms/ directory.
-  OLD_DJCROSS_GCC_ARCHIVE=${DJCROSS_GCC_ARCHIVE/rpms\//deleted\/rpms\/}
-fi
-
-# download source files
-ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $DJLSR_ARCHIVE $DJDEV_ARCHIVE
-              $SED_ARCHIVE $DJCROSS_GCC_ARCHIVE $OLD_DJCROSS_GCC_ARCHIVE $GCC_ARCHIVE
-              $AUTOCONF_ARCHIVE $AUTOMAKE_ARCHIVE $GDB_ARCHIVE $TAR_ARCHIVE"
-
-echo "Download source files..."
-mkdir -p download || exit 1
-cd download
-
-for ARCHIVE in $ARCHIVE_LIST; do
-  FILE=`basename $ARCHIVE`
-  if ! [ -f $FILE ]; then
-    echo "Download $ARCHIVE ..."
-    if [ ! -z $USE_WGET ]; then
-      DL_CMD="wget -U firefox $ARCHIVE"
-    else
-      DL_CMD="curl -f $ARCHIVE -L -o $FILE"
-    fi
-    echo "Command : $DL_CMD"
-    if ! eval $DL_CMD; then
-      if [ "$ARCHIVE" == "$DJCROSS_GCC_ARCHIVE" ]; then
-        echo "$FILE maybe moved to deleted/ directory."
-      else
-        rm $FILE
-        echo "Download $ARCHIVE failed."
-        exit 1
-      fi
-    fi
-  fi
-done
-cd ..
-
-# create target directory, check writable.
-echo "Make prefix directory : $PREFIX"
-mkdir -p $PREFIX
-
-if ! [ -d $PREFIX ]; then
-  echo "Unable to create prefix directory"
-  exit 1
-fi
-
-if ! [ -w $PREFIX ]; then
-  echo "prefix directory is not writable."
-  exit 1
-fi
-
-mkdir -p ${PREFIX}/${TARGET}/etc/ || exit 1
-
-# make build dir
-echo "Make build dir"
-mkdir -p ${BASE}/build
-mkdir -p ${BASE}/build/tmpinst
-cd ${BASE}/build || exit 1
-
-# build GNU tar if needed.
-TAR=tar
-if [ ! -z $TAR_VERSION ]; then
-  if [ ! -e ${BASE}/build/tmpinst/tar-${TAR_VERSION}-installed ]; then
-    echo "Building tar"
-    tar -xJvf ${BASE}/download/tar-${TAR_VERSION}.tar.xz || exit 1
-    cd tar-${TAR_VERSION}/
-    ./configure --prefix=${BASE}/build/tmpinst || exit 1
-    ${MAKE} -j${MAKE_JOBS} || exit 1
-    ${MAKE} -j${MAKE_JOBS} install || exit 1
-    touch ${BASE}/build/tmpinst/tar-${TAR_VERSION}-installed
-  fi
-  TAR=${BASE}/build/tmpinst/bin/tar
-fi
-
-untar()
-{
-  ${TAR} -xavf $(ls -t ${BASE}/download/$1.tar.* | head -n 1)
-}
-
-cd ${BASE}/build || exit 1
-
-# build GNU sed if needed.
-SED=sed
-if [ ! -z $SED_VERSION ]; then
-  if [ ! -e ${BASE}/build/tmpinst/sed-${SED_VERSION}-installed ]; then
-    echo "Building sed"
-    untar sed-${SED_VERSION} || exit 1
-    cd sed-${SED_VERSION}/
-    ./configure --prefix=${BASE}/build/tmpinst || exit 1
-    ${MAKE} -j${MAKE_JOBS} || exit 1
-    ${MAKE} -j${MAKE_JOBS} install || exit 1
-    touch ${BASE}/build/tmpinst/sed-${SED_VERSION}-installed
-  fi
-  SED=${BASE}/build/tmpinst/bin/sed
-fi
-
-cd ${BASE}/build || exit 1
+source script/build-tools.sh
 
 if [ ! -z ${BINUTILS_VERSION} ]; then
   echo "Building binutils"
@@ -285,39 +98,7 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
     chmod a+x $EXEC_FILE || exit 1
   done
 
-  mkdir -p build-${TARGET}
-  cd build-${TARGET} || exit 1
-  if [ ! -e binutils-configure-prefix ] || [ ! `cat binutils-configure-prefix` = "${PREFIX}" ]; then
-    rm binutils-configure-prefix
-    ${MAKE} distclean
-    ../configure \
-               --prefix=$PREFIX \
-               --target=${TARGET} \
-               --program-prefix=${TARGET}- \
-               --disable-werror \
-               --disable-nls \
-               ${BINUTILS_CONFIGURE_OPTIONS} \
-               || exit 1
-    echo ${PREFIX} > binutils-configure-prefix
-  else
-    echo "Note: binutils already configured. To force a rebuild, use: rm -rf $(pwd)"
-    sleep 5
-  fi
-
-  ${MAKE} -j${MAKE_JOBS} configure-bfd || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C bfd stmp-lcoff-h || exit 1
-  ${MAKE} -j${MAKE_JOBS} || exit 1
-
-  if [ ! -z $MAKE_CHECK ]; then
-    echo "Run ${MAKE} check"
-    ${MAKE} -j${MAKE_JOBS} check || exit 1
-  fi
-
-  ${MAKE} -j${MAKE_JOBS} install || exit 1
-
-  rm ${PREFIX}/${TARGET}/etc/binutils-*-installed
-  touch ${PREFIX}/${TARGET}/etc/binutils-${BINUTILS_VERSION}-installed
-  # binutils done
+  source script/build-binutils.sh
 fi
 
 cd ${BASE}/build/
@@ -490,43 +271,7 @@ fi
 
 cd ${BASE}/build
 
-if [ ! -z ${GDB_VERSION} ]; then
-  if [ ! -e gdb-${GDB_VERSION}/gdb-unpacked ]; then
-    echo "Unpacking gdb."
-    untar gdb-${GDB_VERSION} || exit 1
-    touch gdb-${GDB_VERSION}/gdb-unpacked
-  fi
-  mkdir -p gdb-${GDB_VERSION}/build-${TARGET}
-  cd gdb-${GDB_VERSION}/build-${TARGET} || exit 1
-
-  echo "Building gdb."
-  if [ ! -e gdb-configure-prefix ] || [ ! `cat gdb-configure-prefix` = "${PREFIX}" ]; then
-    rm gdb-configure-prefix
-    ${MAKE} distclean
-    ../configure \
-          --prefix=${PREFIX} \
-          --target=${TARGET} \
-          --disable-werror \
-          --disable-nls \
-          ${GDB_CONFIGURE_OPTIONS} \
-          || exit 1
-    echo ${PREFIX} > gdb-configure-prefix
-  else
-    echo "Note: gdb already configured. To force a rebuild, use: rm -rf $(pwd)"
-    sleep 5
-  fi
-  ${MAKE} -j${MAKE_JOBS} || exit 1
-
-  if [ ! -z $MAKE_CHECK ]; then
-    echo "Run ${MAKE} check"
-    ${MAKE} -j${MAKE_JOBS} check || exit 1
-  fi
-
-  ${MAKE} -j${MAKE_JOBS} install || exit 1
-
-  rm ${PREFIX}/${TARGET}/etc/gdb-*-installed
-  touch ${PREFIX}/${TARGET}/etc/gdb-${GDB_VERSION}-installed
-fi
+source script/build-gdb.sh
 
 echo "Copy long name executables to short name."
 (
