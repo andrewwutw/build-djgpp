@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+source script/djgpp-2.05

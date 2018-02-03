@@ -36,17 +36,17 @@ done
 
 DEPS=""
 
-[ ! -z ${GCC_VERSION} ] && DEPS+=" base binutils"
+[ ! -z ${GCC_VERSION} ] && DEPS+=" djgpp binutils"
 [ ! -z ${BINUTILS_VERSION} ] && DEPS+=" "
 [ ! -z ${GDB_VERSION} ] && DEPS+=" "
 [ ! -z ${DJGPP_VERSION} ] && DEPS+=" "
-[ ! -z ${BUILD_DXEGEN} ] && DEPS+=" base binutils gcc"
+[ ! -z ${BUILD_DXEGEN} ] && DEPS+=" djgpp binutils gcc"
 
 for DEP in ${DEPS}; do
   case $DEP in
-    base)
+    djgpp)
       [ -z ${DJGPP_VERSION} ] \
-        && source script/base
+        && source script/djgpp
       ;;
     binutils)
       [ -z "`ls ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/binutils-*-installed 2> /dev/null`" ] \
