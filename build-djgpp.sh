@@ -102,8 +102,8 @@ done
 # It is for OSX, which doesn't ship with GNU sed.
 if ! sed --version 2>/dev/null |grep "GNU sed" > /dev/null ;then
   echo GNU sed is not installed, need to download.
-  SED_VERSION=4.2.2
-  SED_ARCHIVE="http://ftp.gnu.org/gnu/sed/sed-${SED_VERSION}.tar.bz2"
+  SED_VERSION=4.4
+  SED_ARCHIVE="http://ftp.gnu.org/gnu/sed/sed-${SED_VERSION}.tar.xz"
 else
   SED_ARCHIVE=""
 fi
