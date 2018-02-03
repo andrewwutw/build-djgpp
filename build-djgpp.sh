@@ -231,6 +231,7 @@ cd ${BASE}/build/
 
 if [ ! -z ${DJGPP_VERSION} ]; then
   echo "Prepare djgpp"
+  rm -rf ${BASE}/build/djgpp-${DJGPP_VERSION}
   mkdir -p ${BASE}/build/djgpp-${DJGPP_VERSION}
   cd ${BASE}/build/djgpp-${DJGPP_VERSION} || exit 1
   unzip -o ../../download/djdev${DJGPP_VERSION}.zip || exit 1
@@ -248,6 +249,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   mkdir -p $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include || exit 1
   cp -rp include/* $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include/ || exit 1
   cp -rp lib $DJGPP_PREFIX/i586-pc-msdosdjgpp/ || exit 1
+  mkdir -p $DJGPP_PREFIX/bin || exit 1
   cp -p src/stub/i586-pc-msdosdjgpp-stubify $DJGPP_PREFIX/bin/ || exit 1
   cp -p src/stub/i586-pc-msdosdjgpp-stubedit $DJGPP_PREFIX/bin/ || exit 1
 
