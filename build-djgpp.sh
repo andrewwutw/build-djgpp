@@ -352,8 +352,10 @@ if [ ! -z ${GCC_VERSION} ]; then
     cd $BUILDDIR
     untar autoconf-${AUTOCONF_VERSION} || exit 1
     cd autoconf-${AUTOCONF_VERSION}/
-    ./configure --prefix=$BUILDDIR/tmpinst || exit 1
-    ${MAKE} -j${MAKE_JOBS} all install || exit 1
+    PATH="${BUILDDIR}/tmpinst/bin:${BASE/build/tmpinst/:$PATH" \
+      ./configure --prefix=$BUILDDIR/tmpinst || exit 1
+    PATH="${BUILDDIR}/tmpinst/bin:${BASE/build/tmpinst/:$PATH" \
+      ${MAKE} -j${MAKE_JOBS} all install || exit 1
     rm ${BUILDDIR}/tmpinst/autoconf-*-built
     touch ${BUILDDIR}/tmpinst/autoconf-${AUTOCONF_VERSION}-built
   else
@@ -365,10 +367,10 @@ if [ ! -z ${GCC_VERSION} ]; then
     cd $BUILDDIR
     untar automake-${AUTOMAKE_VERSION} || exit 1
     cd automake-${AUTOMAKE_VERSION}/
-    PATH="$BUILDDIR//tmpinst/bin:$PATH" \
-    ./configure --prefix=$BUILDDIR/tmpinst || exit 1
-    PATH="$BUILDDIR//tmpinst/bin:$PATH" \
-    ${MAKE} all install || exit 1
+    PATH="${BUILDDIR}/tmpinst/bin:${BASE/build/tmpinst/:$PATH" \
+      ./configure --prefix=$BUILDDIR/tmpinst || exit 1
+    PATH="${BUILDDIR}/tmpinst/bin:${BASE/build/tmpinst/:$PATH" \
+      ${MAKE} all install || exit 1
     rm ${BUILDDIR}/tmpinst/automake-*-built
     touch ${BUILDDIR}/tmpinst/automake-${AUTOMAKE_VERSION}-built
   else
@@ -386,7 +388,8 @@ if [ ! -z ${GCC_VERSION} ]; then
     fi
 
     echo "Running unpack-gcc.sh"
-    PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source $(ls -t ${BASE}/download/gcc-${GCC_VERSION}.tar.* | head -n 1) || exit 1
+    PATH="${BUILDDIR}/tmpinst/bin:${BASE/build/tmpinst/:$PATH" \
+      sh unpack-gcc.sh --no-djgpp-source $(ls -t ${BASE}/download/gcc-${GCC_VERSION}.tar.* | head -n 1) || exit 1
 
     # patch gnu/gcc-X.XX/gcc/doc/gcc.texi
     echo "Patch gcc/doc/gcc.texi"
@@ -402,7 +405,8 @@ if [ ! -z ${GCC_VERSION} ]; then
     # download mpc/gmp/mpfr/isl libraries
     echo "Downloading gcc dependencies"
     cd gnu/gcc-${GCC_VERSION_SHORT}
-    ./contrib/download_prerequisites
+    PATH="${BUILDDIR}/tmpinst/bin:${BASE/build/tmpinst/:$PATH" \
+      ./contrib/download_prerequisites
     cd -
 
     touch gcc-unpacked
@@ -421,8 +425,8 @@ if [ ! -z ${GCC_VERSION} ]; then
   if [ ! -e gcc-configure-prefix ] || [ ! `cat gcc-configure-prefix` = "${DJGPP_PREFIX}" ]; then
     rm gcc-configure-prefix
     ${MAKE} distclean
-    PATH="$BUILDDIR//tmpinst/bin:$PATH" \
-    ../gnu/gcc-${GCC_VERSION_SHORT}/configure \
+    PATH="${BUILDDIR}/tmpinst/bin:${BASE/build/tmpinst/:$PATH" \
+      ../gnu/gcc-${GCC_VERSION_SHORT}/configure \
                                      --target=i586-pc-msdosdjgpp \
                                      --program-prefix=i586-pc-msdosdjgpp- \
                                      --prefix=$DJGPP_PREFIX \
@@ -438,7 +442,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     sleep 5
   fi
 
-  ${MAKE} -j${MAKE_JOBS} "PATH=$BUILDDIR/tmpinst/bin:$PATH" || exit 1
+  ${MAKE} -j${MAKE_JOBS} PATH="${BUILDDIR}/tmpinst/bin:${BASE/build/tmpinst/:$PATH" || exit 1
   ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
 
   rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gcc-*-installed
