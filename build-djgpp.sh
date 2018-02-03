@@ -34,6 +34,38 @@ while [ ! -z $1 ]; do
   shift
 done
 
+DEPS=""
+
+[ ! -z ${GCC_VERSION} ] && DEPS+=" base binutils"
+[ ! -z ${BINUTILS_VERSION} ] && DEPS+=" "
+[ ! -z ${GDB_VERSION} ] && DEPS+=" "
+[ ! -z ${DJGPP_VERSION} ] && DEPS+=" "
+
+for DEP in ${DEPS}; do
+  case $DEP in
+    base)
+      [ -z "`ls ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/djgpp-*-installed 2> /dev/null`" ] \
+        && [ -z ${DJGPP_VERSION} ] \
+        && source script/base
+      ;;
+    binutils)
+      [ -z "`ls ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/binutils-*-installed 2> /dev/null`" ] \
+        && [ -z ${BINUTILS_VERSION} ] \
+        && source script/binutils
+      ;;
+    gcc)
+      [ -z "`ls ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gcc-*-installed 2> /dev/null`" ] \
+        && [ -z ${GCC_VERSION} ] \
+        && source script/gcc
+      ;;
+    gdb)
+      [ -z "`ls ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-*-installed 2> /dev/null`" ] \
+        && [ -z ${GDB_VERSION} ] \
+        && source script/gdb
+      ;;
+  esac
+done
+
 # use gmake/clang under FreeBSD
 if [ `uname` = "FreeBSD" ]; then
   MAKE=${MAKE-gmake}
