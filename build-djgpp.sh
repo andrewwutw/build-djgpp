@@ -222,6 +222,17 @@ echo "Make build dir"
 mkdir -p ${BASE}/build
 cd build || exit 1
 
+# build GNU tar if needed.
+TAR=tar
+if [ ! -z $TAR_VERSION ]; then
+  echo "Building tar"
+  tar -xJvf ${BASE}/download/tar-${TAR_VERSION}.tar.xz || exit 1
+  cd tar-${TAR_VERSION}/
+  ./configure --prefix=${BASE}/build/tmpinst || exit 1
+  ${MAKE} -j${MAKE_JOBS} all install || exit 1
+  TAR=${BASE}/build/tmpinst/bin/tar
+fi
+
 if [ ! -z ${BINUTILS_VERSION} ]; then
   echo "Building binutils"
   mkdir -p bnu${BINUTILS_VERSION}s
