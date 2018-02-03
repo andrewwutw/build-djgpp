@@ -233,6 +233,11 @@ if [ ! -z $TAR_VERSION ]; then
   TAR=${BASE}/build/tmpinst/bin/tar
 fi
 
+untar()
+{
+  ${TAR} -xavf $(ls -t ${BASE}/download/$1.tar.* | head -n 1)
+}
+
 if [ ! -z ${BINUTILS_VERSION} ]; then
   echo "Building binutils"
   mkdir -p bnu${BINUTILS_VERSION}s
@@ -322,7 +327,7 @@ cd ${BASE}/build/
 
 if [ ! -z ${GCC_VERSION} ]; then
   # build gcc
-  tar -xavf $(ls -t ../download/djcross-gcc-${GCC_VERSION}.tar.* | head -n 1) || exit 1
+  untar djcross-gcc-${GCC_VERSION} || exit 1
   cd djcross-gcc-${GCC_VERSION}/
 
   BUILDDIR=`pwd`
@@ -330,7 +335,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   if [ ! -e ${BUILDDIR}/tmpinst/autoconf-${AUTOCONF_VERSION}-built ]; then
     echo "Building autoconf"
     cd $BUILDDIR
-    tar -xavf $(ls -t ../../download/autoconf-${AUTOCONF_VERSION}.tar.* | head -n 1) || exit 1
+    untar autoconf-${AUTOCONF_VERSION} || exit 1
     cd autoconf-${AUTOCONF_VERSION}/
     ./configure --prefix=$BUILDDIR/tmpinst || exit 1
     ${MAKE} -j${MAKE_JOBS} all install || exit 1
@@ -343,7 +348,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   if [ ! -e ${BUILDDIR}/tmpinst/automake-${AUTOMAKE_VERSION}-built ]; then
     echo "Building automake"
     cd $BUILDDIR
-    tar -xavf $(ls -t ../../download/automake-${AUTOMAKE_VERSION}.tar.* | head -n 1) || exit 1
+    untar automake-${AUTOMAKE_VERSION} || exit 1
     cd automake-${AUTOMAKE_VERSION}/
     PATH="$BUILDDIR//tmpinst/bin:$PATH" \
     ./configure --prefix=$BUILDDIR/tmpinst || exit 1
@@ -360,7 +365,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   if [ ! -z $SED_VERSION ]; then
     echo "Building sed"
     cd $BUILDDIR
-    tar -xavf $(ls -t ../../download/sed-${SED_VERSION}.tar.* | head -n 1) || exit 1
+    untar sed-${SED_VERSION} || exit 1
     cd sed-${SED_VERSION}/
     ./configure --prefix=$BUILDDIR/tmpinst || exit 1
     ${MAKE} -j${MAKE_JOBS} all install || exit 1
@@ -394,7 +399,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     fi
 
     echo "Running unpack-gcc.sh"
-    PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source $(ls -t ../../download/gcc-${GCC_VERSION}.tar.* | head -n 1) || exit 1
+    PATH="$BUILDDIR/tmpinst/bin:$PATH" sh unpack-gcc.sh --no-djgpp-source $(ls -t ${BASE}/download/gcc-${GCC_VERSION}.tar.* | head -n 1) || exit 1
 
     # patch gnu/gcc-X.XX/gcc/doc/gcc.texi
     echo "Patch gcc/doc/gcc.texi"
@@ -485,7 +490,7 @@ cd ${BASE}/build
 if [ ! -z ${GDB_VERSION} ]; then
   if [ ! -e gdb-${GDB_VERSION}/gdb-unpacked ]; then
     echo "Unpacking gdb."
-    tar -xavf $(ls -t ../download/gdb-${GDB_VERSION}.tar.* | head -n 1) || exit 1
+    untar gdb-${GDB_VERSION} || exit 1
     touch gdb-${GDB_VERSION}/gdb-unpacked
   fi
   mkdir -p gdb-${GDB_VERSION}/build
