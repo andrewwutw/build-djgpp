@@ -149,8 +149,8 @@ fi
 # check for GNU tar and download if necessary.
 if ! tar --version 2>/dev/null |grep "GNU tar" > /dev/null ;then
   echo GNU tar is not installed, need to download.
-  TAR_VERSION=latest
-  TAR_ARCHIVE="http://ftpmirror.gnu.org/tar/tar-${SED_VERSION}.tar.xz"
+  TAR_VERSION=1.30
+  TAR_ARCHIVE="http://ftpmirror.gnu.org/tar/tar-${TAR_VERSION}.tar.xz"
 else
   TAR_ARCHIVE=""
 fi
