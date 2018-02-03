@@ -377,22 +377,6 @@ if [ ! -z ${GCC_VERSION} ]; then
   if [ ! -e gcc-unpacked ]; then
     echo "Patch unpack-gcc.sh"
 
-    if [ ${GCC_VERSION} == "4.7.3" ]; then
-      # gcc 4.7.3 unpack-gcc.sh needs to be patched for OSX
-      # patch from :
-      #   ( cd gnu && tar xf $top/$archive --use=`case $archive in *.gz|*.tgz) echo 'gzip';; *.bz2) echo 'bzip2';; *.xz) echo 'xz';; esac` && echo $archive >$top/s-sources )
-      # to :
-      #   ( cd gnu && tar xjf $top/$archive && echo $archive >$top/s-sources )
-      $SED -i "s/\(cd gnu && tar x\)\([^-]*\)\([^&]*\)/\1j\2/" unpack-gcc.sh || exit 1
-    else
-      # gcc 4.8 or above unpack-gcc.sh needs to be patched for OSX
-      # patch from :
-      #   ( cd gnu && tar xf $top/$archive $tar_param && echo $archive >$top/s-sources )
-      # to :
-      #   ( cd gnu && tar xJf $top/$archive && echo $archive >$top/s-sources )
-      $SED -i "s/\(cd gnu && tar x\)\(f [^ ]* \)\([^ ]* \)/\1a\2/" unpack-gcc.sh || exit 1
-    fi
-
     if [ `uname` = "FreeBSD" ]; then
       # The --verbose option is not recognized by BSD patch
       $SED -i 's/patch --verbose/patch/' unpack-gcc.sh || exit 1
