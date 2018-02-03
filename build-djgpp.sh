@@ -22,7 +22,8 @@ BASE=`pwd`
 if [ -z $1 ]; then
   echo "Usage: $0 [packages...]"
   echo "Supported packages:"
-  for F in `(cd script/;echo *)`; do echo "  "$F; done
+  ls djgpp/
+  ls script/
   exit 1
 fi
 
@@ -32,7 +33,7 @@ while [ ! -z $1 ]; do
     exit 1
   fi
 
-  source script/$1
+  ([ -e djgpp/$1 ] && source djgpp/$1) || source script/$1
   shift
 done
 
@@ -48,12 +49,12 @@ for DEP in ${DEPS}; do
   case $DEP in
     djgpp)
       [ -z ${DJGPP_VERSION} ] \
-        && source script/djgpp
+        && source djgpp/djgpp
       ;;
     binutils)
       [ -z "`ls ${DJGPP_PREFIX}/${TARGET}/etc/binutils-*-installed 2> /dev/null`" ] \
         && [ -z ${BINUTILS_VERSION} ] \
-        && source script/binutils
+        && source djgpp/binutils
       ;;
     gcc)
       [ -z "`ls ${DJGPP_PREFIX}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ] \

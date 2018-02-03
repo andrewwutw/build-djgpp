@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-source script/default
-source script/dxegen
+source djgpp/default
+source djgpp/dxegen
 source script/gdb

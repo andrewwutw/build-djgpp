@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-source script/djgpp
-source script/binutils
+source djgpp/djgpp
+source djgpp/binutils
 source script/gcc
