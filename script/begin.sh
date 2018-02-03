@@ -39,6 +39,9 @@ fi
 if [ ! -z ${GDB_VERSION} ]; then
   echo "    GDB_CONFIGURE_OPTIONS=`echo ${GDB_CONFIGURE_OPTIONS}`"
 fi
+if [ ! -z ${NEWLIB_VERSION} ]; then
+  echo "    NEWLIB_CONFIGURE_OPTIONS=`echo ${NEWLIB_CONFIGURE_OPTIONS}`"
+fi
 echo ""
 echo "If you wish to change anything, press CTRL-C now. Otherwise, press any other key to continue."
 read -s -n 1
@@ -150,4 +153,3 @@ mkdir -p ${PREFIX}/${TARGET}/etc/ || exit 1
 # make build dir
 echo "Make build dir"
 mkdir -p ${BASE}/build
-cd ${BASE}/build || exit 1

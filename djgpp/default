@@ -2,4 +2,4 @@
 
 source djgpp/djgpp
 source djgpp/binutils
-source script/gcc
+source common/gcc

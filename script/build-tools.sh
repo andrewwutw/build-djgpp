@@ -1,5 +1,7 @@
 mkdir -p ${BASE}/build/tmpinst
-export PATH="${BASE}/build/tmpinst/:$PATH"
+export PATH="${BASE}/build/tmpinst:$PATH"
+
+cd ${BASE}/build/ || exit 1
 
 # build GNU tar if needed.
 TAR=tar
@@ -37,5 +39,3 @@ if [ ! -z $SED_VERSION ]; then
   fi
   SED=${BASE}/build/tmpinst/bin/sed
 fi
-
-cd ${BASE}/build || exit 1

@@ -23,17 +23,17 @@ if [ -z $1 ]; then
   echo "Usage: $0 [packages...]"
   echo "Supported packages:"
   ls djgpp/
-  ls script/
+  ls common/
   exit 1
 fi
 
 while [ ! -z $1 ]; do
-  if [ ! -x djgpp/$1 ] && [ ! -x script/$1 ]; then
+  if [ ! -x djgpp/$1 ] && [ ! -x common/$1 ]; then
     echo "Unsupported package: $1"
     exit 1
   fi
 
-  ([ -e djgpp/$1 ] && source djgpp/$1) || source script/$1
+  [ -e djgpp/$1 ] && source djgpp/$1 || source common/$1
   shift
 done
 
@@ -59,24 +59,26 @@ for DEP in ${DEPS}; do
     gcc)
       [ -z "`ls ${PREFIX}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ] \
         && [ -z ${GCC_VERSION} ] \
-        && source script/gcc
+        && source common/gcc
       ;;
     gdb)
       [ -z "`ls ${PREFIX}/${TARGET}/etc/gdb-*-installed 2> /dev/null`" ] \
         && [ -z ${GDB_VERSION} ] \
-        && source script/gdb
+        && source common/gdb
       ;;
     dxegen)
       [ -z "`ls ${PREFIX}/${TARGET}/etc/dxegen-installed 2> /dev/null`" ] \
         && [ -z ${BUILD_DXEGEN} ] \
-        && source script/dxegen
+        && source djgpp/dxegen
       ;;
   esac
 done
 
-source script/begin.sh
+source ${BASE}/script/begin.sh
 
-source script/build-tools.sh
+source ${BASE}/script/build-tools.sh
+
+cd ${BASE}/build/ || exit 1
 
 if [ ! -z ${BINUTILS_VERSION} ]; then
   echo "Building binutils"
@@ -98,10 +100,10 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
     chmod a+x $EXEC_FILE || exit 1
   done
 
-  source script/build-binutils.sh
+  source ${BASE}/script/build-binutils.sh
 fi
 
-cd ${BASE}/build/
+cd ${BASE}/build/ || exit 1
 
 if [ ! -z ${DJGPP_VERSION} ] || [ ! -z ${BUILD_DXEGEN} ]; then
   echo "Prepare djgpp"
@@ -206,8 +208,8 @@ if [ ! -z ${GCC_VERSION} ]; then
 
   echo "Building gcc"
 
-  mkdir -p djcross || exit 1
-  cd djcross
+  mkdir -p djcross
+  cd djcross || exit 1
 
   TEMP_CFLAGS="$CFLAGS"
   export CFLAGS="$CFLAGS $GCC_EXTRA_CFLAGS"
@@ -268,6 +270,6 @@ fi
 
 cd ${BASE}/build
 
-source script/build-gdb.sh
+source ${BASE}/script/build-gdb.sh
 
-source script/finalize.sh
+source ${BASE}/script/finalize.sh
