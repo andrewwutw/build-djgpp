@@ -39,7 +39,7 @@ DEPS=""
 [ ! -z ${GCC_VERSION} ] && DEPS+=" base binutils"
 [ ! -z ${BINUTILS_VERSION} ] && DEPS+=" "
 [ ! -z ${GDB_VERSION} ] && DEPS+=" "
-[ ! -z ${DJGPP_VERSION} ] && DEPS+=" "
+[ ! -z ${DJGPP_VERSION} ] && DEPS+=" binutils gcc"
 
 for DEP in ${DEPS}; do
   case $DEP in
