@@ -42,7 +42,7 @@ DEPS=""
 for DEP in ${DEPS}; do
   case $DEP in
     newlib)
-      [ -z ${DJGPP_VERSION} ] \
+      [ -z ${NEWLIB_VERSION} ] \
         && source newlib/newlib
       ;;
     binutils)
@@ -87,11 +87,9 @@ if [ ! -z ${GCC_VERSION} ]; then
     # download mpc/gmp/mpfr/isl libraries
     echo "Downloading gcc dependencies"
     cd gcc-${GCC_VERSION}/
-    PATH="${BUILDDIR}/tmpinst/bin:${BASE}/build/tmpinst/:$PATH" \
-      ./contrib/download_prerequisites
-    cd -
-
+    ./contrib/download_prerequisites
     touch gcc-unpacked
+    cd -
   else
     echo "gcc already unpacked, skipping."
   fi
@@ -109,8 +107,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   if [ ! -e gcc-configure-prefix ] || [ ! `cat gcc-configure-prefix` = "${PREFIX}" ]; then
     rm gcc-configure-prefix
     ${MAKE} distclean
-    PATH="${BASE}/build/tmpinst/:$PATH" \
-      ../configure \
+    ../configure \
           --target=${TARGET} \
           --prefix=${PREFIX} \
           --disable-nls \
@@ -125,8 +122,8 @@ if [ ! -z ${GCC_VERSION} ]; then
     sleep 5
   fi
 
-  ${MAKE} -j${MAKE_JOBS} PATH="${BASE}/build/tmpinst/:$PATH" || exit 1
-  ${MAKE} -j${MAKE_JOBS} PATH="${BASE}/build/tmpinst/:$PATH" install-strip || exit 1
+  ${MAKE} -j${MAKE_JOBS} || exit 1
+  ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
 
   rm ${PREFIX}/${TARGET}/etc/gcc-*-installed
   touch ${PREFIX}/${TARGET}/etc/gcc-${GCC_VERSION}-installed

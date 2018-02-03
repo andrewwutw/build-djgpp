@@ -150,5 +150,4 @@ mkdir -p ${PREFIX}/${TARGET}/etc/ || exit 1
 # make build dir
 echo "Make build dir"
 mkdir -p ${BASE}/build
-mkdir -p ${BASE}/build/tmpinst
 cd ${BASE}/build || exit 1

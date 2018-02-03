@@ -1,3 +1,6 @@
+mkdir -p ${BASE}/build/tmpinst
+export PATH="${BASE}/build/tmpinst/:$PATH"
+
 # build GNU tar if needed.
 TAR=tar
 if [ ! -z $TAR_VERSION ]; then
