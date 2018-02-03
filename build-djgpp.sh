@@ -5,6 +5,8 @@ unset CDPATH
 # target directory
 DJGPP_PREFIX=${DJGPP_PREFIX-/usr/local/djgpp}
 
+TARGET="i586-pc-msdosdjgpp"
+
 # enabled languages
 #ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++,f95,objc,obj-c++}
 ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
@@ -49,22 +51,22 @@ for DEP in ${DEPS}; do
         && source script/djgpp
       ;;
     binutils)
-      [ -z "`ls ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/binutils-*-installed 2> /dev/null`" ] \
+      [ -z "`ls ${DJGPP_PREFIX}/${TARGET}/etc/binutils-*-installed 2> /dev/null`" ] \
         && [ -z ${BINUTILS_VERSION} ] \
         && source script/binutils
       ;;
     gcc)
-      [ -z "`ls ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gcc-*-installed 2> /dev/null`" ] \
+      [ -z "`ls ${DJGPP_PREFIX}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ] \
         && [ -z ${GCC_VERSION} ] \
         && source script/gcc
       ;;
     gdb)
-      [ -z "`ls ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-*-installed 2> /dev/null`" ] \
+      [ -z "`ls ${DJGPP_PREFIX}/${TARGET}/etc/gdb-*-installed 2> /dev/null`" ] \
         && [ -z ${GDB_VERSION} ] \
         && source script/gdb
       ;;
     dxegen)
-      [ -z "`ls ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/dxegen-installed 2> /dev/null`" ] \
+      [ -z "`ls ${DJGPP_PREFIX}/${TARGET}/etc/dxegen-installed 2> /dev/null`" ] \
         && [ -z ${BUILD_DXEGEN} ] \
         && source script/dxegen
       ;;
@@ -215,7 +217,7 @@ if ! [ -w $DJGPP_PREFIX ]; then
   exit 1
 fi
 
-mkdir -p ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/ || exit 1
+mkdir -p ${DJGPP_PREFIX}/${TARGET}/etc/ || exit 1
 
 # make build dir
 echo "Make build dir"
@@ -289,8 +291,8 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
     ${MAKE} distclean
     ../configure \
                --prefix=$DJGPP_PREFIX \
-               --target=i586-pc-msdosdjgpp \
-               --program-prefix=i586-pc-msdosdjgpp- \
+               --target=${TARGET} \
+               --program-prefix=${TARGET}- \
                --disable-werror \
                --disable-nls \
                ${BINUTILS_CONFIGURE_OPTIONS} \
@@ -312,8 +314,8 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
 
   ${MAKE} -j${MAKE_JOBS} install || exit 1
 
-  rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/binutils-*-installed
-  touch ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/binutils-${BINUTILS_VERSION}-installed
+  rm ${DJGPP_PREFIX}/${TARGET}/etc/binutils-*-installed
+  touch ${DJGPP_PREFIX}/${TARGET}/etc/binutils-${BINUTILS_VERSION}-installed
   # binutils done
 fi
 
@@ -331,20 +333,20 @@ if [ ! -z ${DJGPP_VERSION} ] || [ ! -z ${BUILD_DXEGEN} ]; then
   patch -p1 -u < ../../patch/patch-djcrx${DJGPP_VERSION}.txt || exit 1
 
   cd src/stub
-  ${CC} -O2 ${CFLAGS} stubify.c -o i586-pc-msdosdjgpp-stubify || exit 1
-  ${CC} -O2 ${CFLAGS} stubedit.c -o i586-pc-msdosdjgpp-stubedit || exit 1
+  ${CC} -O2 ${CFLAGS} stubify.c -o ${TARGET}-stubify || exit 1
+  ${CC} -O2 ${CFLAGS} stubedit.c -o ${TARGET}-stubedit || exit 1
 
   cd ../..
 
-  mkdir -p $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include || exit 1
-  cp -rp include/* $DJGPP_PREFIX/i586-pc-msdosdjgpp/sys-include/ || exit 1
-  cp -rp lib $DJGPP_PREFIX/i586-pc-msdosdjgpp/ || exit 1
+  mkdir -p $DJGPP_PREFIX/${TARGET}/sys-include || exit 1
+  cp -rp include/* $DJGPP_PREFIX/${TARGET}/sys-include/ || exit 1
+  cp -rp lib $DJGPP_PREFIX/${TARGET}/ || exit 1
   mkdir -p $DJGPP_PREFIX/bin || exit 1
-  cp -p src/stub/i586-pc-msdosdjgpp-stubify $DJGPP_PREFIX/bin/ || exit 1
-  cp -p src/stub/i586-pc-msdosdjgpp-stubedit $DJGPP_PREFIX/bin/ || exit 1
+  cp -p src/stub/${TARGET}-stubify $DJGPP_PREFIX/bin/ || exit 1
+  cp -p src/stub/${TARGET}-stubedit $DJGPP_PREFIX/bin/ || exit 1
 
-  rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/djgpp-*-installed
-  touch ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/djgpp-${DJGPP_VERSION}-installed
+  rm ${DJGPP_PREFIX}/${TARGET}/etc/djgpp-*-installed
+  touch ${DJGPP_PREFIX}/${TARGET}/etc/djgpp-${DJGPP_VERSION}-installed
 fi
 
 cd ${BASE}/build/
@@ -407,7 +409,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     cd -
 
     # copy stubify programs
-    cp -p $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-stubify $BUILDDIR/tmpinst/bin/stubify
+    cp -p $DJGPP_PREFIX/bin/${TARGET}-stubify $BUILDDIR/tmpinst/bin/stubify
 
     cd $BUILDDIR/
 
@@ -436,8 +438,8 @@ if [ ! -z ${GCC_VERSION} ]; then
     ${MAKE} distclean
     PATH="${BUILDDIR}/tmpinst/bin:${BASE}/build/tmpinst/:$PATH" \
       ../gnu/gcc-${GCC_VERSION_SHORT}/configure \
-                                     --target=i586-pc-msdosdjgpp \
-                                     --program-prefix=i586-pc-msdosdjgpp- \
+                                     --target=${TARGET} \
+                                     --program-prefix=${TARGET}- \
                                      --prefix=$DJGPP_PREFIX \
                                      --disable-nls \
                                      --enable-libquadmath-support \
@@ -454,8 +456,8 @@ if [ ! -z ${GCC_VERSION} ]; then
   ${MAKE} -j${MAKE_JOBS} PATH="${BUILDDIR}/tmpinst/bin:${BASE}/build/tmpinst/:$PATH" || exit 1
   ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
 
-  rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gcc-*-installed
-  touch ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gcc-${GCC_VERSION}-installed
+  rm ${DJGPP_PREFIX}/${TARGET}/etc/gcc-*-installed
+  touch ${DJGPP_PREFIX}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
 
   export CFLAGS="$TEMP_CFLAGS"
 fi
@@ -470,17 +472,17 @@ if [ ! -z ${DJGPP_VERSION} ]; then
     cd src
     PATH=$DJGPP_PREFIX/bin/:$PATH ${MAKE} || exit 1
     cd dxe
-    cp -p dxegen  $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-dxegen || exit 1
-    cp -p dxe3gen $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-dxe3gen || exit 1
-    cp -p dxe3res $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-dxe3res || exit 1
+    cp -p dxegen  $DJGPP_PREFIX/bin/${TARGET}-dxegen || exit 1
+    cp -p dxe3gen $DJGPP_PREFIX/bin/${TARGET}-dxe3gen || exit 1
+    cp -p dxe3res $DJGPP_PREFIX/bin/${TARGET}-dxe3res || exit 1
     cd ../..
-    touch ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/dxegen-installed
+    touch ${DJGPP_PREFIX}/${TARGET}/etc/dxegen-installed
   else
     echo "Building DXE tools requires gcc, skip."
   fi
   cd src/stub
   ${CC} -O2 ${CFLAGS} -o exe2coff exe2coff.c || exit 1
-  cp -p exe2coff $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-exe2coff || exit 1
+  cp -p exe2coff $DJGPP_PREFIX/bin/${TARGET}-exe2coff || exit 1
 
   # djlsr done
 fi
@@ -502,7 +504,7 @@ if [ ! -z ${GDB_VERSION} ]; then
     ${MAKE} distclean
     ../configure \
           --prefix=${DJGPP_PREFIX} \
-          --target=i586-pc-msdosdjgpp \
+          --target=${TARGET} \
           --disable-werror \
           --disable-nls \
           ${GDB_CONFIGURE_OPTIONS} \
@@ -521,8 +523,8 @@ if [ ! -z ${GDB_VERSION} ]; then
 
   ${MAKE} -j${MAKE_JOBS} install || exit 1
 
-  rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-*-installed
-  touch ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-${GDB_VERSION}-installed
+  rm ${DJGPP_PREFIX}/${TARGET}/etc/gdb-*-installed
+  touch ${DJGPP_PREFIX}/${TARGET}/etc/gdb-${GDB_VERSION}-installed
 fi
 
 echo "Copy long name executables to short name."
@@ -530,8 +532,8 @@ echo "Copy long name executables to short name."
   cd $DJGPP_PREFIX || exit 1
   SHORT_NAME_LIST="gcc g++ c++ addr2line c++filt cpp size strings dxegen dxe3gen dxe3res exe2coff stubify stubedit gdb"
   for SHORT_NAME in $SHORT_NAME_LIST; do
-    if [ -f bin/i586-pc-msdosdjgpp-$SHORT_NAME ]; then
-      cp -p bin/i586-pc-msdosdjgpp-$SHORT_NAME i586-pc-msdosdjgpp/bin/$SHORT_NAME
+    if [ -f bin/${TARGET}-$SHORT_NAME ]; then
+      cp -p bin/${TARGET}-$SHORT_NAME ${TARGET}/bin/$SHORT_NAME
     fi
   done
 )
@@ -542,14 +544,14 @@ echo "Copy long name executables to short name."
 echo "Testing DJGPP."
 cd ${BASE}/build
 echo "Use DJGPP to build a test C program."
-$DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-gcc ../hello.c -o hello || echo "FAILED: C"
+$DJGPP_PREFIX/bin/${TARGET}-gcc ../hello.c -o hello || echo "FAILED: C"
 
 for x in $(echo $ENABLE_LANGUAGES | tr "," " ")
 do
   case $x in
     c++)
       echo "Use DJGPP to build a test C++ program."
-      $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-c++ ../hello-cpp.cpp -o hello-cpp || echo "FAILED: C++"
+      $DJGPP_PREFIX/bin/${TARGET}-c++ ../hello-cpp.cpp -o hello-cpp || echo "FAILED: C++"
       ;;
   esac
 done
