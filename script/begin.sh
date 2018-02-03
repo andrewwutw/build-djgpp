@@ -12,11 +12,12 @@ fi
 export CC CXX MAKE
 
 echo "You are about to build and install:"
-[ -z ${DJGPP_VERSION} ] || echo "    - DJGPP base library ${DJGPP_VERSION}"
+[ -z ${DJGPP_VERSION} ]    || echo "    - DJGPP base library ${DJGPP_VERSION}"
+[ -z ${NEWLIB_VERSION} ]   || echo "    - newlib ${NEWLIB_VERSION}"
 [ -z ${BINUTILS_VERSION} ] || echo "    - binutils ${BINUTILS_VERSION}"
-[ -z ${GCC_VERSION} ] || echo "    - gcc ${GCC_VERSION}"
-[ -z ${GDB_VERSION} ] || echo "    - gdb ${GDB_VERSION}"
-[ -z ${BUILD_DXEGEN} ] || echo "    - DXE tools ${DJGPP_VERSION}"
+[ -z ${GCC_VERSION} ]      || echo "    - gcc ${GCC_VERSION}"
+[ -z ${GDB_VERSION} ]      || echo "    - gdb ${GDB_VERSION}"
+[ -z ${BUILD_DXEGEN} ]     || echo "    - DXE tools ${DJGPP_VERSION}"
 echo ""
 echo "With the following options:"
 echo "    TARGET=${TARGET}"
