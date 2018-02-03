@@ -39,7 +39,8 @@ DEPS=""
 [ ! -z ${GCC_VERSION} ] && DEPS+=" base binutils"
 [ ! -z ${BINUTILS_VERSION} ] && DEPS+=" "
 [ ! -z ${GDB_VERSION} ] && DEPS+=" "
-[ ! -z ${DJGPP_VERSION} ] && DEPS+=" binutils gcc"
+[ ! -z ${DJGPP_VERSION} ] && DEPS+=" "
+[ ! -z ${BUILD_DXEGEN} ] && DEPS+=" base binutils gcc"
 
 for DEP in ${DEPS}; do
   case $DEP in
@@ -63,6 +64,11 @@ for DEP in ${DEPS}; do
         && [ -z ${GDB_VERSION} ] \
         && source script/gdb
       ;;
+    dxegen)
+      [ -z "`ls ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/dxegen-installed 2> /dev/null`" ] \
+        && [ -z ${BUILD_DXEGEN} ] \
+        && source script/dxegen
+      ;;
   esac
 done
 
@@ -84,6 +90,7 @@ echo "You are about to build and install:"
 [ -z ${BINUTILS_VERSION} ] || echo "    - binutils ${BINUTILS_VERSION}"
 [ -z ${GCC_VERSION} ] || echo "    - gcc ${GCC_VERSION}"
 [ -z ${GDB_VERSION} ] || echo "    - gdb ${GDB_VERSION}"
+[ -z ${BUILD_DXEGEN} ] || echo "    - DXE tools ${DJGPP_VERSION}"
 echo ""
 echo "With the following options:"
 echo "    DJGPP_PREFIX=${DJGPP_PREFIX}"
@@ -263,7 +270,7 @@ fi
 
 cd ${BASE}/build/
 
-if [ ! -z ${DJGPP_VERSION} ]; then
+if [ ! -z ${DJGPP_VERSION} ] || [ ! -z ${BUILD_DXEGEN} ]; then
   echo "Prepare djgpp"
   rm -rf ${BASE}/build/djgpp-${DJGPP_VERSION}
   mkdir -p ${BASE}/build/djgpp-${DJGPP_VERSION}
@@ -432,7 +439,7 @@ fi
 if [ ! -z ${DJGPP_VERSION} ]; then
   # build djlsr (for dxegen / exe2coff)
   cd ${BASE}/build/djgpp-${DJGPP_VERSION}
-  if [ "$CC" == "gcc" ]; then
+  if [ "$CC" == "gcc" ] && [ ! -z ${BUILD_DXEGEN} ]; then
     echo "Building DXE tools."
     cd src
     PATH=$DJGPP_PREFIX/bin/:$PATH ${MAKE} || exit 1
@@ -441,6 +448,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
     cp -p dxe3gen $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-dxe3gen || exit 1
     cp -p dxe3res $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-dxe3res || exit 1
     cd ../..
+    touch ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/dxegen-installed
   else
     echo "Building DXE tools requires gcc, skip."
   fi
