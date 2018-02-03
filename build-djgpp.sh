@@ -220,7 +220,7 @@ mkdir -p ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/ || exit 1
 # make build dir
 echo "Make build dir"
 mkdir -p ${BASE}/build
-cd build || exit 1
+cd ${BASE}/build || exit 1
 
 # build GNU tar if needed.
 TAR=tar
@@ -237,6 +237,21 @@ untar()
 {
   ${TAR} -xavf $(ls -t ${BASE}/download/$1.tar.* | head -n 1)
 }
+
+cd ${BASE}/build || exit 1
+
+# build GNU sed if needed.
+SED=sed
+if [ ! -z $SED_VERSION ]; then
+  echo "Building sed"
+  untar sed-${SED_VERSION} || exit 1
+  cd sed-${SED_VERSION}/
+  ./configure --prefix=${BASE}/build/tmpinst || exit 1
+  ${MAKE} -j${MAKE_JOBS} all install || exit 1
+  SED=${BASE}/build/tmpinst/bin/sed
+fi
+
+cd ${BASE}/build || exit 1
 
 if [ ! -z ${BINUTILS_VERSION} ]; then
   echo "Building binutils"
@@ -358,18 +373,6 @@ if [ ! -z ${GCC_VERSION} ]; then
     touch ${BUILDDIR}/tmpinst/automake-${AUTOMAKE_VERSION}-built
   else
     echo "automake already built, skipping."
-  fi
-
-  # build GNU sed if needed.
-  SED=sed
-  if [ ! -z $SED_VERSION ]; then
-    echo "Building sed"
-    cd $BUILDDIR
-    untar sed-${SED_VERSION} || exit 1
-    cd sed-${SED_VERSION}/
-    ./configure --prefix=$BUILDDIR/tmpinst || exit 1
-    ${MAKE} -j${MAKE_JOBS} all install || exit 1
-    SED=$BUILDDIR/tmpinst/bin/sed
   fi
 
   cd $BUILDDIR
