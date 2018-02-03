@@ -146,6 +146,15 @@ else
   SED_ARCHIVE=""
 fi
 
+# check for GNU tar and download if necessary.
+if ! tar --version 2>/dev/null |grep "GNU tar" > /dev/null ;then
+  echo GNU tar is not installed, need to download.
+  TAR_VERSION=latest
+  TAR_ARCHIVE="http://ftpmirror.gnu.org/tar/tar-${SED_VERSION}.tar.xz"
+else
+  TAR_ARCHIVE=""
+fi
+
 # check zlib is installed
 if ! ${CC} test-zlib.c -o test-zlib -lz; then
   echo "zlib not installed"
@@ -163,7 +172,7 @@ fi
 # download source files
 ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $DJLSR_ARCHIVE $DJDEV_ARCHIVE
               $SED_ARCHIVE $DJCROSS_GCC_ARCHIVE $OLD_DJCROSS_GCC_ARCHIVE $GCC_ARCHIVE
-              $AUTOCONF_ARCHIVE $AUTOMAKE_ARCHIVE $GDB_ARCHIVE"
+              $AUTOCONF_ARCHIVE $AUTOMAKE_ARCHIVE $GDB_ARCHIVE $TAR_ARCHIVE"
 
 echo "Download source files..."
 mkdir -p download || exit 1
