@@ -493,8 +493,8 @@ if [ ! -z ${GDB_VERSION} ]; then
 
   ${MAKE} -j${MAKE_JOBS} install || exit 1
 
-  rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gcc-*-installed
-  touch ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gcc-${GCC_VERSION}-installed
+  rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-*-installed
+  touch ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gdb-${GDB_VERSION}-installed
 fi
 
 echo "Copy long name executables to short name."
