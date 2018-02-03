@@ -285,8 +285,8 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
     chmod a+x $EXEC_FILE || exit 1
   done
 
-  mkdir -p build
-  cd build || exit 1
+  mkdir -p build-${TARGET}
+  cd build-${TARGET} || exit 1
   if [ ! -e binutils-configure-prefix ] || [ ! `cat binutils-configure-prefix` = "${DJGPP_PREFIX}" ]; then
     rm binutils-configure-prefix
     ${MAKE} distclean
@@ -496,8 +496,8 @@ if [ ! -z ${GDB_VERSION} ]; then
     untar gdb-${GDB_VERSION} || exit 1
     touch gdb-${GDB_VERSION}/gdb-unpacked
   fi
-  mkdir -p gdb-${GDB_VERSION}/build
-  cd gdb-${GDB_VERSION}/build || exit 1
+  mkdir -p gdb-${GDB_VERSION}/build-${TARGET}
+  cd gdb-${GDB_VERSION}/build-${TARGET} || exit 1
 
   echo "Building gdb."
   if [ ! -e gdb-configure-prefix ] || [ ! `cat gdb-configure-prefix` = "${DJGPP_PREFIX}" ]; then
