@@ -1,9 +1,3 @@
 #!/usr/bin/env bash
 
-# source tarball versions
-export DJGPP_VERSION=205
-
-# source tarball locations
-export DJCRX_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djcrx${DJGPP_VERSION}.zip"
-export DJLSR_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djlsr${DJGPP_VERSION}.zip"
-export DJDEV_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djdev${DJGPP_VERSION}.zip"
+source script/base-2.05
