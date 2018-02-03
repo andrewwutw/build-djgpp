@@ -74,7 +74,7 @@ for DEP in ${DEPS}; do
   esac
 done
 
-source script/stage1.sh
+source script/begin.sh
 
 source script/build-tools.sh
 
@@ -273,35 +273,4 @@ cd ${BASE}/build
 
 source script/build-gdb.sh
 
-echo "Copy long name executables to short name."
-(
-  cd $PREFIX || exit 1
-  SHORT_NAME_LIST="gcc g++ c++ addr2line c++filt cpp size strings dxegen dxe3gen dxe3res exe2coff stubify stubedit gdb"
-  for SHORT_NAME in $SHORT_NAME_LIST; do
-    if [ -f bin/${TARGET}-$SHORT_NAME ]; then
-      cp -p bin/${TARGET}-$SHORT_NAME ${TARGET}/bin/$SHORT_NAME
-    fi
-  done
-)
-
-# copy setenv script
-(cd ${BASE}/setenv/ && ./copyfile.sh $PREFIX) || exit 1
-
-echo "Testing DJGPP."
-cd ${BASE}/build
-echo "Use DJGPP to build a test C program."
-$PREFIX/bin/${TARGET}-gcc ../hello.c -o hello || echo "FAILED: C"
-
-for x in $(echo $ENABLE_LANGUAGES | tr "," " ")
-do
-  case $x in
-    c++)
-      echo "Use DJGPP to build a test C++ program."
-      $PREFIX/bin/${TARGET}-c++ ../hello-cpp.cpp -o hello-cpp || echo "FAILED: C++"
-      ;;
-  esac
-done
-
-echo "build-djgpp.sh done."
-echo "To remove temporary build files, use: rm -rf build/"
-echo "To remove downloaded source packages, use: rm -rf download/"
+source script/finalize.sh
