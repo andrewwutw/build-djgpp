@@ -198,6 +198,7 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
   mkdir -p build
   cd build || exit 1
   if [ ! -e binutils-configure-prefix ] || [ ! `cat binutils-configure-prefix` = "${DJGPP_PREFIX}" ]; then
+    ${MAKE} distclean
     ../configure \
                --prefix=$DJGPP_PREFIX \
                --target=i586-pc-msdosdjgpp \
@@ -422,6 +423,7 @@ if [ ! -z ${GDB_VERSION} ]; then
 
   echo "Building gdb."
   if [ ! -e gdb-configure-prefix ] || [ ! `cat gdb-configure-prefix` = "${DJGPP_PREFIX}" ]; then
+    ${MAKE} distclean
     ../configure \
           --prefix=${DJGPP_PREFIX} \
           --target=i586-pc-msdosdjgpp \
