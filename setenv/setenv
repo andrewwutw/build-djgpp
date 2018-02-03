@@ -1,6 +1,0 @@
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-export PATH="$DIR/i586-pc-msdosdjgpp/bin/:$DIR/bin/:$PATH"
-export GCC_EXEC_PREFIX="$DIR/lib/gcc/"
-export MANPATH="$DIR/share/man:$MANPATH"
-export INFOPATH="$DIR/share/info:$INFOPATH"
-export DJDIR="$DIR/i586-pc-msdosdjgpp"
