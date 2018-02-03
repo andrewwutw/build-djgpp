@@ -224,6 +224,8 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
 
   ${MAKE} -j${MAKE_JOBS} install || exit 1
 
+  rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/binutils-*-installed
+  touch ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/binutils-${BINUTILS_VERSION}-installed
   # binutils done
 fi
 
@@ -253,8 +255,11 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   cp -p src/stub/i586-pc-msdosdjgpp-stubify $DJGPP_PREFIX/bin/ || exit 1
   cp -p src/stub/i586-pc-msdosdjgpp-stubedit $DJGPP_PREFIX/bin/ || exit 1
 
-  cd ..
+  rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/djgpp-*-installed
+  touch ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/djgpp-${DJGPP_VERSION}-installed
 fi
+
+cd ${BASE}/build/
 
 if [ ! -z ${GCC_VERSION} ]; then
   # build gcc
@@ -382,8 +387,10 @@ if [ ! -z ${GCC_VERSION} ]; then
   fi
 
   ${MAKE} -j${MAKE_JOBS} "PATH=$BUILDDIR/tmpinst/bin:$PATH" || exit 1
-
   ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
+
+  rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gcc-*-installed
+  touch ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gcc-${GCC_VERSION}-installed
 
   export CFLAGS="$TEMP_CFLAGS"
 fi
@@ -408,7 +415,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   cd src/stub
   ${CC} -O2 ${CFLAGS} -o exe2coff exe2coff.c || exit 1
   cp -p exe2coff $DJGPP_PREFIX/bin/i586-pc-msdosdjgpp-exe2coff || exit 1
-  cd ${BASE}
+
   # djlsr done
 fi
 
@@ -446,6 +453,9 @@ if [ ! -z ${GDB_VERSION} ]; then
   fi
 
   ${MAKE} -j${MAKE_JOBS} install || exit 1
+
+  rm ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gcc-*-installed
+  touch ${DJGPP_PREFIX}/i586-pc-msdosdjgpp/etc/gcc-${GCC_VERSION}-installed
 fi
 
 echo "Copy long name executables to short name."
