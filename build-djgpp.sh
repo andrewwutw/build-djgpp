@@ -3,7 +3,7 @@
 unset CDPATH
 
 # target directory
-DJGPP_PREFIX=${DJGPP_PREFIX-/usr/local/djgpp}
+PREFIX=${PREFIX-/usr/local/djgpp}
 
 TARGET="i586-pc-msdosdjgpp"
 
@@ -52,22 +52,22 @@ for DEP in ${DEPS}; do
         && source djgpp/djgpp
       ;;
     binutils)
-      [ -z "`ls ${DJGPP_PREFIX}/${TARGET}/etc/binutils-*-installed 2> /dev/null`" ] \
+      [ -z "`ls ${PREFIX}/${TARGET}/etc/binutils-*-installed 2> /dev/null`" ] \
         && [ -z ${BINUTILS_VERSION} ] \
         && source djgpp/binutils
       ;;
     gcc)
-      [ -z "`ls ${DJGPP_PREFIX}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ] \
+      [ -z "`ls ${PREFIX}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ] \
         && [ -z ${GCC_VERSION} ] \
         && source script/gcc
       ;;
     gdb)
-      [ -z "`ls ${DJGPP_PREFIX}/${TARGET}/etc/gdb-*-installed 2> /dev/null`" ] \
+      [ -z "`ls ${PREFIX}/${TARGET}/etc/gdb-*-installed 2> /dev/null`" ] \
         && [ -z ${GDB_VERSION} ] \
         && source script/gdb
       ;;
     dxegen)
-      [ -z "`ls ${DJGPP_PREFIX}/${TARGET}/etc/dxegen-installed 2> /dev/null`" ] \
+      [ -z "`ls ${PREFIX}/${TARGET}/etc/dxegen-installed 2> /dev/null`" ] \
         && [ -z ${BUILD_DXEGEN} ] \
         && source script/dxegen
       ;;
@@ -95,7 +95,7 @@ echo "You are about to build and install:"
 [ -z ${BUILD_DXEGEN} ] || echo "    - DXE tools ${DJGPP_VERSION}"
 echo ""
 echo "With the following options:"
-echo "    DJGPP_PREFIX=${DJGPP_PREFIX}"
+echo "    PREFIX=${PREFIX}"
 echo "    CC=${CC}"
 echo "    CXX=${CXX}"
 echo "    CFLAGS=${CFLAGS}"
@@ -205,20 +205,20 @@ done
 cd ..
 
 # create target directory, check writable.
-echo "Make prefix directory : $DJGPP_PREFIX"
-mkdir -p $DJGPP_PREFIX
+echo "Make prefix directory : $PREFIX"
+mkdir -p $PREFIX
 
-if ! [ -d $DJGPP_PREFIX ]; then
+if ! [ -d $PREFIX ]; then
   echo "Unable to create prefix directory"
   exit 1
 fi
 
-if ! [ -w $DJGPP_PREFIX ]; then
+if ! [ -w $PREFIX ]; then
   echo "prefix directory is not writable."
   exit 1
 fi
 
-mkdir -p ${DJGPP_PREFIX}/${TARGET}/etc/ || exit 1
+mkdir -p ${PREFIX}/${TARGET}/etc/ || exit 1
 
 # make build dir
 echo "Make build dir"
@@ -287,18 +287,18 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
 
   mkdir -p build-${TARGET}
   cd build-${TARGET} || exit 1
-  if [ ! -e binutils-configure-prefix ] || [ ! `cat binutils-configure-prefix` = "${DJGPP_PREFIX}" ]; then
+  if [ ! -e binutils-configure-prefix ] || [ ! `cat binutils-configure-prefix` = "${PREFIX}" ]; then
     rm binutils-configure-prefix
     ${MAKE} distclean
     ../configure \
-               --prefix=$DJGPP_PREFIX \
+               --prefix=$PREFIX \
                --target=${TARGET} \
                --program-prefix=${TARGET}- \
                --disable-werror \
                --disable-nls \
                ${BINUTILS_CONFIGURE_OPTIONS} \
                || exit 1
-    echo ${DJGPP_PREFIX} > binutils-configure-prefix
+    echo ${PREFIX} > binutils-configure-prefix
   else
     echo "Note: binutils already configured. To force a rebuild, use: rm -rf $(pwd)"
     sleep 5
@@ -315,8 +315,8 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
 
   ${MAKE} -j${MAKE_JOBS} install || exit 1
 
-  rm ${DJGPP_PREFIX}/${TARGET}/etc/binutils-*-installed
-  touch ${DJGPP_PREFIX}/${TARGET}/etc/binutils-${BINUTILS_VERSION}-installed
+  rm ${PREFIX}/${TARGET}/etc/binutils-*-installed
+  touch ${PREFIX}/${TARGET}/etc/binutils-${BINUTILS_VERSION}-installed
   # binutils done
 fi
 
@@ -339,15 +339,15 @@ if [ ! -z ${DJGPP_VERSION} ] || [ ! -z ${BUILD_DXEGEN} ]; then
 
   cd ../..
 
-  mkdir -p $DJGPP_PREFIX/${TARGET}/sys-include || exit 1
-  cp -rp include/* $DJGPP_PREFIX/${TARGET}/sys-include/ || exit 1
-  cp -rp lib $DJGPP_PREFIX/${TARGET}/ || exit 1
-  mkdir -p $DJGPP_PREFIX/bin || exit 1
-  cp -p src/stub/${TARGET}-stubify $DJGPP_PREFIX/bin/ || exit 1
-  cp -p src/stub/${TARGET}-stubedit $DJGPP_PREFIX/bin/ || exit 1
+  mkdir -p $PREFIX/${TARGET}/sys-include || exit 1
+  cp -rp include/* $PREFIX/${TARGET}/sys-include/ || exit 1
+  cp -rp lib $PREFIX/${TARGET}/ || exit 1
+  mkdir -p $PREFIX/bin || exit 1
+  cp -p src/stub/${TARGET}-stubify $PREFIX/bin/ || exit 1
+  cp -p src/stub/${TARGET}-stubedit $PREFIX/bin/ || exit 1
 
-  rm ${DJGPP_PREFIX}/${TARGET}/etc/djgpp-*-installed
-  touch ${DJGPP_PREFIX}/${TARGET}/etc/djgpp-${DJGPP_VERSION}-installed
+  rm ${PREFIX}/${TARGET}/etc/djgpp-*-installed
+  touch ${PREFIX}/${TARGET}/etc/djgpp-${DJGPP_VERSION}-installed
 fi
 
 cd ${BASE}/build/
@@ -410,7 +410,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     cd -
 
     # copy stubify programs
-    cp -p $DJGPP_PREFIX/bin/${TARGET}-stubify $BUILDDIR/tmpinst/bin/stubify
+    cp -p $PREFIX/bin/${TARGET}-stubify $BUILDDIR/tmpinst/bin/stubify
 
     cd $BUILDDIR/
 
@@ -434,21 +434,21 @@ if [ ! -z ${GCC_VERSION} ]; then
   TEMP_CFLAGS="$CFLAGS"
   export CFLAGS="$CFLAGS $GCC_EXTRA_CFLAGS"
 
-  if [ ! -e gcc-configure-prefix ] || [ ! `cat gcc-configure-prefix` = "${DJGPP_PREFIX}" ]; then
+  if [ ! -e gcc-configure-prefix ] || [ ! `cat gcc-configure-prefix` = "${PREFIX}" ]; then
     rm gcc-configure-prefix
     ${MAKE} distclean
     PATH="${BUILDDIR}/tmpinst/bin:${BASE}/build/tmpinst/:$PATH" \
       ../gnu/gcc-${GCC_VERSION_SHORT}/configure \
                                      --target=${TARGET} \
                                      --program-prefix=${TARGET}- \
-                                     --prefix=$DJGPP_PREFIX \
+                                     --prefix=$PREFIX \
                                      --disable-nls \
                                      --enable-libquadmath-support \
                                      --enable-version-specific-runtime-libs \
                                      --enable-languages=${ENABLE_LANGUAGES} \
                                      --enable-fat \
                                      ${GCC_CONFIGURE_OPTIONS} || exit 1
-    echo ${DJGPP_PREFIX} > gcc-configure-prefix
+    echo ${PREFIX} > gcc-configure-prefix
   else
     echo "Note: gcc already configured. To force a rebuild, use: rm -rf $(pwd)"
     sleep 5
@@ -457,8 +457,8 @@ if [ ! -z ${GCC_VERSION} ]; then
   ${MAKE} -j${MAKE_JOBS} PATH="${BUILDDIR}/tmpinst/bin:${BASE}/build/tmpinst/:$PATH" || exit 1
   ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
 
-  rm ${DJGPP_PREFIX}/${TARGET}/etc/gcc-*-installed
-  touch ${DJGPP_PREFIX}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
+  rm ${PREFIX}/${TARGET}/etc/gcc-*-installed
+  touch ${PREFIX}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
 
   export CFLAGS="$TEMP_CFLAGS"
 fi
@@ -471,19 +471,19 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   if [ "$CC" == "gcc" ] && [ ! -z ${BUILD_DXEGEN} ]; then
     echo "Building DXE tools."
     cd src
-    PATH=$DJGPP_PREFIX/bin/:$PATH ${MAKE} || exit 1
+    PATH=$PREFIX/bin/:$PATH ${MAKE} || exit 1
     cd dxe
-    cp -p dxegen  $DJGPP_PREFIX/bin/${TARGET}-dxegen || exit 1
-    cp -p dxe3gen $DJGPP_PREFIX/bin/${TARGET}-dxe3gen || exit 1
-    cp -p dxe3res $DJGPP_PREFIX/bin/${TARGET}-dxe3res || exit 1
+    cp -p dxegen  $PREFIX/bin/${TARGET}-dxegen || exit 1
+    cp -p dxe3gen $PREFIX/bin/${TARGET}-dxe3gen || exit 1
+    cp -p dxe3res $PREFIX/bin/${TARGET}-dxe3res || exit 1
     cd ../..
-    touch ${DJGPP_PREFIX}/${TARGET}/etc/dxegen-installed
+    touch ${PREFIX}/${TARGET}/etc/dxegen-installed
   else
     echo "Building DXE tools requires gcc, skip."
   fi
   cd src/stub
   ${CC} -O2 ${CFLAGS} -o exe2coff exe2coff.c || exit 1
-  cp -p exe2coff $DJGPP_PREFIX/bin/${TARGET}-exe2coff || exit 1
+  cp -p exe2coff $PREFIX/bin/${TARGET}-exe2coff || exit 1
 
   # djlsr done
 fi
@@ -500,17 +500,17 @@ if [ ! -z ${GDB_VERSION} ]; then
   cd gdb-${GDB_VERSION}/build-${TARGET} || exit 1
 
   echo "Building gdb."
-  if [ ! -e gdb-configure-prefix ] || [ ! `cat gdb-configure-prefix` = "${DJGPP_PREFIX}" ]; then
+  if [ ! -e gdb-configure-prefix ] || [ ! `cat gdb-configure-prefix` = "${PREFIX}" ]; then
     rm gdb-configure-prefix
     ${MAKE} distclean
     ../configure \
-          --prefix=${DJGPP_PREFIX} \
+          --prefix=${PREFIX} \
           --target=${TARGET} \
           --disable-werror \
           --disable-nls \
           ${GDB_CONFIGURE_OPTIONS} \
           || exit 1
-    echo ${DJGPP_PREFIX} > gdb-configure-prefix
+    echo ${PREFIX} > gdb-configure-prefix
   else
     echo "Note: gdb already configured. To force a rebuild, use: rm -rf $(pwd)"
     sleep 5
@@ -524,13 +524,13 @@ if [ ! -z ${GDB_VERSION} ]; then
 
   ${MAKE} -j${MAKE_JOBS} install || exit 1
 
-  rm ${DJGPP_PREFIX}/${TARGET}/etc/gdb-*-installed
-  touch ${DJGPP_PREFIX}/${TARGET}/etc/gdb-${GDB_VERSION}-installed
+  rm ${PREFIX}/${TARGET}/etc/gdb-*-installed
+  touch ${PREFIX}/${TARGET}/etc/gdb-${GDB_VERSION}-installed
 fi
 
 echo "Copy long name executables to short name."
 (
-  cd $DJGPP_PREFIX || exit 1
+  cd $PREFIX || exit 1
   SHORT_NAME_LIST="gcc g++ c++ addr2line c++filt cpp size strings dxegen dxe3gen dxe3res exe2coff stubify stubedit gdb"
   for SHORT_NAME in $SHORT_NAME_LIST; do
     if [ -f bin/${TARGET}-$SHORT_NAME ]; then
@@ -540,19 +540,19 @@ echo "Copy long name executables to short name."
 )
 
 # copy setenv script
-(cd ${BASE}/setenv/ && ./copyfile.sh $DJGPP_PREFIX) || exit 1
+(cd ${BASE}/setenv/ && ./copyfile.sh $PREFIX) || exit 1
 
 echo "Testing DJGPP."
 cd ${BASE}/build
 echo "Use DJGPP to build a test C program."
-$DJGPP_PREFIX/bin/${TARGET}-gcc ../hello.c -o hello || echo "FAILED: C"
+$PREFIX/bin/${TARGET}-gcc ../hello.c -o hello || echo "FAILED: C"
 
 for x in $(echo $ENABLE_LANGUAGES | tr "," " ")
 do
   case $x in
     c++)
       echo "Use DJGPP to build a test C++ program."
-      $DJGPP_PREFIX/bin/${TARGET}-c++ ../hello-cpp.cpp -o hello-cpp || echo "FAILED: C++"
+      $PREFIX/bin/${TARGET}-c++ ../hello-cpp.cpp -o hello-cpp || echo "FAILED: C++"
       ;;
   esac
 done
