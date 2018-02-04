@@ -1,16 +1,3 @@
-# use gmake/clang under FreeBSD
-if [ `uname` = "FreeBSD" ]; then
-  MAKE=${MAKE-gmake}
-  CC=${CC-clang}
-  CXX=${CXX-clang++}
-else
-  MAKE=${MAKE-make}
-  CC=${CC-gcc}
-  CXX=${CXX-g++}
-fi
-
-export CC CXX MAKE
-
 echo "You are about to build and install:"
 [ -z ${DJGPP_VERSION} ]    || echo "    - DJGPP base library ${DJGPP_VERSION}"
 [ -z ${NEWLIB_VERSION} ]   || echo "    - newlib ${NEWLIB_VERSION}"
@@ -22,6 +9,7 @@ echo ""
 echo "With the following options:"
 [ ! -z ${IGNORE_DEPENDENCIES} ] && echo "    IGNORE_DEPENDENCIES=${IGNORE_DEPENDENCIES}"
 echo "    TARGET=${TARGET}"
+echo "    HOST=${HOST}"
 echo "    PREFIX=${PREFIX}"
 echo "    CC=${CC}"
 echo "    CXX=${CXX}"
@@ -31,6 +19,10 @@ echo "    LDFLAGS=${LDFLAGS}"
 echo "    MAKE=${MAKE}"
 echo "    MAKE_JOBS=${MAKE_JOBS}"
 echo "    MAKE_CHECK=${MAKE_CHECK}"
+if [ ! -z ${HOST} ]; then
+  echo "    HOST_CC=`echo ${HOST_CC}`"
+  echo "    HOST_CXX=`echo ${HOST_CXX}`"
+fi
 if [ ! -z ${GCC_VERSION} ]; then
   echo "    ENABLE_LANGUAGES=${ENABLE_LANGUAGES}"
   echo "    GCC_CONFIGURE_OPTIONS=`echo ${GCC_CONFIGURE_OPTIONS}`"

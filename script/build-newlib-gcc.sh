@@ -29,7 +29,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   TEMP_CFLAGS="$CFLAGS"
   export CFLAGS="$CFLAGS $GCC_EXTRA_CFLAGS"
   
-  GCC_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX}
+  GCC_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX} ${HOST_FLAG}
                            --enable-languages=${ENABLE_LANGUAGES}
                            --with-newlib"
   strip_whitespace GCC_CONFIGURE_OPTIONS
@@ -55,7 +55,7 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
   mkdir -p newlib-${NEWLIB_VERSION}/build-${TARGET}
   cd newlib-${NEWLIB_VERSION}/build-${TARGET} || exit 1
   
-  NEWLIB_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX}"
+  NEWLIB_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX} ${HOST_FLAG}"
   strip_whitespace NEWLIB_CONFIGURE_OPTIONS
   
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${NEWLIB_CONFIGURE_OPTIONS}" ]; then

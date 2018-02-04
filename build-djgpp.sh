@@ -219,11 +219,11 @@ if [ ! -z ${GCC_VERSION} ]; then
   TEMP_CFLAGS="$CFLAGS"
   export CFLAGS="$CFLAGS $GCC_EXTRA_CFLAGS"
   
-  GCC_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX}
+  GCC_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX} ${HOST_FLAG}
                            --enable-languages=${ENABLE_LANGUAGES}"
   strip_whitespace GCC_CONFIGURE_OPTIONS
 
-  if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" = "${GCC_CONFIGURE_OPTIONS}" ]; then
+  if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${GCC_CONFIGURE_OPTIONS}" ]; then
     rm -rf *
     ../gnu/gcc-${GCC_VERSION_SHORT}/configure ${GCC_CONFIGURE_OPTIONS} || exit 1
     echo ${GCC_CONFIGURE_OPTIONS} > configure-prefix
