@@ -3,7 +3,7 @@
 unset CDPATH
 
 # target directory
-PREFIX=${PREFIX-/usr/local/djgpp}
+PREFIX=${PREFIX-/usr/local/cross}
 
 TARGET="i586-pc-msdosdjgpp"
 

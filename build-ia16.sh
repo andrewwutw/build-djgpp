@@ -3,7 +3,7 @@
 unset CDPATH
 
 # target directory
-PREFIX=${PREFIX-/usr/local/ia16}
+PREFIX=${PREFIX-/usr/local/cross}
 
 # enabled languages
 #ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++,f95,objc,obj-c++}
