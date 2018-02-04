@@ -1,3 +1,5 @@
+cd ${BASE}/build
+
 if [ ! -z ${GDB_VERSION} ]; then
   if [ ! -e gdb-${GDB_VERSION}/gdb-unpacked ]; then
     echo "Unpacking gdb."
