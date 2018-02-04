@@ -150,6 +150,8 @@ fi
 
 mkdir -p ${PREFIX}/${TARGET}/etc/ || exit 1
 
+export PATH="${PREFIX}/bin:$PATH"
+
 # make build dir
 echo "Make build dir"
 mkdir -p ${BASE}/build

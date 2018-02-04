@@ -17,6 +17,21 @@ MAKE_JOBS=${MAKE_JOBS-4}
 #DJGPP_DOWNLOAD_BASE="ftp://ftp.delorie.com/pub"
 export DJGPP_DOWNLOAD_BASE="http://www.delorie.com/pub"
 
+BINUTILS_CONFIGURE_OPTIONS="--disable-werror
+                            --disable-nls
+                            ${BINUTILS_CONFIGURE_OPTIONS}"
+
+GCC_CONFIGURE_OPTIONS="--disable-nls
+                       --enable-libquadmath-support
+                       --enable-version-specific-runtime-libs
+                       --enable-fat
+                       ${GCC_CONFIGURE_OPTIONS}"
+
+
+GDB_CONFIGURE_OPTIONS="--disable-werror 
+                       --disable-nls
+                       ${GDB_CONFIGURE_OPTIONS}"
+
 BASE=`pwd`
 
 if [ -z $1 ]; then
@@ -213,22 +228,16 @@ if [ ! -z ${GCC_VERSION} ]; then
 
   TEMP_CFLAGS="$CFLAGS"
   export CFLAGS="$CFLAGS $GCC_EXTRA_CFLAGS"
+  
+  GCC_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX}
+                           --enable-languages=${ENABLE_LANGUAGES}"
+  GCC_CONFIGURE_OPTIONS="`echo ${GCC_CONFIGURE_OPTIONS}`"
 
-  if [ ! -e gcc-configure-prefix ] || [ ! `cat gcc-configure-prefix` = "${PREFIX}" ]; then
-    rm gcc-configure-prefix
-    ${MAKE} distclean
+  if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" = "${GCC_CONFIGURE_OPTIONS}" ]; then
+    cd .. && rm -rf build-${TARGET}/ && cd - || exit 1
     PATH="${BUILDDIR}/tmpinst/bin:$PATH" \
-      ../gnu/gcc-${GCC_VERSION_SHORT}/configure \
-                                     --target=${TARGET} \
-                                     --program-prefix=${TARGET}- \
-                                     --prefix=$PREFIX \
-                                     --disable-nls \
-                                     --enable-libquadmath-support \
-                                     --enable-version-specific-runtime-libs \
-                                     --enable-languages=${ENABLE_LANGUAGES} \
-                                     --enable-fat \
-                                     ${GCC_CONFIGURE_OPTIONS} || exit 1
-    echo ${PREFIX} > gcc-configure-prefix
+      ../gnu/gcc-${GCC_VERSION_SHORT}/configure ${GCC_CONFIGURE_OPTIONS} || exit 1
+    echo ${GCC_CONFIGURE_OPTIONS} > configure-prefix
   else
     echo "Note: gcc already configured. To force a rebuild, use: rm -rf $(pwd)"
     sleep 5

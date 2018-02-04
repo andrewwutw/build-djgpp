@@ -1,17 +1,13 @@
 mkdir -p build-${TARGET}
 cd build-${TARGET} || exit 1
-if [ ! -e configure-prefix ] || [ ! `cat configure-prefix` = "${PREFIX}" ]; then
-  rm configure-prefix
-  ${MAKE} distclean
-  ../configure \
-             --prefix=$PREFIX \
-             --target=${TARGET} \
-             --program-prefix=${TARGET}- \
-             --disable-werror \
-             --disable-nls \
-             ${BINUTILS_CONFIGURE_OPTIONS} \
-             || exit 1
-  echo ${PREFIX} > configure-prefix
+
+BINUTILS_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX}"
+BINUTILS_CONFIGURE_OPTIONS="`echo ${BINUTILS_CONFIGURE_OPTIONS}`"
+
+if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" = "${BINUTILS_CONFIGURE_OPTIONS}" ]; then
+  cd .. && rm -rf build-${TARGET}/ && cd - || exit 1
+  ../configure ${BINUTILS_CONFIGURE_OPTIONS} || exit 1
+  echo ${BINUTILS_CONFIGURE_OPTIONS} > configure-prefix
 else
   echo "Note: binutils already configured. To force a rebuild, use: rm -rf $(pwd)"
   sleep 5

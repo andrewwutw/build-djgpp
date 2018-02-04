@@ -8,17 +8,14 @@ if [ ! -z ${GDB_VERSION} ]; then
   cd gdb-${GDB_VERSION}/build-${TARGET} || exit 1
 
   echo "Building gdb."
-  if [ ! -e gdb-configure-prefix ] || [ ! `cat gdb-configure-prefix` = "${PREFIX}" ]; then
-    rm gdb-configure-prefix
-    ${MAKE} distclean
-    ../configure \
-          --prefix=${PREFIX} \
-          --target=${TARGET} \
-          --disable-werror \
-          --disable-nls \
-          ${GDB_CONFIGURE_OPTIONS} \
-          || exit 1
-    echo ${PREFIX} > gdb-configure-prefix
+  
+  GDB_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX}"
+  GDB_CONFIGURE_OPTIONS="`echo ${GDB_CONFIGURE_OPTIONS}`"
+
+  if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" = "${GDB_CONFIGURE_OPTIONS}" ]; then
+    cd .. && rm -rf build-${TARGET}/ && cd - || exit 1
+    ../configure ${GDB_CONFIGURE_OPTIONS} || exit 1
+    echo ${GDB_CONFIGURE_OPTIONS} > configure-prefix
   else
     echo "Note: gdb already configured. To force a rebuild, use: rm -rf $(pwd)"
     sleep 5
