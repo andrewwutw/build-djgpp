@@ -130,7 +130,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   GCC_CONFIGURE_OPTIONS="`echo ${GCC_CONFIGURE_OPTIONS}`"
 
   if [ ! -e configure-prefix ] || [ ! `cat configure-prefix` = "${PREFIX}" ]; then
-    cd .. && rm -rf build-${TARGET}/ && cd - || exit 1
+    rm -rf *
     ../configure ${GCC_CONFIGURE_OPTIONS} || exit 1
     echo ${PREFIX} > configure-prefix
   else

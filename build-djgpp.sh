@@ -162,6 +162,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   cd djcross-gcc-${GCC_VERSION}/
 
   BUILDDIR=`pwd`
+  export PATH="${BUILDDIR}/tmpinst/bin:$PATH"
 
   if [ ! -e ${BUILDDIR}/tmpinst/autoconf-${AUTOCONF_VERSION}-built ]; then
     echo "Building autoconf"
@@ -202,8 +203,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     fi
 
     echo "Running unpack-gcc.sh"
-    PATH="${BUILDDIR}/tmpinst/bin:$PATH" \
-      sh unpack-gcc.sh --no-djgpp-source $(ls -t ${BASE}/download/gcc-${GCC_VERSION}.tar.* | head -n 1) || exit 1
+    sh unpack-gcc.sh --no-djgpp-source $(ls -t ${BASE}/download/gcc-${GCC_VERSION}.tar.* | head -n 1) || exit 1
 
     # patch gnu/gcc-X.XX/gcc/doc/gcc.texi
     echo "Patch gcc/doc/gcc.texi"
@@ -240,16 +240,15 @@ if [ ! -z ${GCC_VERSION} ]; then
   GCC_CONFIGURE_OPTIONS="`echo ${GCC_CONFIGURE_OPTIONS}`"
 
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" = "${GCC_CONFIGURE_OPTIONS}" ]; then
-    cd .. && rm -rf build-${TARGET}/ && cd - || exit 1
-    PATH="${BUILDDIR}/tmpinst/bin:$PATH" \
-      ../gnu/gcc-${GCC_VERSION_SHORT}/configure ${GCC_CONFIGURE_OPTIONS} || exit 1
+    rm -rf *
+    ../gnu/gcc-${GCC_VERSION_SHORT}/configure ${GCC_CONFIGURE_OPTIONS} || exit 1
     echo ${GCC_CONFIGURE_OPTIONS} > configure-prefix
   else
     echo "Note: gcc already configured. To force a rebuild, use: rm -rf $(pwd)"
     sleep 5
   fi
 
-  ${MAKE} -j${MAKE_JOBS} PATH="${BUILDDIR}/tmpinst/bin:$PATH" || exit 1
+  ${MAKE} -j${MAKE_JOBS} || exit 1
   ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
 
   rm ${PREFIX}/${TARGET}/etc/gcc-*-installed

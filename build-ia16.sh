@@ -90,8 +90,14 @@ source ${BASE}/script/build-tools.sh
 
 cd ${BASE}/build/ || exit 1
 
-git clone https://github.com/tkchia/gcc-ia16.git --depth 1 --branch gcc-6_3_0-ia16-tkchia
-git clone https://github.com/tkchia/newlib-ia16.git --depth 1 --branch newlib-2_4_0-ia16-tkchia
+[ -d gcc-ia16 ] || git clone https://github.com/tkchia/gcc-ia16.git --depth 1 --branch gcc-6_3_0-ia16-tkchia
+cd gcc-ia16 && git pull && cd .. || exit 1
+
+[ -d newlib-ia16 ] || git clone https://github.com/tkchia/newlib-ia16.git --depth 1 --branch newlib-2_4_0-ia16-tkchia
+cd newlib-ia16 && git pull && cd .. || exit 1
+
+#[ -d binutils-ia16 ] || git clone https://github.com/crtc-demos/binutils-ia16.git --depth 1 --branch master
+#cd binutils-ia16 && git pull && cd .. || exit 1
 
 if [ ! -z ${BINUTILS_VERSION} ]; then
   echo "Building binutils"
@@ -141,7 +147,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   GCC_CONFIGURE_OPTIONS="`echo ${GCC_CONFIGURE_OPTIONS}`"
 
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${GCC_CONFIGURE_OPTIONS}" ]; then
-    cd .. && rm -rf build-${TARGET}/ && cd - || exit 1
+    rm -rf *
     ../configure ${GCC_CONFIGURE_OPTIONS} || exit 1
     echo ${GCC_CONFIGURE_OPTIONS} > configure-prefix
   else
@@ -165,7 +171,7 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
   NEWLIB_CONFIGURE_OPTIONS="`echo ${NEWLIB_CONFIGURE_OPTIONS}`"
   
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${NEWLIB_CONFIGURE_OPTIONS}" ]; then
-    cd .. && rm -rf build-${TARGET}/ && cd - || exit 1
+    rm -rf *
     ../configure ${NEWLIB_CONFIGURE_OPTIONS} || exit 1
     echo ${NEWLIB_CONFIGURE_OPTIONS} > configure-prefix
   else

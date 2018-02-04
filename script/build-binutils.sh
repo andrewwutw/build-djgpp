@@ -5,7 +5,7 @@ BINUTILS_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX}"
 BINUTILS_CONFIGURE_OPTIONS="`echo ${BINUTILS_CONFIGURE_OPTIONS}`"
 
 if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" = "${BINUTILS_CONFIGURE_OPTIONS}" ]; then
-  cd .. && rm -rf build-${TARGET}/ && cd - || exit 1
+  rm -rf *
   ../configure ${BINUTILS_CONFIGURE_OPTIONS} || exit 1
   echo ${BINUTILS_CONFIGURE_OPTIONS} > configure-prefix
 else

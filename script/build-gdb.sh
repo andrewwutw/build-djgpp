@@ -13,7 +13,7 @@ if [ ! -z ${GDB_VERSION} ]; then
   GDB_CONFIGURE_OPTIONS="`echo ${GDB_CONFIGURE_OPTIONS}`"
 
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" = "${GDB_CONFIGURE_OPTIONS}" ]; then
-    cd .. && rm -rf build-${TARGET}/ && cd - || exit 1
+    rm -rf *
     ../configure ${GDB_CONFIGURE_OPTIONS} || exit 1
     echo ${GDB_CONFIGURE_OPTIONS} > configure-prefix
   else

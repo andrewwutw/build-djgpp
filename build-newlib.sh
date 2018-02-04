@@ -143,7 +143,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   GCC_CONFIGURE_OPTIONS="`echo ${GCC_CONFIGURE_OPTIONS}`"
 
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${GCC_CONFIGURE_OPTIONS}" ]; then
-    cd .. && rm -rf build-${TARGET}/ && cd - || exit 1
+    rm -rf *
     ../configure ${GCC_CONFIGURE_OPTIONS} || exit 1
     echo ${GCC_CONFIGURE_OPTIONS} > configure-prefix
   else
@@ -167,7 +167,7 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
   NEWLIB_CONFIGURE_OPTIONS="`echo ${NEWLIB_CONFIGURE_OPTIONS}`"
   
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${NEWLIB_CONFIGURE_OPTIONS}" ]; then
-    cd .. && rm -rf build-${TARGET}/ && cd - || exit 1
+    rm -rf *
     ../configure ${NEWLIB_CONFIGURE_OPTIONS} || exit 1
     echo ${NEWLIB_CONFIGURE_OPTIONS} > configure-prefix
   else
