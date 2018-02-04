@@ -187,8 +187,7 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
     echo "Note: newlib already configured. To force a rebuild, use: rm -rf $(pwd)"
     sleep 5
   fi
-  
-  ${MAKE} -C ${TARGET}/libgloss/libnosys libnosys.a || exit 1
+
   ${MAKE} -j${MAKE_JOBS} || exit 1
   ${MAKE} -j${MAKE_JOBS} install || \
   ${MAKE} -j${MAKE_JOBS} install || exit 1
