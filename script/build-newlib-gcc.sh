@@ -68,7 +68,7 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
   fi
   
   ${MAKE} -j${MAKE_JOBS} || exit 1
-  [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -Otarget check || exit 1
+  [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/newlib.log
   ${MAKE} -j${MAKE_JOBS} install || \
   ${MAKE} -j${MAKE_JOBS} install || exit 1
 fi
@@ -79,7 +79,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   cd gcc-${GCC_VERSION}/build-${TARGET} || exit 1
   
   ${MAKE} -j${MAKE_JOBS} || exit 1
-  [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -Otarget check || exit 1
+  [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/gcc.log
   ${MAKE} -j${MAKE_JOBS} install-strip || \
   ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
   

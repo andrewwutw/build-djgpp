@@ -30,6 +30,7 @@ echo "    CXXFLAGS=${CXXFLAGS}"
 echo "    LDFLAGS=${LDFLAGS}"
 echo "    MAKE=${MAKE}"
 echo "    MAKE_JOBS=${MAKE_JOBS}"
+echo "    MAKE_CHECK=${MAKE_CHECK}"
 if [ ! -z ${GCC_VERSION} ]; then
   echo "    ENABLE_LANGUAGES=${ENABLE_LANGUAGES}"
   echo "    GCC_CONFIGURE_OPTIONS=`echo ${GCC_CONFIGURE_OPTIONS}`"
@@ -147,6 +148,6 @@ mkdir -p ${PREFIX}/${TARGET}/etc/ || exit 1
 
 export PATH="${PREFIX}/bin:$PATH"
 
-# make build dir
-echo "Make build dir"
+rm -rf ${BASE}/tests
+mkdir -p ${BASE}/tests
 mkdir -p ${BASE}/build

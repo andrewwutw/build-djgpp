@@ -23,7 +23,7 @@ if [ ! -z ${GDB_VERSION} ]; then
     sleep 5
   fi
   ${MAKE} -j${MAKE_JOBS} || exit 1
-  [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -Otarget check || exit 1
+  [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/gdb.log
   ${MAKE} -j${MAKE_JOBS} install || exit 1
 
   rm ${PREFIX}/${TARGET}/etc/gdb-*-installed
