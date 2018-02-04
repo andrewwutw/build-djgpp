@@ -19,8 +19,6 @@ BINUTILS_CONFIGURE_OPTIONS="--disable-werror
                             ${BINUTILS_CONFIGURE_OPTIONS}"
 
 GCC_CONFIGURE_OPTIONS="--disable-nls
-                       --enable-libquadmath-support
-                       --enable-version-specific-runtime-libs
                        --enable-fat
                        ${GCC_CONFIGURE_OPTIONS}"
 
@@ -28,6 +26,9 @@ GDB_CONFIGURE_OPTIONS="--disable-werror
                        --disable-nls
                        ${GDB_CONFIGURE_OPTIONS}"
 
+NEWLIB_CONFIGURE_OPTIONS="--enable-newlib-nano-malloc 
+                          --disable-newlib-multithread
+                          ${NEWLIB_CONFIGURE_OPTIONS}"
 
 BASE=`pwd`
 
