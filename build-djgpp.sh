@@ -1,18 +1,8 @@
 #!/usr/bin/env bash
 
-unset CDPATH
-
-# target directory
-PREFIX=${PREFIX-/usr/local/cross}
+source script/functions.sh
 
 TARGET="i586-pc-msdosdjgpp"
-
-# enabled languages
-#ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++,f95,objc,obj-c++}
-ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
-
-# number of parallel build threads
-MAKE_JOBS=${MAKE_JOBS-4}
 
 #DJGPP_DOWNLOAD_BASE="ftp://ftp.delorie.com/pub"
 export DJGPP_DOWNLOAD_BASE="http://www.delorie.com/pub"
@@ -31,8 +21,6 @@ GCC_CONFIGURE_OPTIONS="--disable-nls
 GDB_CONFIGURE_OPTIONS="--disable-werror 
                        --disable-nls
                        ${GDB_CONFIGURE_OPTIONS}"
-
-BASE=`pwd`
 
 if [ -z $1 ]; then
   echo "Usage: $0 [packages...]"
@@ -201,7 +189,7 @@ if [ ! -z ${GCC_VERSION} ]; then
 
     if [ `uname` = "FreeBSD" ]; then
       # The --verbose option is not recognized by BSD patch
-      $SED -i 's/patch --verbose/patch/' unpack-gcc.sh || exit 1
+      sed -i 's/patch --verbose/patch/' unpack-gcc.sh || exit 1
     fi
 
     echo "Running unpack-gcc.sh"
@@ -210,7 +198,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     # patch gnu/gcc-X.XX/gcc/doc/gcc.texi
     echo "Patch gcc/doc/gcc.texi"
     cd gnu/gcc-*/gcc/doc || exit 1
-    $SED -i "s/[^^]@\(\(tex\)\|\(end\)\)/\n@\1/g" gcc.texi || exit 1
+    sed -i "s/[^^]@\(\(tex\)\|\(end\)\)/\n@\1/g" gcc.texi || exit 1
     cd -
 
     # copy stubify programs

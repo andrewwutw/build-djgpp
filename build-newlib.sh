@@ -1,23 +1,6 @@
 #!/usr/bin/env bash
 
-unset CDPATH
-
-debug()
-{
-  echo $1
-  read -s -n 1
-}
-
-# target directory
-PREFIX=${PREFIX-/usr/local/cross}
-
-# enabled languages
-#ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++,f95,objc,obj-c++}
-ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
-
-# number of parallel build threads
-MAKE_JOBS=${MAKE_JOBS-4}
-
+source script/functions.sh
 
 BINUTILS_CONFIGURE_OPTIONS="--disable-werror
                             --disable-nls
@@ -32,9 +15,6 @@ GCC_CONFIGURE_OPTIONS="--disable-nls
 GDB_CONFIGURE_OPTIONS="--disable-werror
                        --disable-nls
                        ${GDB_CONFIGURE_OPTIONS}"
-
-
-BASE=`pwd`
 
 if [ -z ${TARGET} ]; then
   echo "Please specify a target with: export TARGET=..."

@@ -1,16 +1,6 @@
 #!/usr/bin/env bash
 
-unset CDPATH
-
-# target directory
-PREFIX=${PREFIX-/usr/local/cross}
-
-# enabled languages
-#ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++,f95,objc,obj-c++}
-ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
-
-# number of parallel build threads
-MAKE_JOBS=${MAKE_JOBS-4}
+source script/functions.sh
 
 TARGET="ia16-elf"
 
@@ -29,8 +19,6 @@ GDB_CONFIGURE_OPTIONS="--disable-werror
 NEWLIB_CONFIGURE_OPTIONS="--enable-newlib-nano-malloc
                           --disable-newlib-multithread
                           ${NEWLIB_CONFIGURE_OPTIONS}"
-
-BASE=`pwd`
 
 if [ -z ${TARGET} ]; then
   echo "Please specify a target with: export TARGET=..."

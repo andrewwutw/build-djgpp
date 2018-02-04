@@ -1,10 +1,9 @@
 mkdir -p ${BASE}/build/tmpinst
-export PATH="${BASE}/build/tmpinst:$PATH"
+export PATH="${BASE}/build/tmpinst/bin:$PATH"
 
 cd ${BASE}/build/ || exit 1
 
 # build GNU tar if needed.
-TAR=tar
 if [ ! -z $TAR_VERSION ]; then
   if [ ! -e ${BASE}/build/tmpinst/tar-${TAR_VERSION}-installed ]; then
     echo "Building tar"
@@ -15,18 +14,11 @@ if [ ! -z $TAR_VERSION ]; then
     ${MAKE} -j${MAKE_JOBS} install || exit 1
     touch ${BASE}/build/tmpinst/tar-${TAR_VERSION}-installed
   fi
-  TAR=${BASE}/build/tmpinst/bin/tar
 fi
-
-untar()
-{
-  ${TAR} -xavf $(ls -t ${BASE}/download/$1.tar.* | head -n 1)
-}
 
 cd ${BASE}/build || exit 1
 
 # build GNU sed if needed.
-SED=sed
 if [ ! -z $SED_VERSION ]; then
   if [ ! -e ${BASE}/build/tmpinst/sed-${SED_VERSION}-installed ]; then
     echo "Building sed"
@@ -37,5 +29,4 @@ if [ ! -z $SED_VERSION ]; then
     ${MAKE} -j${MAKE_JOBS} install || exit 1
     touch ${BASE}/build/tmpinst/sed-${SED_VERSION}-installed
   fi
-  SED=${BASE}/build/tmpinst/bin/sed
 fi
