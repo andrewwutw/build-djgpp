@@ -40,7 +40,6 @@ if [ -z $1 ]; then
   echo "Usage: $0 [packages...]"
   echo "Supported packages:"
   ls ia16/
-  ls common/
   exit 1
 fi
 
@@ -50,7 +49,7 @@ while [ ! -z $1 ]; do
     exit 1
   fi
 
-  [ -e ia16/$1 ] && source ia16/$1 || source common/$1
+  [ -e ia16/$1 ] && source ia16/$1
   shift
 done
 
@@ -98,7 +97,11 @@ patch -p1 -u < ${BASE}/patch/patch-gcc-ia16.txt
 cd ..
 
 [ -d newlib-ia16 ] || git clone https://github.com/tkchia/newlib-ia16.git --depth 1 --branch newlib-2_4_0-ia16-tkchia
-cd newlib-ia16 && git pull && cd .. || exit 1
+cd newlib-ia16
+git reset --hard HEAD
+git pull || exit 1
+patch -p1 -u < ${BASE}/patch/patch-newlib-ia16.txt
+cd ..
 
 #[ -d binutils-ia16 ] || git clone https://github.com/crtc-demos/binutils-ia16.git --depth 1 --branch master
 #cd binutils-ia16 && git pull && cd .. || exit 1
@@ -183,6 +186,7 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
     sleep 5
   fi
   
+  ${MAKE} -C ${TARGET}/libgloss/libnosys libnosys.a || exit 1
   ${MAKE} -j${MAKE_JOBS} || exit 1
   ${MAKE} -j${MAKE_JOBS} install || \
   ${MAKE} -j${MAKE_JOBS} install || exit 1
