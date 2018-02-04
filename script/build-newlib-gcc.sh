@@ -78,6 +78,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   cd gcc-${GCC_VERSION}/build-${TARGET} || exit 1
   
   ${MAKE} -j${MAKE_JOBS} || exit 1
+  ${MAKE} -j${MAKE_JOBS} install-strip || \
   ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
   
   rm ${PREFIX}/${TARGET}/etc/gcc-*-installed
