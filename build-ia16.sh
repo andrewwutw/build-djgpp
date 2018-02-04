@@ -12,7 +12,7 @@ ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
 # number of parallel build threads
 MAKE_JOBS=${MAKE_JOBS-4}
 
-TARGET="ia16-none-elf"
+TARGET="ia16-elf"
 
 BINUTILS_CONFIGURE_OPTIONS="--disable-werror
                             --disable-nls
@@ -180,7 +180,8 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
   
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${NEWLIB_CONFIGURE_OPTIONS}" ]; then
     rm -rf *
-    ../configure ${NEWLIB_CONFIGURE_OPTIONS} || exit 1
+    CFLAGS_FOR_TARGET='-O2 -mseparate-code-segment -D_IEEE_LIBM' \
+      ../configure ${NEWLIB_CONFIGURE_OPTIONS} || exit 1
     echo ${NEWLIB_CONFIGURE_OPTIONS} > configure-prefix
   else
     echo "Note: newlib already configured. To force a rebuild, use: rm -rf $(pwd)"
