@@ -91,7 +91,11 @@ source ${BASE}/script/build-tools.sh
 cd ${BASE}/build/ || exit 1
 
 [ -d gcc-ia16 ] || git clone https://github.com/tkchia/gcc-ia16.git --depth 1 --branch gcc-6_3_0-ia16-tkchia
-cd gcc-ia16 && git pull && cd .. || exit 1
+cd gcc-ia16
+git reset --hard HEAD
+git pull || exit 1
+patch -p1 -u < ${BASE}/patch/patch-gcc-ia16.txt
+cd ..
 
 [ -d newlib-ia16 ] || git clone https://github.com/tkchia/newlib-ia16.git --depth 1 --branch newlib-2_4_0-ia16-tkchia
 cd newlib-ia16 && git pull && cd .. || exit 1
