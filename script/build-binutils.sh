@@ -18,12 +18,7 @@ if [ ${TARGET} == "i586-pc-msdosdjgpp" ]; then
   ${MAKE} -j${MAKE_JOBS} -C bfd stmp-lcoff-h || exit 1
 fi
 ${MAKE} -j${MAKE_JOBS} || exit 1
-
-if [ ! -z $MAKE_CHECK ]; then
-  echo "Run ${MAKE} check"
-  ${MAKE} -j${MAKE_JOBS} check || exit 1
-fi
-
+[ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -Otarget check || exit 1
 ${MAKE} -j${MAKE_JOBS} install || exit 1
 
 rm ${PREFIX}/${TARGET}/etc/binutils-*-installed

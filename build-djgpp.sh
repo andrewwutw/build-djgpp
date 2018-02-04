@@ -15,7 +15,6 @@ prepend GCC_CONFIGURE_OPTIONS "--disable-nls
                                --enable-version-specific-runtime-libs
                                --enable-fat"
 
-
 prepend GDB_CONFIGURE_OPTIONS "--disable-werror 
                                --disable-nls"
 
@@ -234,6 +233,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   fi
 
   ${MAKE} -j${MAKE_JOBS} || exit 1
+  [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -Otarget check || exit 1
   ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
 
   rm ${PREFIX}/${TARGET}/etc/gcc-*-installed
