@@ -61,33 +61,35 @@ done
 
 DEPS=""
 
-[ ! -z ${GCC_VERSION} ] && DEPS+=" newlib binutils"
-[ ! -z ${BINUTILS_VERSION} ] && DEPS+=" "
-[ ! -z ${GDB_VERSION} ] && DEPS+=" "
-[ ! -z ${NEWLIB_VERSION} ] && DEPS+=" gcc binutils"
-
-for DEP in ${DEPS}; do
-  case $DEP in
-    newlib)
-      [ -z ${NEWLIB_VERSION} ] \
-        && source newlib/newlib
-      ;;
-    binutils)
-      [ -z "`ls ${PREFIX}/${TARGET}/etc/binutils-*-installed 2> /dev/null`" ] \
-        && [ -z ${BINUTILS_VERSION} ] \
-        && source newlib/binutils
-      ;;
-    gcc)
-      [ -z ${GCC_VERSION} ] \
-        && source common/gcc
-      ;;
-    gdb)
-      [ -z "`ls ${PREFIX}/${TARGET}/etc/gdb-*-installed 2> /dev/null`" ] \
-        && [ -z ${GDB_VERSION} ] \
-        && source common/gdb
-      ;;
-  esac
-done
+if [ -z ${IGNORE_DEPENDENCIES} ]; then
+  [ ! -z ${GCC_VERSION} ] && DEPS+=" newlib binutils"
+  [ ! -z ${BINUTILS_VERSION} ] && DEPS+=" "
+  [ ! -z ${GDB_VERSION} ] && DEPS+=" "
+  [ ! -z ${NEWLIB_VERSION} ] && DEPS+=" gcc binutils"
+  
+  for DEP in ${DEPS}; do
+    case $DEP in
+      newlib)
+        [ -z ${NEWLIB_VERSION} ] \
+          && source newlib/newlib
+        ;;
+      binutils)
+        [ -z "`ls ${PREFIX}/${TARGET}/etc/binutils-*-installed 2> /dev/null`" ] \
+          && [ -z ${BINUTILS_VERSION} ] \
+          && source newlib/binutils
+        ;;
+      gcc)
+        [ -z ${GCC_VERSION} ] \
+          && source common/gcc
+        ;;
+      gdb)
+        [ -z "`ls ${PREFIX}/${TARGET}/etc/gdb-*-installed 2> /dev/null`" ] \
+          && [ -z ${GDB_VERSION} ] \
+          && source common/gdb
+        ;;
+    esac
+  done
+fi
 
 source ${BASE}/script/begin.sh
 

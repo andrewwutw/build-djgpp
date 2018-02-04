@@ -54,40 +54,42 @@ done
 
 DEPS=""
 
-[ ! -z ${GCC_VERSION} ] && DEPS+=" djgpp binutils"
-[ ! -z ${BINUTILS_VERSION} ] && DEPS+=" "
-[ ! -z ${GDB_VERSION} ] && DEPS+=" "
-[ ! -z ${DJGPP_VERSION} ] && DEPS+=" "
-[ ! -z ${BUILD_DXEGEN} ] && DEPS+=" djgpp binutils gcc"
-
-for DEP in ${DEPS}; do
-  case $DEP in
-    djgpp)
-      [ -z ${DJGPP_VERSION} ] \
-        && source djgpp/djgpp
-      ;;
-    binutils)
-      [ -z "`ls ${PREFIX}/${TARGET}/etc/binutils-*-installed 2> /dev/null`" ] \
-        && [ -z ${BINUTILS_VERSION} ] \
-        && source djgpp/binutils
-      ;;
-    gcc)
-      [ -z "`ls ${PREFIX}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ] \
-        && [ -z ${GCC_VERSION} ] \
-        && source common/gcc
-      ;;
-    gdb)
-      [ -z "`ls ${PREFIX}/${TARGET}/etc/gdb-*-installed 2> /dev/null`" ] \
-        && [ -z ${GDB_VERSION} ] \
-        && source common/gdb
-      ;;
-    dxegen)
-      [ -z "`ls ${PREFIX}/${TARGET}/etc/dxegen-installed 2> /dev/null`" ] \
-        && [ -z ${BUILD_DXEGEN} ] \
-        && source djgpp/dxegen
-      ;;
-  esac
-done
+if [ -z ${IGNORE_DEPENDENCIES} ]; then
+  [ ! -z ${GCC_VERSION} ] && DEPS+=" djgpp binutils"
+  [ ! -z ${BINUTILS_VERSION} ] && DEPS+=" "
+  [ ! -z ${GDB_VERSION} ] && DEPS+=" "
+  [ ! -z ${DJGPP_VERSION} ] && DEPS+=" "
+  [ ! -z ${BUILD_DXEGEN} ] && DEPS+=" djgpp binutils gcc"
+  
+  for DEP in ${DEPS}; do
+    case $DEP in
+      djgpp)
+        [ -z ${DJGPP_VERSION} ] \
+          && source djgpp/djgpp
+        ;;
+      binutils)
+        [ -z "`ls ${PREFIX}/${TARGET}/etc/binutils-*-installed 2> /dev/null`" ] \
+          && [ -z ${BINUTILS_VERSION} ] \
+          && source djgpp/binutils
+        ;;
+      gcc)
+        [ -z "`ls ${PREFIX}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ] \
+          && [ -z ${GCC_VERSION} ] \
+          && source common/gcc
+        ;;
+      gdb)
+        [ -z "`ls ${PREFIX}/${TARGET}/etc/gdb-*-installed 2> /dev/null`" ] \
+          && [ -z ${GDB_VERSION} ] \
+          && source common/gdb
+        ;;
+      dxegen)
+        [ -z "`ls ${PREFIX}/${TARGET}/etc/dxegen-installed 2> /dev/null`" ] \
+          && [ -z ${BUILD_DXEGEN} ] \
+          && source djgpp/dxegen
+        ;;
+    esac
+  done
+fi
 
 if [ ! -z ${GCC_VERSION} ]; then
   DJCROSS_GCC_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/rpms/djcross-gcc-${GCC_VERSION}/djcross-gcc-${GCC_VERSION}.tar.bz2"
