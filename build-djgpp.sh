@@ -89,6 +89,12 @@ for DEP in ${DEPS}; do
   esac
 done
 
+if [ ! -z ${GCC_VERSION} ]; then
+  DJCROSS_GCC_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/rpms/djcross-gcc-${GCC_VERSION}/djcross-gcc-${GCC_VERSION}.tar.bz2"
+  # djcross-gcc-X.XX-tar.* maybe moved from /djgpp/rpms/ to /djgpp/deleted/rpms/ directory.
+  OLD_DJCROSS_GCC_ARCHIVE=${DJCROSS_GCC_ARCHIVE/rpms\//deleted\/rpms\/}
+fi
+
 source ${BASE}/script/begin.sh
 
 source ${BASE}/script/build-tools.sh
