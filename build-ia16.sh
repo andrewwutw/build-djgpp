@@ -74,7 +74,7 @@ for DEP in ${DEPS}; do
       ;;
     gcc)
       [ -z ${GCC_VERSION} ] \
-        && source common/gcc
+        && source ia16/gcc
       ;;
     gdb)
       [ -z "`ls ${PREFIX}/${TARGET}/etc/gdb-*-installed 2> /dev/null`" ] \
