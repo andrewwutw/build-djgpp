@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-BINUTILS_VERSION="ia16"
+#BINUTILS_VERSION="ia16"
+source newlib/binutils
