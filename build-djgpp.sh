@@ -124,8 +124,10 @@ if [ ! -z ${DJGPP_VERSION} ] || [ ! -z ${BUILD_DXEGEN} ]; then
   patch -p1 -u < ../../patch/patch-djcrx${DJGPP_VERSION}.txt || exit 1
 
   cd src/stub
-  ${CC} -O2 ${CFLAGS} stubify.c -o ${TARGET}-stubify || exit 1
-  ${CC} -O2 ${CFLAGS} stubedit.c -o ${TARGET}-stubedit || exit 1
+  ${CC} -O2 ${CFLAGS} stubify.c -o stubify || exit 1
+  ${CC} -O2 ${CFLAGS} stubedit.c -o stubedit || exit 1
+  ${HOST_CC} -O2 ${CFLAGS} stubify.c -o ${TARGET}-stubify || exit 1
+  ${HOST_CC} -O2 ${CFLAGS} stubedit.c -o ${TARGET}-stubedit || exit 1
 
   cd ../..
 
@@ -196,7 +198,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     cd -
 
     # copy stubify programs
-    cp -p $PREFIX/bin/${TARGET}-stubify $BUILDDIR/tmpinst/bin/stubify
+    cp -p $PREFIX/bin/stubify $BUILDDIR/tmpinst/bin/
 
     cd $BUILDDIR/
 
@@ -261,7 +263,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
     echo "Building DXE tools requires gcc, skip."
   fi
   cd src/stub
-  ${CC} -O2 ${CFLAGS} -o exe2coff exe2coff.c || exit 1
+  ${HOST_CC} -O2 ${CFLAGS} -o exe2coff exe2coff.c || exit 1
   cp -p exe2coff $PREFIX/bin/${TARGET}-exe2coff || exit 1
 
   # djlsr done
