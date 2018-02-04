@@ -94,14 +94,14 @@ cd ${BASE}/build/ || exit 1
 cd gcc-ia16
 git reset --hard HEAD
 git pull || exit 1
-patch -p1 -u < ${BASE}/patch/patch-gcc-ia16.txt
+patch -p1 -u < ${BASE}/patch/patch-gcc-ia16.txt || exit 1
 cd ..
 
 [ -d newlib-ia16 ] || git clone https://github.com/tkchia/newlib-ia16.git --depth 1 --branch newlib-2_4_0-ia16-tkchia
 cd newlib-ia16
 git reset --hard HEAD
 git pull || exit 1
-patch -p1 -u < ${BASE}/patch/patch-newlib-ia16.txt
+patch -p1 -u < ${BASE}/patch/patch-newlib-ia16.txt || exit 1
 cd ..
 
 #[ -d binutils-ia16 ] || git clone https://github.com/crtc-demos/binutils-ia16.git --depth 1 --branch master
