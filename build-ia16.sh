@@ -70,7 +70,7 @@ for DEP in ${DEPS}; do
     binutils)
       [ -z "`ls ${PREFIX}/${TARGET}/etc/binutils-*-installed 2> /dev/null`" ] \
         && [ -z ${BINUTILS_VERSION} ] \
-        && source newlib/binutils
+        && source ia16/binutils
       ;;
     gcc)
       [ -z ${GCC_VERSION} ] \
