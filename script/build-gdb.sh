@@ -12,7 +12,7 @@ if [ ! -z ${GDB_VERSION} ]; then
   echo "Building gdb."
   
   GDB_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX}"
-  GDB_CONFIGURE_OPTIONS="`echo ${GDB_CONFIGURE_OPTIONS}`"
+  strip_whitespace GDB_CONFIGURE_OPTIONS
 
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" = "${GDB_CONFIGURE_OPTIONS}" ]; then
     rm -rf *

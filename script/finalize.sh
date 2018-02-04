@@ -13,12 +13,10 @@ echo "export PATH=\"${PREFIX}/${TARGET}/bin/:${PREFIX}/bin/:\$PATH\""  >  ${PREF
 echo "export GCC_EXEC_PREFIX=\"${PREFIX}/lib/gcc/\""                   >> ${PREFIX}/setenv-${TARGET}
 echo "export MANPATH=\"${PREFIX}/share/man:\$MANPATH\""                >> ${PREFIX}/setenv-${TARGET}
 echo "export INFOPATH=\"${PREFIX}/share/info:\$INFOPATH\""             >> ${PREFIX}/setenv-${TARGET}
-echo "export DJDIR=\"${PREFIX}/${TARGET}\""                            >> ${PREFIX}/setenv-${TARGET}
 
 echo "@echo off"                                >> ${PREFIX}/setenv-${TARGET}.bat
 echo "PATH=%~dp0${TARGET}\\bin;%~dp0bin;%PATH%" >> ${PREFIX}/setenv-${TARGET}.bat
 echo "set GCC_EXEC_PREFIX=%~dp0lib\\gcc\\"      >> ${PREFIX}/setenv-${TARGET}.bat
-echo "set DJDIR=%~dp0${TARGET}"                 >> ${PREFIX}/setenv-${TARGET}.bat
 
 cd ${BASE}/build
 

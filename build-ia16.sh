@@ -4,21 +4,17 @@ source script/functions.sh
 
 TARGET="ia16-elf"
 
-BINUTILS_CONFIGURE_OPTIONS="--disable-werror
-                            --disable-nls
-                            ${BINUTILS_CONFIGURE_OPTIONS}"
+prepend BINUTILS_CONFIGURE_OPTIONS "--disable-werror
+                                    --disable-nls"
 
-GCC_CONFIGURE_OPTIONS="--disable-nls
-                       --enable-fat
-                       ${GCC_CONFIGURE_OPTIONS}"
+prepend GCC_CONFIGURE_OPTIONS "--disable-nls
+                               --enable-fat"
 
-GDB_CONFIGURE_OPTIONS="--disable-werror
-                       --disable-nls
-                       ${GDB_CONFIGURE_OPTIONS}"
+prepend GDB_CONFIGURE_OPTIONS "--disable-werror
+                               --disable-nls"
 
-NEWLIB_CONFIGURE_OPTIONS="--enable-newlib-nano-malloc
-                          --disable-newlib-multithread
-                          ${NEWLIB_CONFIGURE_OPTIONS}"
+prepend NEWLIB_CONFIGURE_OPTIONS "--enable-newlib-nano-malloc
+                                  --disable-newlib-multithread"
 
 if [ -z ${TARGET} ]; then
   echo "Please specify a target with: export TARGET=..."

@@ -32,7 +32,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   GCC_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX}
                            --enable-languages=${ENABLE_LANGUAGES}
                            --with-newlib"
-  GCC_CONFIGURE_OPTIONS="`echo ${GCC_CONFIGURE_OPTIONS}`"
+  strip_whitespace GCC_CONFIGURE_OPTIONS
 
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${GCC_CONFIGURE_OPTIONS}" ]; then
     rm -rf *
@@ -56,7 +56,7 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
   cd newlib-${NEWLIB_VERSION}/build-${TARGET} || exit 1
   
   NEWLIB_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX}"
-  NEWLIB_CONFIGURE_OPTIONS="`echo ${NEWLIB_CONFIGURE_OPTIONS}`"
+  strip_whitespace NEWLIB_CONFIGURE_OPTIONS
   
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${NEWLIB_CONFIGURE_OPTIONS}" ]; then
     rm -rf *

@@ -2,19 +2,16 @@
 
 source script/functions.sh
 
-BINUTILS_CONFIGURE_OPTIONS="--disable-werror
-                            --disable-nls
-                            ${BINUTILS_CONFIGURE_OPTIONS}"
+prepend BINUTILS_CONFIGURE_OPTIONS "--disable-werror
+                                    --disable-nls"
 
-GCC_CONFIGURE_OPTIONS="--disable-nls
-                       --enable-libquadmath-support
-                       --enable-version-specific-runtime-libs
-                       --enable-fat
-                       ${GCC_CONFIGURE_OPTIONS}"
+prepend GCC_CONFIGURE_OPTIONS "--disable-nls
+                               --enable-libquadmath-support
+                               --enable-version-specific-runtime-libs
+                               --enable-fat"
 
-GDB_CONFIGURE_OPTIONS="--disable-werror
-                       --disable-nls
-                       ${GDB_CONFIGURE_OPTIONS}"
+prepend GDB_CONFIGURE_OPTIONS "--disable-werror
+                               --disable-nls"
 
 if [ -z ${TARGET} ]; then
   echo "Please specify a target with: export TARGET=..."

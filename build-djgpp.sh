@@ -7,20 +7,17 @@ TARGET="i586-pc-msdosdjgpp"
 #DJGPP_DOWNLOAD_BASE="ftp://ftp.delorie.com/pub"
 export DJGPP_DOWNLOAD_BASE="http://www.delorie.com/pub"
 
-BINUTILS_CONFIGURE_OPTIONS="--disable-werror
-                            --disable-nls
-                            ${BINUTILS_CONFIGURE_OPTIONS}"
+prepend BINUTILS_CONFIGURE_OPTIONS "--disable-werror
+                                    --disable-nls"
 
-GCC_CONFIGURE_OPTIONS="--disable-nls
-                       --enable-libquadmath-support
-                       --enable-version-specific-runtime-libs
-                       --enable-fat
-                       ${GCC_CONFIGURE_OPTIONS}"
+prepend GCC_CONFIGURE_OPTIONS "--disable-nls
+                               --enable-libquadmath-support
+                               --enable-version-specific-runtime-libs
+                               --enable-fat"
 
 
-GDB_CONFIGURE_OPTIONS="--disable-werror 
-                       --disable-nls
-                       ${GDB_CONFIGURE_OPTIONS}"
+prepend GDB_CONFIGURE_OPTIONS "--disable-werror 
+                               --disable-nls"
 
 if [ -z $1 ]; then
   echo "Usage: $0 [packages...]"
@@ -172,9 +169,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     cd $BUILDDIR
     untar automake-${AUTOMAKE_VERSION} || exit 1
     cd automake-${AUTOMAKE_VERSION}/
-    PATH="${BUILDDIR}/tmpinst/bin:$PATH" \
-      ./configure --prefix=$BUILDDIR/tmpinst || exit 1
-    PATH="${BUILDDIR}/tmpinst/bin:$PATH" \
+    ./configure --prefix=$BUILDDIR/tmpinst || exit 1
       ${MAKE} all install || exit 1
     rm ${BUILDDIR}/tmpinst/automake-*-built
     touch ${BUILDDIR}/tmpinst/automake-${AUTOMAKE_VERSION}-built
@@ -227,7 +222,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   
   GCC_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX}
                            --enable-languages=${ENABLE_LANGUAGES}"
-  GCC_CONFIGURE_OPTIONS="`echo ${GCC_CONFIGURE_OPTIONS}`"
+  strip_whitespace GCC_CONFIGURE_OPTIONS
 
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" = "${GCC_CONFIGURE_OPTIONS}" ]; then
     rm -rf *
@@ -277,3 +272,6 @@ cd ${BASE}/build
 source ${BASE}/script/build-gdb.sh
 
 source ${BASE}/script/finalize.sh
+
+echo "export DJDIR=\"${PREFIX}/${TARGET}\"" >> ${PREFIX}/setenv-${TARGET}
+echo "set DJDIR=%~dp0${TARGET}" >> ${PREFIX}/setenv-${TARGET}.bat

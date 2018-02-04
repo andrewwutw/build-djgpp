@@ -2,7 +2,7 @@ mkdir -p build-${TARGET}
 cd build-${TARGET} || exit 1
 
 BINUTILS_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX}"
-BINUTILS_CONFIGURE_OPTIONS="`echo ${BINUTILS_CONFIGURE_OPTIONS}`"
+strip_whitespace BINUTILS_CONFIGURE_OPTIONS
 
 if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" = "${BINUTILS_CONFIGURE_OPTIONS}" ]; then
   rm -rf *

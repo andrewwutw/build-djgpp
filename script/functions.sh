@@ -12,7 +12,8 @@ ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
 # number of parallel build threads
 MAKE_JOBS=${MAKE_JOBS-4}
 
-untar()
-{
-  tar -xavf $(ls -t ${BASE}/download/$1.tar.* | head -n 1)
-}
+untar() { tar -xavf $(ls -t ${BASE}/download/$1.tar.* | head -n 1); }
+
+strip_whitespace() { eval "$1=\"`echo ${!1}`\""; }
+
+prepend() { eval "$1=\"$2 ${!1}\""; }
