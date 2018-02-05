@@ -25,6 +25,7 @@ fi
 
 export CC CXX MAKE
 
+[ ! -z ${BUILD} ] && BUILD_FLAG="--build=${BUILD}"
 if [ ! -z ${HOST} ]; then
   HOST_FLAG="--host=${HOST}"
   IGNORE_DEPENDENCIES=yes
