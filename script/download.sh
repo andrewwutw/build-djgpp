@@ -20,6 +20,7 @@ echo "    LDFLAGS=${LDFLAGS}"
 echo "    MAKE=${MAKE}"
 echo "    MAKE_JOBS=${MAKE_JOBS}"
 echo "    MAKE_CHECK=${MAKE_CHECK}"
+echo "    MAKE_CHECK_GCC=${MAKE_CHECK_GCC}"
 if [ ! -z ${HOST} ]; then
   echo "    HOST_CC=`echo ${HOST_CC}`"
   echo "    HOST_CXX=`echo ${HOST_CXX}`"
