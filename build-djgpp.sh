@@ -237,6 +237,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK_GCC ] && ${MAKE} -j${MAKE_JOBS} -s check-gcc | tee ${BASE}/tests/gcc.log
   ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
+  ${MAKE} -j${MAKE_JOBS} -C mpfr install
 
   rm ${PREFIX}/${TARGET}/etc/gcc-*-installed
   touch ${PREFIX}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
