@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source script/functions.sh
+source script/init.sh
 
 TARGET="ia16-elf"
 
@@ -70,7 +70,7 @@ if [ -z ${IGNORE_DEPENDENCIES} ]; then
   done
 fi
 
-source ${BASE}/script/begin.sh
+source ${BASE}/script/download.sh
 
 source ${BASE}/script/build-tools.sh
 

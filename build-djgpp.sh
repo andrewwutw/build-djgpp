@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source script/functions.sh
+source script/init.sh
 
 TARGET="i586-pc-msdosdjgpp"
 
@@ -81,7 +81,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   OLD_DJCROSS_GCC_ARCHIVE=${DJCROSS_GCC_ARCHIVE/rpms\//deleted\/rpms\/}
 fi
 
-source ${BASE}/script/begin.sh
+source ${BASE}/script/download.sh
 
 source ${BASE}/script/build-tools.sh
 
