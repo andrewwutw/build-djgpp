@@ -10,7 +10,7 @@ PREFIX=${PREFIX-/usr/local/cross}
 ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
 
 # number of parallel build threads
-MAKE_JOBS=${MAKE_JOBS-4}
+MAKE_JOBS=${MAKE_JOBS-`nproc --all`}
 
 # use gmake/clang under FreeBSD
 if [ `uname` = "FreeBSD" ]; then
