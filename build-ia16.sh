@@ -11,7 +11,8 @@ prepend GCC_CONFIGURE_OPTIONS "--disable-nls
                                --enable-fat"
 
 prepend GDB_CONFIGURE_OPTIONS "--disable-werror
-                               --disable-nls"
+                               --disable-nls
+                               --with-system-readline"
 
 prepend NEWLIB_CONFIGURE_OPTIONS "--enable-newlib-nano-malloc
                                   --disable-newlib-multithread"
