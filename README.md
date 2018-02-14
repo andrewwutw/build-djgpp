@@ -1,14 +1,8 @@
-## Building DJGPP cross compiler on Windows, Mac OSX, Linux and FreeBSD.
+## Build gcc cross compiler on Windows, Mac OSX, Linux and FreeBSD.
 
-build-djgpp : Build DJGPP cross compiler and binutils on Windows (MinGW/Cygwin), Mac OSX, Linux and FreeBSD.
+### Requirements
 
-### Prebuilt binary files
-
-If you don't want build DJGPP by yourself, you can download prebuilt DJGPP binary files for MinGW, OSX and Linux from GitHub Release page.
-
-### Requirement
-
-Before running this script, you need to install these programs first :
+Before running this script, you need to install these programs first:
 
 * g++
 * gcc
@@ -52,111 +46,91 @@ pacman -Syuu base-devel mingw-w64-x86_64-toolchain mingw-w64-x86_64-curl mingw-w
 
 ### Configuration
 
-Default install location is /usr/local/djgpp. You can change install location by setting environment variable *DJGPP_PREFIX* :
-
+Several environment variables control the build process. Usually you only need to specify `TARGET`. Here is the full list:
 ```
-DJGPP_PREFIX=/usr/local/my-djgpp
-```
+# Primary build options:
+TARGET=                     # Target duplet or triplet.
+PREFIX=                     # Install location.
+ENABLE_LANGUAGES=           # Comma-separated list of languages to build compilers for.
 
-Default support language is C and C++. You can change supported languages by setting environment variable *ENABLE_LANGUAGES* :
+# Advanced build options:
+MAKE_JOBS=                  # Number of parallel build threads (auto-detected)
+GCC_CONFIGURE_OPTIONS=      # Extra options to pass to gcc's ./configure
+BINUTILS_CONFIGURE_OPTIONS= # Same, for binutils
+GDB_CONFIGURE_OPTIONS=      # Same, for gdb
+NEWLIB_CONFIGURE_OPTIONS=   # Same, for newlib
 
-```
-ENABLE_LANGUAGES=c,c++,f95,objc,obj-c++
-```
-
-Default number of parallel builds is 4. You can change this number by setting environment variable *MAKE_JOBS* :
-
-```
-MAKE_JOBS=8
-```
-
-To configure packages with additional options, add your custom flags to one of the following environment variables:
-
-```
-GCC_CONFIGURE_OPTIONS="--enable-feature"
-GDB_CONFIGURE_OPTIONS="--enable-feature"
-BINUTILS_CONFIGURE_OPTIONS="--enable-feature"
+# Misc.
+HOST=                       # The platform you are building for, when building a cross-cross compiler
+BUILD=                      # The platform you are building on (auto-detected)
+MAKE_CHECK=                 # Run test suites on built programs.
+MAKE_CHECK_GCC=             # Run gcc test suites.
 ```
 
-### Building DJGPP compiler
+### Building
 
-To build DJGPP, just run :
+Pick the script you want to use:
+```
+build-glibc.sh      # builds a toolchain with glibc (gcc's default standard library)
+build-djgpp.sh      # builds a toolchain with the djgpp standard library (fixed TARGET: i586-pc-msdosdjgpp)
+build-newlib.sh     # builds a toolchain with the newlib standard library
+build-ia16.sh       # builds a toolchain with the newlib standard library (fixed TARGET: ia16-elf)
+```
 
+To build DJGPP, just run:
+```
 ./build-djgpp.sh [packages...]
+```
+Run with no arguments to see a list of supported packages and versions.
 
-Currently supported packages :
-
-* gcc-4.7.3
-* gcc-4.8.4
-* gcc-4.8.5
-* gcc-4.9.2
-* gcc-4.9.3
-* gcc-4.9.4
-* gcc-5.1.0
-* gcc-5.2.0
-* gcc-5.3.0
-* gcc-5.4.0
-* gcc-5.5.0
-* gcc-6.1.0
-* gcc-6.2.0
-* gcc-6.3.0
-* gcc-6.4.0
-* gcc-7.1.0
-* gcc-7.2.0
-* gcc-7.3.0
-* binutils-2.29.1
-* gdb-8.0.1
-
-For example, to build gcc 7.2.0 with the base library and latest binutils:
-
+For example, to build gcc 7.2.0 with the djgpp base library and latest binutils:
 ```
 ./build-djgpp.sh base binutils gcc-7.2.0
 ```
 
 To install or upgrade all packages:
-
 ```
 ./build-djgpp.sh all
 ```
 
 It will download all necessary files, build DJGPP compiler and binutils, and install it.
 
-### Using DJGPP compiler
+### Using
 
-There are 2 methods to run the compiler (*BASE_DIR* is your DJGPP install location).
+There are 2 methods to run the compiler (`$PREFIX` and `$TARGET` here are the variables you used to build).
 
-* Use compiler full name :
+* Use compiler full name:
 
 ```
-BASE_DIR/bin/i586-pc-msdosdjgpp-g++ hello.cpp
+$PREFIX/bin/$TARGET-g++ hello.cpp
 ```
 
 * Or, use compiler short name, you have to change environment variables.
 
-If you are using Linux :
+If you are using Linux:
 ```
-export PATH=BASE_DIR/i586-pc-msdosdjgpp/bin/:$PATH
-export GCC_EXEC_PREFIX=BASE_DIR/lib/gcc/
+export PATH=$PREFIX/$TARGET/bin/:$PATH
+export GCC_EXEC_PREFIX=$PREFIX/lib/gcc/
 g++ hello.cpp
 ```
 Or, run :
 
 ```
-source BASE_DIR/setenv
+source $PREFIX/setenv-$TARGET
 ```
 
 If you are using Windows command prompt :
 
 ```
-PATH=BASE_DIR/i586-pc-msdosdjgpp/bin;%PATH%
-set GCC_EXEC_PREFIX=BASE_DIR/lib/gcc/
+PATH=$PREFIX/$TARGET/bin;%PATH%
+set GCC_EXEC_PREFIX=$PREFIX/lib/gcc/
 g++ hello.cpp
 ```
 
 Or, run :
 
 ```
-BASE_DIR/setenv.bat
+$PREFIX/setenv-$TARGET.bat
 ```
 
 ### Supported DJGPP Utilities
@@ -179,6 +153,7 @@ BASE_DIR/setenv.bat
 
 ### Thanks
 
-This script is based on spec file from DJGPP source rpm files by Andris Pavenis :
-
+These scripts are based on Andrew Wu's build-djgpp script:  
+<https://github.com/andrewwutw/build-djgpp>  
+Which in turn is based on spec file from DJGPP source rpm files by Andris Pavenis:  
 <http://ap1.pp.fi/djgpp/index.html>
