@@ -36,6 +36,7 @@ if [ ! -z ${GCC_VERSION} ]; then
 
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${GCC_CONFIGURE_OPTIONS}" ]; then
     rm -rf *
+    rm -rf ${BASE}/build/newlib-${NEWLIB_VERSION}/build-${TARGET}/*
     ../configure ${GCC_CONFIGURE_OPTIONS} || exit 1
     echo ${GCC_CONFIGURE_OPTIONS} > configure-prefix
   else
