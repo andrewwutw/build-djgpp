@@ -7,6 +7,7 @@ echo "Copy long name executables to short name."
       cp -p bin/${TARGET}-$SHORT_NAME ${TARGET}/bin/$SHORT_NAME
     fi
   done
+  cp -p bin/${TARGET}-g++ bin/${TARGET}-g++-${GCC_VERSION}
 )
 
 echo "export PATH=\"${PREFIX}/${TARGET}/bin/:${PREFIX}/bin/:\$PATH\""  >  ${PREFIX}/setenv-${TARGET}
