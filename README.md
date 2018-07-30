@@ -4,7 +4,7 @@
 
 * gcc 8.2.0
 * binutils 2.31.1
-# gdb 8.1
+* gdb 8.1
 * djgpp 2.05
 * newlib 3.0.0.20180720
 
