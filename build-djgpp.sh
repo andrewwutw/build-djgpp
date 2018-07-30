@@ -207,6 +207,9 @@ if [ ! -z ${GCC_VERSION} ]; then
     echo "Downloading gcc dependencies"
     cd gnu/gcc-${GCC_VERSION_SHORT}
     ./contrib/download_prerequisites
+
+    # apply extra patches if necessary
+    [ -e ${BASE}/patch/patch-djgpp-gcc-${GCC_VERSION}.txt ] && patch -p 1 -u -i ${BASE}/patch/patch-djgpp-gcc-${GCC_VERSION}.txt
     cd -
 
     touch gcc-unpacked
