@@ -132,15 +132,15 @@ if [ ! -z ${DJGPP_VERSION} ] || [ ! -z ${BUILD_DXEGEN} ]; then
 
   cd ../..
 
-  mkdir -p $PREFIX/${TARGET}/sys-include || exit 1
-  cp -rp include/* $PREFIX/${TARGET}/sys-include/ || exit 1
-  cp -rp lib $PREFIX/${TARGET}/ || exit 1
-  mkdir -p $PREFIX/bin || exit 1
-  cp -p src/stub/${TARGET}-stubify $PREFIX/bin/ || exit 1
-  cp -p src/stub/${TARGET}-stubedit $PREFIX/bin/ || exit 1
+  ${SUDO} mkdir -p $PREFIX/${TARGET}/sys-include || exit 1
+  ${SUDO} cp -rp include/* $PREFIX/${TARGET}/sys-include/ || exit 1
+  ${SUDO} cp -rp lib $PREFIX/${TARGET}/ || exit 1
+  ${SUDO} mkdir -p $PREFIX/bin || exit 1
+  ${SUDO} cp -p src/stub/${TARGET}-stubify $PREFIX/bin/ || exit 1
+  ${SUDO} cp -p src/stub/${TARGET}-stubedit $PREFIX/bin/ || exit 1
 
-  rm ${PREFIX}/${TARGET}/etc/djgpp-*-installed
-  touch ${PREFIX}/${TARGET}/etc/djgpp-${DJGPP_VERSION}-installed
+  ${SUDO} rm ${PREFIX}/${TARGET}/etc/djgpp-*-installed
+  ${SUDO} touch ${PREFIX}/${TARGET}/etc/djgpp-${DJGPP_VERSION}-installed
 fi
 
 cd ${BASE}/build/
@@ -199,7 +199,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     cd -
 
     # copy stubify programs
-    cp -p $PREFIX/bin/stubify $BUILDDIR/tmpinst/bin/
+    ${SUDO} cp -p $PREFIX/bin/stubify $BUILDDIR/tmpinst/bin/
 
     cd $BUILDDIR/
 
@@ -240,8 +240,8 @@ if [ ! -z ${GCC_VERSION} ]; then
 
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK_GCC ] && ${MAKE} -j${MAKE_JOBS} -s check-gcc | tee ${BASE}/tests/gcc.log
-  ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C mpfr install
+  ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
+  ${SUDO} ${MAKE} -j${MAKE_JOBS} -C mpfr install
 
   rm ${PREFIX}/${TARGET}/etc/gcc-*-installed
   touch ${PREFIX}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
@@ -259,9 +259,9 @@ if [ ! -z ${DJGPP_VERSION} ]; then
     cd src
     PATH=$PREFIX/bin/:$PATH ${MAKE} || exit 1
     cd dxe
-    cp -p dxegen  $PREFIX/bin/${TARGET}-dxegen || exit 1
-    cp -p dxe3gen $PREFIX/bin/${TARGET}-dxe3gen || exit 1
-    cp -p dxe3res $PREFIX/bin/${TARGET}-dxe3res || exit 1
+    ${SUDO} cp -p dxegen  $PREFIX/bin/${TARGET}-dxegen || exit 1
+    ${SUDO} cp -p dxe3gen $PREFIX/bin/${TARGET}-dxe3gen || exit 1
+    ${SUDO} cp -p dxe3res $PREFIX/bin/${TARGET}-dxe3res || exit 1
     cd ../..
     touch ${PREFIX}/${TARGET}/etc/dxegen-installed
   else
@@ -269,7 +269,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   fi
   cd src/stub
   ${HOST_CC} -O2 ${CFLAGS} -o exe2coff exe2coff.c || exit 1
-  cp -p exe2coff $PREFIX/bin/${TARGET}-exe2coff || exit 1
+  ${SUDO} cp -p exe2coff $PREFIX/bin/${TARGET}-exe2coff || exit 1
 
   # djlsr done
 fi
@@ -280,5 +280,5 @@ source ${BASE}/script/build-gdb.sh
 
 source ${BASE}/script/finalize.sh
 
-echo "export DJDIR=\"${PREFIX}/${TARGET}\"" >> ${PREFIX}/setenv-${TARGET}
-echo "set DJDIR=%~dp0${TARGET}" >> ${PREFIX}/setenv-${TARGET}.bat
+${SUDO} echo "export DJDIR=\"${PREFIX}/${TARGET}\"" >> ${PREFIX}/setenv-${TARGET}
+${SUDO} echo "set DJDIR=%~dp0${TARGET}" >> ${PREFIX}/setenv-${TARGET}.bat

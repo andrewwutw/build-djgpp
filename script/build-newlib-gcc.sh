@@ -2,8 +2,8 @@ cd ${BASE}/build/
 
 if [ ! -z ${NEWLIB_VERSION} ] && [ ! -e newlib-${NEWLIB_VERSION}/newlib-unpacked ]; then
   untar newlib-${NEWLIB_VERSION}
-  mkdir -p ${PREFIX}/${TARGET}/sys-include/
-  cp -rv newlib-${NEWLIB_VERSION}/newlib/libc/include/* ${PREFIX}/${TARGET}/sys-include/ | exit 1
+  ${SUDO} mkdir -p ${PREFIX}/${TARGET}/sys-include/
+  ${SUDO} cp -rv newlib-${NEWLIB_VERSION}/newlib/libc/include/* ${PREFIX}/${TARGET}/sys-include/ | exit 1
   touch newlib-${NEWLIB_VERSION}/newlib-unpacked
 fi
 
@@ -45,7 +45,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   fi
 
   ${MAKE} -j${MAKE_JOBS} all-gcc || exit 1
-  ${MAKE} -j${MAKE_JOBS} install-gcc || exit 1
+  ${SUDO} ${MAKE} -j${MAKE_JOBS} install-gcc || exit 1
 
   export CFLAGS="$TEMP_CFLAGS"
 fi
@@ -70,8 +70,8 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
   
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/newlib.log
-  ${MAKE} -j${MAKE_JOBS} install || \
-  ${MAKE} -j${MAKE_JOBS} install || exit 1
+  ${SUDO} ${MAKE} -j${MAKE_JOBS} install || \
+  ${SUDO} ${MAKE} -j${MAKE_JOBS} install || exit 1
 fi
 
 cd ${BASE}/build/
@@ -81,10 +81,10 @@ if [ ! -z ${GCC_VERSION} ]; then
   
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK_GCC ] && ${MAKE} -j${MAKE_JOBS} -s check-gcc | tee ${BASE}/tests/gcc.log
-  ${MAKE} -j${MAKE_JOBS} install-strip || \
-  ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C mpfr install
+  ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || \
+  ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
+  ${SUDO} ${MAKE} -j${MAKE_JOBS} -C mpfr install
   
-  rm ${PREFIX}/${TARGET}/etc/gcc-*-installed
-  touch ${PREFIX}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
+  ${SUDO} rm ${PREFIX}/${TARGET}/etc/gcc-*-installed
+  ${SUDO} touch ${PREFIX}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
 fi

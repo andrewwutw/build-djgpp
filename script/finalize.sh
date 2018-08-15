@@ -4,20 +4,20 @@ echo "Copy long name executables to short name."
   SHORT_NAME_LIST="gcc g++ c++ addr2line c++filt cpp size strings dxegen dxe3gen dxe3res exe2coff stubify stubedit gdb"
   for SHORT_NAME in $SHORT_NAME_LIST; do
     if [ -f bin/${TARGET}-$SHORT_NAME ]; then
-      cp -p bin/${TARGET}-$SHORT_NAME ${TARGET}/bin/$SHORT_NAME
+      ${SUDO} cp -p bin/${TARGET}-$SHORT_NAME ${TARGET}/bin/$SHORT_NAME
     fi
   done
-  cp -p bin/${TARGET}-g++ bin/${TARGET}-g++-${GCC_VERSION}
+  ${SUDO} cp -p bin/${TARGET}-g++ bin/${TARGET}-g++-${GCC_VERSION}
 )
 
-echo "export PATH=\"${PREFIX}/${TARGET}/bin/:${PREFIX}/bin/:\$PATH\""  >  ${PREFIX}/setenv-${TARGET}
-echo "export GCC_EXEC_PREFIX=\"${PREFIX}/lib/gcc/\""                   >> ${PREFIX}/setenv-${TARGET}
-echo "export MANPATH=\"${PREFIX}/share/man:\$MANPATH\""                >> ${PREFIX}/setenv-${TARGET}
-echo "export INFOPATH=\"${PREFIX}/share/info:\$INFOPATH\""             >> ${PREFIX}/setenv-${TARGET}
+${SUDO} echo "export PATH=\"${PREFIX}/${TARGET}/bin/:${PREFIX}/bin/:\$PATH\""  >  ${PREFIX}/setenv-${TARGET}
+${SUDO} echo "export GCC_EXEC_PREFIX=\"${PREFIX}/lib/gcc/\""                   >> ${PREFIX}/setenv-${TARGET}
+${SUDO} echo "export MANPATH=\"${PREFIX}/share/man:\$MANPATH\""                >> ${PREFIX}/setenv-${TARGET}
+${SUDO} echo "export INFOPATH=\"${PREFIX}/share/info:\$INFOPATH\""             >> ${PREFIX}/setenv-${TARGET}
 
-echo "@echo off"                                >> ${PREFIX}/setenv-${TARGET}.bat
-echo "PATH=%~dp0${TARGET}\\bin;%~dp0bin;%PATH%" >> ${PREFIX}/setenv-${TARGET}.bat
-echo "set GCC_EXEC_PREFIX=%~dp0lib\\gcc\\"      >> ${PREFIX}/setenv-${TARGET}.bat
+${SUDO} echo "@echo off"                                >> ${PREFIX}/setenv-${TARGET}.bat
+${SUDO} echo "PATH=%~dp0${TARGET}\\bin;%~dp0bin;%PATH%" >> ${PREFIX}/setenv-${TARGET}.bat
+${SUDO} echo "set GCC_EXEC_PREFIX=%~dp0lib\\gcc\\"      >> ${PREFIX}/setenv-${TARGET}.bat
 
 cd ${BASE}/build
 

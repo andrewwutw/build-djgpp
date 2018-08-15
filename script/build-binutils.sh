@@ -19,7 +19,7 @@ if [ ${TARGET} == "i586-pc-msdosdjgpp" ]; then
 fi
 ${MAKE} -j${MAKE_JOBS} || exit 1
 [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/binutils.log
-${MAKE} -j${MAKE_JOBS} install || exit 1
+${SUDO} ${MAKE} -j${MAKE_JOBS} install || exit 1
 
-rm ${PREFIX}/${TARGET}/etc/binutils-*-installed
-touch ${PREFIX}/${TARGET}/etc/binutils-${BINUTILS_VERSION}-installed
+${SUDO} rm ${PREFIX}/${TARGET}/etc/binutils-*-installed
+${SUDO} touch ${PREFIX}/${TARGET}/etc/binutils-${BINUTILS_VERSION}-installed

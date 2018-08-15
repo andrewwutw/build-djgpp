@@ -1,17 +1,3 @@
-# create target directory, check writable.
-echo "Make prefix directory : $PREFIX"
-mkdir -p $PREFIX
-
-if ! [ -d $PREFIX ]; then
-  echo "Unable to create prefix directory"
-  exit 1
-fi
-
-if ! [ -w $PREFIX ]; then
-  echo "prefix directory is not writable."
-  exit 1
-fi
-
 echo "You are about to build and install:"
 [ -z ${DJGPP_VERSION} ]    || echo "    - DJGPP base library ${DJGPP_VERSION}"
 [ -z ${NEWLIB_VERSION} ]   || echo "    - newlib ${NEWLIB_VERSION}"
@@ -53,8 +39,21 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
   echo "    NEWLIB_CONFIGURE_OPTIONS=`echo ${NEWLIB_CONFIGURE_OPTIONS}`"
 fi
 echo ""
+
+mkdir -p ${PREFIX}
+
+if [ ! -d ${PREFIX} ] || [ ! -w ${PREFIX} ]; then
+  echo "WARNING: no write access to ${PREFIX}."
+  echo "You may need to enter your sudo password several times during the build process."
+  SUDO=sudo
+fi
+
+echo ""
 echo "If you wish to change anything, press CTRL-C now. Otherwise, press any other key to continue."
 read -s -n 1
+
+${SUDO} mkdir -p ${PREFIX} || exit 1
+${SUDO} mkdir -p ${PREFIX}/${TARGET}/etc/ || exit 1
 
 # check required programs
 REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch"
@@ -137,8 +136,6 @@ for ARCHIVE in $ARCHIVE_LIST; do
   fi
 done
 cd ..
-
-mkdir -p ${PREFIX}/${TARGET}/etc/ || exit 1
 
 export PATH="${PREFIX}/bin:$PATH"
 
