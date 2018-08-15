@@ -103,7 +103,7 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
   cd gnu/binutils-* || exit 1
 
   # exec permission of some files are not set, fix it.
-  for EXEC_FILE in install-sh missing; do
+  for EXEC_FILE in install-sh missing configure; do
     echo "chmod a+x $EXEC_FILE"
     chmod a+x $EXEC_FILE || exit 1
   done
