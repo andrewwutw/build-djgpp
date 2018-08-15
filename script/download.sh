@@ -1,3 +1,17 @@
+# create target directory, check writable.
+echo "Make prefix directory : $PREFIX"
+mkdir -p $PREFIX
+
+if ! [ -d $PREFIX ]; then
+  echo "Unable to create prefix directory"
+  exit 1
+fi
+
+if ! [ -w $PREFIX ]; then
+  echo "prefix directory is not writable."
+  exit 1
+fi
+
 echo "You are about to build and install:"
 [ -z ${DJGPP_VERSION} ]    || echo "    - DJGPP base library ${DJGPP_VERSION}"
 [ -z ${NEWLIB_VERSION} ]   || echo "    - newlib ${NEWLIB_VERSION}"
@@ -123,20 +137,6 @@ for ARCHIVE in $ARCHIVE_LIST; do
   fi
 done
 cd ..
-
-# create target directory, check writable.
-echo "Make prefix directory : $PREFIX"
-mkdir -p $PREFIX
-
-if ! [ -d $PREFIX ]; then
-  echo "Unable to create prefix directory"
-  exit 1
-fi
-
-if ! [ -w $PREFIX ]; then
-  echo "prefix directory is not writable."
-  exit 1
-fi
 
 mkdir -p ${PREFIX}/${TARGET}/etc/ || exit 1
 
