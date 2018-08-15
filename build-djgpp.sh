@@ -279,6 +279,3 @@ cd ${BASE}/build
 source ${BASE}/script/build-gdb.sh
 
 source ${BASE}/script/finalize.sh
-
-${SUDO} echo "export DJDIR=\"${PREFIX}/${TARGET}\"" >> ${PREFIX}/setenv-${TARGET}
-${SUDO} echo "set DJDIR=%~dp0${TARGET}" >> ${PREFIX}/setenv-${TARGET}.bat
