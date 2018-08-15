@@ -52,9 +52,6 @@ echo ""
 echo "If you wish to change anything, press CTRL-C now. Otherwise, press any other key to continue."
 read -s -n 1
 
-${SUDO} mkdir -p ${PREFIX} || exit 1
-${SUDO} mkdir -p ${PREFIX}/${TARGET}/etc/ || exit 1
-
 # check required programs
 REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch"
 
@@ -136,6 +133,10 @@ for ARCHIVE in $ARCHIVE_LIST; do
   fi
 done
 cd ..
+
+echo "Creating install directory: ${PREFIX}"
+[ -d ${PREFIX} ] || ${SUDO} mkdir -p ${PREFIX} || exit 1
+[ -d ${PREFIX}/${TARGET}/etc/ ] || ${SUDO} mkdir -p ${PREFIX}/${TARGET}/etc/ || exit 1
 
 export PATH="${PREFIX}/bin:$PATH"
 
