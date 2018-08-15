@@ -199,7 +199,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     cd -
 
     # copy stubify programs
-    ${SUDO} cp -p $PREFIX/bin/stubify $BUILDDIR/tmpinst/bin/
+    cp -p $PREFIX/bin/stubify $BUILDDIR/tmpinst/bin/
 
     cd $BUILDDIR/
 
