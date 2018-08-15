@@ -199,7 +199,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     cd -
 
     # copy stubify programs
-    cp -p $PREFIX/bin/stubify $BUILDDIR/tmpinst/bin/
+    cp -p ${BASE}/build/djgpp-${DJGPP_VERSION}/src/stub/stubify $BUILDDIR/tmpinst/bin/
 
     cd $BUILDDIR/
 
