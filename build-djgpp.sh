@@ -2,7 +2,10 @@
 
 source script/init.sh
 
-TARGET="i586-pc-msdosdjgpp"
+case $TARGET in
+*-msdosdjgpp) ;;
+*) TARGET="i586-pc-msdosdjgpp" ;;
+esac
 
 #DJGPP_DOWNLOAD_BASE="ftp://ftp.delorie.com/pub"
 export DJGPP_DOWNLOAD_BASE="http://www.delorie.com/pub"
