@@ -6,7 +6,7 @@ source script/init.sh
 
 case $TARGET in
 *-msdosdjgpp) ;;
-*) TARGET="i586-pc-msdosdjgpp" ;;
+*) TARGET="i386-pc-msdosdjgpp" ;;
 esac
 
 prepend BINUTILS_CONFIGURE_OPTIONS "--disable-werror
