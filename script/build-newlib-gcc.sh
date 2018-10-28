@@ -85,6 +85,6 @@ if [ ! -z ${GCC_VERSION} ]; then
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
   ${SUDO} ${MAKE} -j${MAKE_JOBS} -C mpfr install
   
-  ${SUDO} rm ${PREFIX}/${TARGET}/etc/gcc-*-installed
+  ${SUDO} rm -f ${PREFIX}/${TARGET}/etc/gcc-*-installed
   ${SUDO} touch ${PREFIX}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
 fi

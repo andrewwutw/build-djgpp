@@ -27,6 +27,6 @@ if [ ! -z ${GDB_VERSION} ]; then
   [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/gdb.log
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install || exit 1
 
-  ${SUDO} rm ${PREFIX}/${TARGET}/etc/gdb-*-installed
+  ${SUDO} rm -f ${PREFIX}/${TARGET}/etc/gdb-*-installed
   ${SUDO} touch ${PREFIX}/${TARGET}/etc/gdb-${GDB_VERSION}-installed
 fi
