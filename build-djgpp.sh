@@ -142,7 +142,7 @@ if [ ! -z ${DJGPP_VERSION} ] || [ ! -z ${BUILD_DXEGEN} ]; then
   ${SUDO} cp -p src/stub/${TARGET}-stubify $PREFIX/bin/ || exit 1
   ${SUDO} cp -p src/stub/${TARGET}-stubedit $PREFIX/bin/ || exit 1
 
-  ${SUDO} rm ${PREFIX}/${TARGET}/etc/djgpp-*-installed
+  ${SUDO} rm -f ${PREFIX}/${TARGET}/etc/djgpp-*-installed
   ${SUDO} touch ${PREFIX}/${TARGET}/etc/djgpp-${DJGPP_VERSION}-installed
 fi
 
@@ -246,8 +246,8 @@ if [ ! -z ${GCC_VERSION} ]; then
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
   ${SUDO} ${MAKE} -j${MAKE_JOBS} -C mpfr install
 
-  rm ${PREFIX}/${TARGET}/etc/gcc-*-installed
-  touch ${PREFIX}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
+  ${SUDO} rm -f ${PREFIX}/${TARGET}/etc/gcc-*-installed
+  ${SUDO} touch ${PREFIX}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
 
   export CFLAGS="$TEMP_CFLAGS"
 fi

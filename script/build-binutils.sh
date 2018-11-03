@@ -21,5 +21,5 @@ ${MAKE} -j${MAKE_JOBS} || exit 1
 [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/binutils.log
 ${SUDO} ${MAKE} -j${MAKE_JOBS} install || exit 1
 
-${SUDO} rm ${PREFIX}/${TARGET}/etc/binutils-*-installed
+${SUDO} rm -f ${PREFIX}/${TARGET}/etc/binutils-*-installed
 ${SUDO} touch ${PREFIX}/${TARGET}/etc/binutils-${BINUTILS_VERSION}-installed
