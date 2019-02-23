@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-source newlib/newlib-3.0.0.20180720
+source newlib/newlib-3.1.0

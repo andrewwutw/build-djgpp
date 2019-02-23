@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+NEWLIB_VERSION=3.1.0
+NEWLIB_ARCHIVE="ftp://sourceware.org/pub/newlib/newlib-${NEWLIB_VERSION}.tar.gz"
