@@ -1,8 +1,8 @@
 ## Build gcc cross compiler on Windows, Mac OSX, Linux and FreeBSD.
 
-### Current package versions, as of 2019-02-23:
+### Current package versions, as of 2019-03-05:
 
-* gcc 8.2.0
+* gcc 8.3.0
 * binutils 2.31.1
 * gdb 8.2.1
 * djgpp 2.05
