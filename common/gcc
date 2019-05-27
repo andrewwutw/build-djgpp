@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-source common/gcc-8.3.0
+source common/gcc-9.1.0

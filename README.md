@@ -2,7 +2,7 @@
 
 ### Current package versions, as of 2019-05-26:
 
-* gcc 8.3.0
+* gcc 9.1.0
 * binutils 2.32
 * gdb 8.3
 * djgpp 2.05
