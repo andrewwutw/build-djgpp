@@ -3,7 +3,7 @@ cd ${BASE}/build
 if [ ! -z ${GDB_VERSION} ]; then
   if [ ! -e gdb-${GDB_VERSION}/gdb-unpacked ]; then
     echo "Unpacking gdb."
-    untar gdb-${GDB_VERSION} || exit 1
+    untar ${GDB_ARCHIVE} || exit 1
     touch gdb-${GDB_VERSION}/gdb-unpacked
   fi
   mkdir -p gdb-${GDB_VERSION}/build-${TARGET}

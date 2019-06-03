@@ -150,7 +150,7 @@ cd ${BASE}/build/
 
 if [ ! -z ${GCC_VERSION} ]; then
   # build gcc
-  untar djcross-gcc-${GCC_VERSION} || exit 1
+  untar ${DJCROSS_GCC_ARCHIVE} || exit 1
   cd djcross-gcc-${GCC_VERSION}/
 
   BUILDDIR=`pwd`
@@ -159,7 +159,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   if [ ! -e ${BUILDDIR}/tmpinst/autoconf-${AUTOCONF_VERSION}-built ]; then
     echo "Building autoconf"
     cd $BUILDDIR
-    untar autoconf-${AUTOCONF_VERSION} || exit 1
+    untar ${AUTOCONF_ARCHIVE} || exit 1
     cd autoconf-${AUTOCONF_VERSION}/
       ./configure --prefix=$BUILDDIR/tmpinst || exit 1
       ${MAKE} -j${MAKE_JOBS} all install || exit 1
@@ -172,7 +172,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   if [ ! -e ${BUILDDIR}/tmpinst/automake-${AUTOMAKE_VERSION}-built ]; then
     echo "Building automake"
     cd $BUILDDIR
-    untar automake-${AUTOMAKE_VERSION} || exit 1
+    untar ${AUTOMAKE_ARCHIVE} || exit 1
     cd automake-${AUTOMAKE_VERSION}/
     ./configure --prefix=$BUILDDIR/tmpinst || exit 1
       ${MAKE} all install || exit 1
@@ -193,7 +193,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     fi
 
     echo "Running unpack-gcc.sh"
-    sh unpack-gcc.sh --no-djgpp-source $(ls -t ../../download/gcc-${GCC_VERSION}.tar.* | head -n 1) || exit 1
+    sh unpack-gcc.sh --no-djgpp-source ../../download/$(basename ${GCC_ARCHIVE}) || exit 1
 
     # patch gnu/gcc-X.XX/gcc/doc/gcc.texi
     echo "Patch gcc/doc/gcc.texi"

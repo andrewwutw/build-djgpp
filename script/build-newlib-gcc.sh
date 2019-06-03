@@ -1,7 +1,7 @@
 cd ${BASE}/build/
 
 if [ ! -z ${NEWLIB_VERSION} ] && [ ! -e newlib-${NEWLIB_VERSION}/newlib-unpacked ]; then
-  untar newlib-${NEWLIB_VERSION}
+  untar ${NEWLIB_ARCHIVE}
   ${SUDO} mkdir -p ${PREFIX}/${TARGET}/sys-include/
   ${SUDO} cp -rv newlib-${NEWLIB_VERSION}/newlib/libc/include/* ${PREFIX}/${TARGET}/sys-include/ | exit 1
   touch newlib-${NEWLIB_VERSION}/newlib-unpacked
@@ -9,7 +9,7 @@ fi
 
 if [ ! -z ${GCC_VERSION} ]; then
   if [ ! -e gcc-${GCC_VERSION}/gcc-unpacked ]; then
-    untar gcc-${GCC_VERSION}
+    untar ${GCC_ARCHIVE}
 
     # download mpc/gmp/mpfr/isl libraries
     echo "Downloading gcc dependencies"

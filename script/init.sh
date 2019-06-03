@@ -39,7 +39,18 @@ else
   HOST_CXX=${CXX}
 fi
 
-untar() { tar -xavf $(ls -t ${BASE}/download/$1.tar.* | head -n 1); }
+untar()
+{
+  local file=$(basename $1)
+  local ext=${file##*.}
+  local param="-a"
+  case $ext in
+    xz)  param="-J" ;;
+    bz2) param="-j" ;;
+    gz)  param="-z" ;;
+  esac
+  tar -x ${param} -f ${BASE}/download/${file}
+}
 
 strip_whitespace() { eval "$1=\"`echo ${!1}`\""; }
 

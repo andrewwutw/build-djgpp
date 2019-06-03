@@ -78,7 +78,7 @@ cd ${BASE}/build/ || exit 1
 if [ ! -z ${BINUTILS_VERSION} ]; then
   echo "Building binutils"
   if [ ! -e binutils-${BINUTILS_VERSION}/binutils-unpacked ]; then
-    untar binutils-${BINUTILS_VERSION} || exit 1
+    untar ${BINUTILS_ARCHIVE} || exit 1
     touch binutils-unpacked
   fi
 
