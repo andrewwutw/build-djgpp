@@ -10,14 +10,18 @@ echo "Copy long name executables to short name."
   ${SUDO} cp -p bin/${TARGET}-g++ bin/${TARGET}-g++-${GCC_VERSION}
 )
 
-echo "export PATH=\"${PREFIX}/${TARGET}/bin/:${PREFIX}/bin/:\$PATH\"" >  ${BASE}/build/setenv-${TARGET}
-echo "export GCC_EXEC_PREFIX=\"${PREFIX}/lib/gcc/\""                  >> ${BASE}/build/setenv-${TARGET}
-echo "export MANPATH=\"${PREFIX}/share/man:\$MANPATH\""               >> ${BASE}/build/setenv-${TARGET}
-echo "export INFOPATH=\"${PREFIX}/share/info:\$INFOPATH\""            >> ${BASE}/build/setenv-${TARGET}
+cat << STOP > ${BASE}/build/setenv-${TARGET}
+export PATH="${PREFIX}/${TARGET}/bin/:${PREFIX}/bin/:\$PATH"
+export GCC_EXEC_PREFIX="${PREFIX}/lib/gcc/"
+export MANPATH="${PREFIX}/share/man:\$MANPATH"
+export INFOPATH="${PREFIX}/share/info:\$INFOPATH"
+STOP
 
-echo "@echo off"                                >  ${BASE}/build/setenv-${TARGET}.bat
-echo "PATH=%~dp0${TARGET}\\bin;%~dp0bin;%PATH%" >> ${BASE}/build/setenv-${TARGET}.bat
-echo "set GCC_EXEC_PREFIX=%~dp0lib\\gcc\\"      >> ${BASE}/build/setenv-${TARGET}.bat
+cat << STOP > ${BASE}/build/setenv-${TARGET}.bat
+@echo off
+PATH=%~dp0${TARGET}\\bin;%~dp0bin;%PATH%
+set GCC_EXEC_PREFIX=%~dp0lib\\gcc\\
+STOP
 
 if [ ! -z ${DJGPP_VERSION} ]; then
   echo "export DJDIR=\"${PREFIX}/${TARGET}\""   >> ${BASE}/build/setenv-${TARGET}
