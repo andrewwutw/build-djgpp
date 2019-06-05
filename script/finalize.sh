@@ -23,10 +23,12 @@ PATH=%~dp0${TARGET}\\bin;%~dp0bin;%PATH%
 set GCC_EXEC_PREFIX=%~dp0lib\\gcc\\
 STOP
 
-if [ ! -z ${DJGPP_VERSION} ]; then
+case $TARGET in
+*-msdosdjgpp)
   echo "export DJDIR=\"${PREFIX}/${TARGET}\""   >> ${BASE}/build/setenv-${TARGET}
   echo "set DJDIR=%~dp0${TARGET}"               >> ${BASE}/build/setenv-${TARGET}.bat
-fi
+  ;;
+esac
 
 ${SUDO} cp ${BASE}/build/setenv-${TARGET} ${PREFIX}/
 cp ${BASE}/build/setenv-${TARGET}.bat ${PREFIX}/ 2> /dev/null
