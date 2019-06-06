@@ -1,5 +1,9 @@
 ## Build gcc cross compiler on Windows, Mac OSX, Linux and FreeBSD.
 
+### Upgrade notes:
+
+* 2019-06-06: `master` is now the default branch again.
+
 ### Current package versions, as of 2019-05-26:
 
 * gcc 9.1.0
