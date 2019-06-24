@@ -14,7 +14,7 @@ cat << STOP > ${BASE}/build/setenv-${TARGET}
 export PATH="${PREFIX}/${TARGET}/bin/:${PREFIX}/bin/:\$PATH"
 export GCC_EXEC_PREFIX="${PREFIX}/lib/gcc/"
 export MANPATH="${PREFIX}/share/man:\$MANPATH"
-export INFOPATH="${PREFIX}/share/info:\$INFOPATH"
+export INFOPATH="${PREFIX}/${TARGET}/share/info:${PREFIX}/share/info:\$INFOPATH"
 STOP
 
 cat << STOP > ${BASE}/build/setenv-${TARGET}.bat

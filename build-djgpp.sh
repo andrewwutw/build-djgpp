@@ -121,9 +121,9 @@ if [ ! -z ${DJGPP_VERSION} ] || [ ! -z ${BUILD_DXEGEN} ]; then
   rm -rf ${BASE}/build/djgpp-${DJGPP_VERSION}
   mkdir -p ${BASE}/build/djgpp-${DJGPP_VERSION}
   cd ${BASE}/build/djgpp-${DJGPP_VERSION} || exit 1
-  unzip -o ../../download/djdev${DJGPP_VERSION}.zip || exit 1
-  unzip -o ../../download/djlsr${DJGPP_VERSION}.zip || exit 1
-  unzip -o ../../download/djcrx${DJGPP_VERSION}.zip || exit 1
+  unzip -u ../../download/djdev${DJGPP_VERSION}.zip || exit 1
+  unzip -u ../../download/djlsr${DJGPP_VERSION}.zip || exit 1
+  unzip -u ../../download/djcrx${DJGPP_VERSION}.zip || exit 1
   patch -p1 -u < ../../patch/patch-djlsr${DJGPP_VERSION}.txt || exit 1
   patch -p1 -u < ../../patch/patch-djcrx${DJGPP_VERSION}.txt || exit 1
 
@@ -141,6 +141,9 @@ if [ ! -z ${DJGPP_VERSION} ] || [ ! -z ${BUILD_DXEGEN} ]; then
   ${SUDO} mkdir -p $PREFIX/bin || exit 1
   ${SUDO} cp -p src/stub/${TARGET}-stubify $PREFIX/bin/ || exit 1
   ${SUDO} cp -p src/stub/${TARGET}-stubedit $PREFIX/bin/ || exit 1
+
+  ${SUDO} mkdir -p ${PREFIX}/${TARGET}/share/info
+  ${SUDO} cp -pf info/* ${PREFIX}/${TARGET}/share/info/
 
   ${SUDO} rm -f ${PREFIX}/${TARGET}/etc/djgpp-*-installed
   ${SUDO} touch ${PREFIX}/${TARGET}/etc/djgpp-${DJGPP_VERSION}-installed
