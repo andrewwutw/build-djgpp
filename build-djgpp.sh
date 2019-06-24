@@ -7,8 +7,7 @@ case $TARGET in
 *) TARGET="i586-pc-msdosdjgpp" ;;
 esac
 
-#DJGPP_DOWNLOAD_BASE="ftp://ftp.delorie.com/pub"
-export DJGPP_DOWNLOAD_BASE="http://www.delorie.com/pub"
+export DJGPP_DOWNLOAD_BASE="http://www.mirrorservice.org/sites/ftp.delorie.com/pub"
 
 prepend BINUTILS_CONFIGURE_OPTIONS "--disable-werror
                                     --disable-nls"
