@@ -120,9 +120,9 @@ if [ ! -z ${DJGPP_VERSION} ] || [ ! -z ${BUILD_DXEGEN} ]; then
   rm -rf ${BASE}/build/djgpp-${DJGPP_VERSION}
   mkdir -p ${BASE}/build/djgpp-${DJGPP_VERSION}
   cd ${BASE}/build/djgpp-${DJGPP_VERSION} || exit 1
-  unzip -u ../../download/djdev${DJGPP_VERSION}.zip || exit 1
-  unzip -u ../../download/djlsr${DJGPP_VERSION}.zip || exit 1
-  unzip -u ../../download/djcrx${DJGPP_VERSION}.zip || exit 1
+  unzip -uo ../../download/djdev${DJGPP_VERSION}.zip || exit 1
+  unzip -uo ../../download/djlsr${DJGPP_VERSION}.zip || exit 1
+  unzip -uo ../../download/djcrx${DJGPP_VERSION}.zip || exit 1
   patch -p1 -u < ../../patch/patch-djlsr${DJGPP_VERSION}.txt || exit 1
   patch -p1 -u < ../../patch/patch-djcrx${DJGPP_VERSION}.txt || exit 1
 
