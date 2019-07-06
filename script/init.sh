@@ -10,7 +10,11 @@ PREFIX=${PREFIX-/usr/local/cross}
 ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
 
 # number of parallel build threads
-MAKE_JOBS=${MAKE_JOBS-`nproc --all`}
+if nproc > /dev/null 2>&1 ; then
+  MAKE_JOBS=${MAKE_JOBS-`nproc --all`}
+else
+  MAKE_JOBS=${MAKE_JOBS-`sysctl -n hw.physicalcpu`}
+fi
 
 SUDO=
 
