@@ -11,8 +11,7 @@ prepend GCC_CONFIGURE_OPTIONS "--disable-nls
                                --enable-fat"
 
 prepend GDB_CONFIGURE_OPTIONS "--disable-werror
-                               --disable-nls
-                               --with-system-readline"
+                               --disable-nls"
 
 if [ -z ${TARGET} ]; then
   echo "Please specify a target with: export TARGET=..."

@@ -19,8 +19,7 @@ prepend GCC_CONFIGURE_OPTIONS "--disable-nls
                                --enable-libstdcxx-filesystem-ts"
 
 prepend GDB_CONFIGURE_OPTIONS "--disable-werror
-                               --disable-nls
-                               --with-system-readline"
+                               --disable-nls"
 
 if [ -z $1 ]; then
   echo "Usage: $0 [packages...]"
