@@ -4,7 +4,11 @@ echo "You are about to build and install:"
 [ -z ${BINUTILS_VERSION} ] || echo "    - binutils ${BINUTILS_VERSION}"
 [ -z ${GCC_VERSION} ]      || echo "    - gcc ${GCC_VERSION}"
 [ -z ${GDB_VERSION} ]      || echo "    - gdb ${GDB_VERSION}"
-[ -z ${BUILD_DXEGEN} ]     || echo "    - DXE tools ${DJGPP_VERSION}"
+[ -z ${AVRLIBC_VERSION} ]  || echo "    - avr-libc ${AVRLIBC_VERSION}"
+[ -z ${AVRDUDE_VERSION} ]  || echo "    - AVRDUDE ${AVRDUDE_VERSION}"
+[ -z ${AVARICE_VERSION} ]  || echo "    - AVaRICE ${AVARICE_VERSION}"
+[ -z ${SIMULAVR_VERSION} ] || echo "    - SimulAVR ${SIMULAVR_VERSION}"
+
 echo ""
 echo "With the following options:"
 [ ! -z ${IGNORE_DEPENDENCIES} ] && echo "    IGNORE_DEPENDENCIES=${IGNORE_DEPENDENCIES}"
@@ -37,6 +41,9 @@ if [ ! -z ${GDB_VERSION} ]; then
 fi
 if [ ! -z ${NEWLIB_VERSION} ]; then
   echo "    NEWLIB_CONFIGURE_OPTIONS=`echo ${NEWLIB_CONFIGURE_OPTIONS}`"
+fi
+if [ ! -z ${AVRLIBC_VERSION} ]; then
+  echo "    AVRLIBC_CONFIGURE_OPTIONS=`echo ${AVRLIBC_CONFIGURE_OPTIONS}`"
 fi
 echo ""
 
@@ -95,7 +102,8 @@ rm test-zlib.exe 2>/dev/null
 # download source files
 ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $DJLSR_ARCHIVE $DJDEV_ARCHIVE
               $SED_ARCHIVE $DJCROSS_GCC_ARCHIVE $OLD_DJCROSS_GCC_ARCHIVE $GCC_ARCHIVE
-              $AUTOCONF_ARCHIVE $AUTOMAKE_ARCHIVE $GDB_ARCHIVE $NEWLIB_ARCHIVE"
+              $AUTOCONF_ARCHIVE $AUTOMAKE_ARCHIVE $GDB_ARCHIVE $NEWLIB_ARCHIVE
+              $AVRLIBC_ARCHIVE $AVRLIBC_DOC_ARCHIVE $AVRDUDE_ARCHIVE $AVARICE_ARCHIVE"
 
 echo "Download source files..."
 mkdir -p download || exit 1

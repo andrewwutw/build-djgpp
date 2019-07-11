@@ -13,7 +13,7 @@ echo "Copy long name executables to short name."
 cat << STOP > ${BASE}/build/setenv-${TARGET}
 export PATH="${PREFIX}/${TARGET}/bin/:${PREFIX}/bin/:\$PATH"
 export GCC_EXEC_PREFIX="${PREFIX}/lib/gcc/"
-export MANPATH="${PREFIX}/share/man:\$MANPATH"
+export MANPATH="${PREFIX}/${TARGET}/share/man:${PREFIX}/share/man:\$MANPATH"
 export INFOPATH="${PREFIX}/${TARGET}/share/info:${PREFIX}/share/info:\$INFOPATH"
 STOP
 

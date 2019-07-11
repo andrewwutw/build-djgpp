@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-source newlib/newlib
-source newlib/binutils
-source common/gcc
-source common/gdb

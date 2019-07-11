@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+source avr/avr-libc-2.0.0

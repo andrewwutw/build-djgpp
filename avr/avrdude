@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+source avr/avrdude-6.3

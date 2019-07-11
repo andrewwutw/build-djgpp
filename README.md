@@ -12,6 +12,13 @@
 * djgpp 2.05
 * newlib 3.1.0
 
+### Tested targets:
+
+* *-pc-msdosdjgpp
+* ia16
+* arm-eabi
+* avr
+
 ### Requirements
 
 Before running this script, you need to install these programs first:
@@ -114,7 +121,8 @@ There are 2 methods to run the compiler (`$PREFIX` and `$TARGET` here are the va
 * Use compiler full name:
 
 ```
-$PREFIX/bin/$TARGET-g++ hello.cpp
+export PATH=$PREFIX/bin/:$PATH
+$TARGET-g++ hello.cpp
 ```
 
 * Or, use compiler short name, you have to change environment variables.
@@ -146,6 +154,7 @@ $PREFIX/setenv-$TARGET.bat
 ```
 
 ### Supported DJGPP Utilities
+
 * dxe3gen
 * dxe3res
 * dxegen
@@ -153,15 +162,11 @@ $PREFIX/setenv-$TARGET.bat
 * stubedit
 * stubify
 
-### Successful build
+### Supported AVR utilities
 
-* OSX 10.12.5
-* Debian 7 (32bit)
-* Ubuntu 12 (64bit)
-* FreeBSD-10.2 (64bit)
-* Cygwin (32bit Windows XP)
-* MinGW (32bit Windows XP)
-* MinGW64 (64bit Windows 7)
+* avrdude
+* avarice
+* simulavr
 
 ### Thanks
 

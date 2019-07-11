@@ -25,16 +25,19 @@ if [ -z $1 ]; then
   echo "Usage: $0 [packages...]"
   echo "Supported packages:"
   ls ia16/
+  ls binutils/
   exit 1
 fi
 
 while [ ! -z $1 ]; do
-  if [ ! -x ia16/$1 ]; then
+  if [ -e ia16/$1 ]; then
+    source ia16/$1
+  elif [ -e binutils/$1 ]; then
+    source binutils/$1
+  else
     echo "Unsupported package: $1"
     exit 1
   fi
-
-  [ -e ia16/$1 ] && source ia16/$1
   shift
 done
 
@@ -55,7 +58,7 @@ if [ -z ${IGNORE_DEPENDENCIES} ]; then
       binutils)
         [ -z "`ls ${PREFIX}/${TARGET}/etc/binutils-*-installed 2> /dev/null`" ] \
           && [ -z ${BINUTILS_VERSION} ] \
-          && source ia16/binutils
+          && source binutils/binutils
         ;;
       gcc)
         [ -z ${GCC_VERSION} ] \
@@ -95,7 +98,7 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
   echo "Building binutils"
   if [ ! -e binutils-${BINUTILS_VERSION}/binutils-unpacked ]; then
     untar ${BINUTILS_ARCHIVE} || exit 1
-    touch binutils-unpacked
+    touch binutils-${BINUTILS_VERSION}/binutils-unpacked
   fi
 
   cd binutils-${BINUTILS_VERSION} || exit 1

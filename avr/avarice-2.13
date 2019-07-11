@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+AVARICE_VERSION=2.13
+AVARICE_ARCHIVE=https://downloads.sourceforge.net/project/avarice/avarice/avarice-2.13/avarice-2.13.tar.bz2

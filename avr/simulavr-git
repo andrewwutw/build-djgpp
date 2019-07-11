@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+SIMULAVR_VERSION=git

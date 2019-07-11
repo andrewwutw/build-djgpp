@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+source binutils/binutils-2.32

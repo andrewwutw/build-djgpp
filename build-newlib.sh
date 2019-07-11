@@ -27,12 +27,16 @@ if [ -z $1 ]; then
 fi
 
 while [ ! -z $1 ]; do
-  if [ ! -x newlib/$1 ] && [ ! -x common/$1 ]; then
+  if [ -e newlib/$1 ]; then
+    source newlib/$1
+  elif [ -e binutils/$1 ]; then
+    source binutils/$1
+  elif [ -e common/$1 ]; then
+    source common/$1
+  else
     echo "Unsupported package: $1"
     exit 1
   fi
-
-  [ -e newlib/$1 ] && source newlib/$1 || source common/$1
   shift
 done
 
@@ -53,7 +57,7 @@ if [ -z ${IGNORE_DEPENDENCIES} ]; then
       binutils)
         [ -z "`ls ${PREFIX}/${TARGET}/etc/binutils-*-installed 2> /dev/null`" ] \
           && [ -z ${BINUTILS_VERSION} ] \
-          && source newlib/binutils
+          && source binutils/binutils
         ;;
       gcc)
         [ -z ${GCC_VERSION} ] \
@@ -75,10 +79,10 @@ source ${BASE}/script/build-tools.sh
 cd ${BASE}/build/ || exit 1
 
 if [ ! -z ${BINUTILS_VERSION} ]; then
-  echo "Building binutils"
   if [ ! -e binutils-${BINUTILS_VERSION}/binutils-unpacked ]; then
+    echo "Unpacking binutils..."
     untar ${BINUTILS_ARCHIVE} || exit 1
-    touch binutils-unpacked
+    touch binutils-${BINUTILS_VERSION}/binutils-unpacked
   fi
 
   cd binutils-${BINUTILS_VERSION} || exit 1

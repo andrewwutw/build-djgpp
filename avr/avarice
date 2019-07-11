@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+source avr/avarice-2.13
