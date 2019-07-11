@@ -2,8 +2,8 @@ cd ${BASE}/build/
 
 if [ ! -z ${NEWLIB_VERSION} ] && [ ! -e newlib-${NEWLIB_VERSION}/newlib-unpacked ]; then
   untar ${NEWLIB_ARCHIVE}
-  ${SUDO} mkdir -p ${PREFIX}/${TARGET}/sys-include/
-  ${SUDO} cp -rv newlib-${NEWLIB_VERSION}/newlib/libc/include/* ${PREFIX}/${TARGET}/sys-include/ | exit 1
+  #${SUDO} mkdir -p ${PREFIX}/${TARGET}/sys-include/
+  #${SUDO} cp -rv newlib-${NEWLIB_VERSION}/newlib/libc/include/* ${PREFIX}/${TARGET}/sys-include/ | exit 1
   touch newlib-${NEWLIB_VERSION}/newlib-unpacked
 fi
 
@@ -31,7 +31,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   
   GCC_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX} ${HOST_FLAG} ${BUILD_FLAG}
                            --enable-languages=${ENABLE_LANGUAGES}
-                           --with-newlib"
+                           --with-newlib --with-headers"
   strip_whitespace GCC_CONFIGURE_OPTIONS
 
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${GCC_CONFIGURE_OPTIONS}" ]; then
