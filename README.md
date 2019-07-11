@@ -26,6 +26,10 @@ Before running this script, you need to install these programs first:
 * g++
 * gcc
 * unzip
+* tar
+* bzip2
+* gzip
+* xz
 * bison
 * flex
 * make (or gmake for FreeBSD)
@@ -41,13 +45,13 @@ On Debian/Ubuntu, you can install these programs by :
 
 ```
 sudo apt-get update
-sudo apt-get install bison flex curl gcc g++ make texinfo zlib1g-dev g++ unzip
+sudo apt-get install bison flex curl gcc g++ make texinfo zlib1g-dev tar bzip2 gzip xz-utils unzip
 ```
 
 Fedora :
 
 ```
-sudo yum install gcc-c++ bison flex texinfo patch zlib-devel
+sudo yum install gcc-c++ bison flex texinfo patch zlib-devel tar bzip2 gzip xz unzip
 ```
 
 MinGW :
@@ -57,10 +61,10 @@ mingw-get update
 mingw-get install msys-unzip libz-dev msys-wget msys-bison msys-flex msys-patch
 ```
 
-MinGW64 :
+MinGW64 (msys2) :
 
 ```
-pacman -Syuu base-devel mingw-w64-x86_64-toolchain mingw-w64-x86_64-curl mingw-w64-x86_64-zlib unzip
+pacman -Syuu base-devel mingw-w64-x86_64-toolchain mingw-w64-x86_64-curl mingw-w64-x86_64-zlib compression
 ```
 
 ### Configuration
