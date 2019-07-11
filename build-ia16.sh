@@ -58,7 +58,7 @@ if [ -z ${IGNORE_DEPENDENCIES} ]; then
       binutils)
         [ -z "`ls ${PREFIX}/${TARGET}/etc/binutils-*-installed 2> /dev/null`" ] \
           && [ -z ${BINUTILS_VERSION} ] \
-          && source binutils/binutils
+          && source ia16/binutils
         ;;
       gcc)
         [ -z ${GCC_VERSION} ] \
@@ -91,12 +91,15 @@ git reset --hard HEAD
 git pull || exit 1
 cd ..
 
-#[ -d binutils-ia16 ] || git clone https://github.com/crtc-demos/binutils-ia16.git --depth 1 --branch master
-#cd binutils-ia16 && git pull && cd .. || exit 1
-
 if [ ! -z ${BINUTILS_VERSION} ]; then
-  echo "Building binutils"
-  if [ ! -e binutils-${BINUTILS_VERSION}/binutils-unpacked ]; then
+  if [ "$BINUTILS_VERSION" = "ia16" ]; then
+    [ -d binutils-ia16 ] || git clone https://github.com/tkchia/binutils-ia16.git --depth 1 --branch master
+    cd binutils-ia16
+    git reset --hard HEAD
+    git pull || exit 1
+    cd ..
+  elif [ ! -e binutils-${BINUTILS_VERSION}/binutils-unpacked ]; then
+    echo "Unpacking binutils.."
     untar ${BINUTILS_ARCHIVE} || exit 1
     touch binutils-${BINUTILS_VERSION}/binutils-unpacked
   fi

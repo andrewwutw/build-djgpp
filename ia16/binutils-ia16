@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+BINUTILS_VERSION=ia16
