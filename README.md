@@ -4,13 +4,17 @@
 
 * 2019-06-06: `master` is now the default branch again.
 
-### Current package versions, as of 2019-05-26:
+### Current package versions, as of 2019-07-11:
 
 * gcc 9.1.0
 * binutils 2.32
 * gdb 8.3
 * djgpp 2.05
 * newlib 3.1.0
+* avr-libc 2.0.0
+* avrdude 6.3
+* avarice 2.13
+* simulavr git
 
 ### Tested targets:
 
