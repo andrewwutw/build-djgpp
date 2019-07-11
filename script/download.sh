@@ -61,7 +61,7 @@ echo "If you wish to change anything, press CTRL-C now. Otherwise, press any oth
 read -s -n 1
 
 # check required programs
-REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch"
+REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch tar xz bunzip2 gunzip"
 
 # MinGW doesn't have curl, so we use wget.
 if ! which curl > /dev/null; then
