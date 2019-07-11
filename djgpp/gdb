@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+source common/gdb-8.2.1
+

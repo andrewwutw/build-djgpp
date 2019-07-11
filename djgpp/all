@@ -2,4 +2,4 @@
 
 source djgpp/default
 source djgpp/dxegen
-source common/gdb
+source djgpp/gdb
