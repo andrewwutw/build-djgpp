@@ -82,12 +82,7 @@ source ${BASE}/script/build-tools.sh
 cd ${BASE}/build/ || exit 1
 
 if [ ! -z ${SIMULAVR_VERSION} ]; then
-  echo "Downloading simulavr..."
-  [ -d simulavr ] || git clone https://git.savannah.nongnu.org/git/simulavr.git --depth 1 --branch master
-  cd simulavr
-  git reset --hard HEAD
-  git pull || exit 1
-  cd ..
+  download_git https://git.savannah.nongnu.org/git/simulavr.git master
 fi
 
 if [ ! -z ${BINUTILS_VERSION} ]; then

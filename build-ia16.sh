@@ -79,28 +79,13 @@ source ${BASE}/script/build-tools.sh
 
 cd ${BASE}/build/ || exit 1
 
-echo "Downloading gcc..."
-[ -d gcc-ia16 ] || git clone https://github.com/tkchia/gcc-ia16.git --depth 1 --branch gcc-6_3_0-ia16-tkchia
-cd gcc-ia16
-git reset --hard HEAD
-git pull || exit 1
-cd ..
+download_git https://github.com/tkchia/gcc-ia16.git gcc-6_3_0-ia16-tkchia
 
-echo "Downloading newlib..."
-[ -d newlib-ia16 ] || git clone https://github.com/tkchia/newlib-ia16.git --depth 1 --branch newlib-2_4_0-ia16-tkchia
-cd newlib-ia16
-git reset --hard HEAD
-git pull || exit 1
-cd ..
+download_git https://github.com/tkchia/newlib-ia16.git newlib-2_4_0-ia16-tkchia
 
 if [ ! -z ${BINUTILS_VERSION} ]; then
   if [ "$BINUTILS_VERSION" = "ia16" ]; then
-    echo "Downloading binutils..."
-    [ -d binutils-ia16 ] || git clone https://github.com/tkchia/binutils-ia16.git --depth 1 --branch binutils-ia16-tkchia
-    cd binutils-ia16
-    git reset --hard HEAD
-    git pull || exit 1
-    cd ..
+    download_git https://github.com/tkchia/binutils-ia16.git binutils-ia16-tkchia
   elif [ ! -e binutils-${BINUTILS_VERSION}/binutils-unpacked ]; then
     echo "Unpacking binutils..."
     untar ${BINUTILS_ARCHIVE} || exit 1
