@@ -91,10 +91,10 @@ source ${BASE}/script/build-tools.sh
 cd ${BASE}/build/ || exit 1
 
 if [ ! -z ${BINUTILS_VERSION} ]; then
-  echo "Building binutils"
   mkdir -p bnu${BINUTILS_VERSION}s
   cd bnu${BINUTILS_VERSION}s
   if [ ! -e binutils-unpacked ]; then
+    echo "Unpacking binutils..."
     unzip -o ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
 
     # patch for binutils 2.27
@@ -116,7 +116,7 @@ fi
 cd ${BASE}/build/ || exit 1
 
 if [ ! -z ${DJGPP_VERSION} ] || [ ! -z ${BUILD_DXEGEN} ]; then
-  echo "Prepare djgpp"
+  echo "Unpacking djgpp..."
   rm -rf ${BASE}/build/djgpp-${DJGPP_VERSION}
   mkdir -p ${BASE}/build/djgpp-${DJGPP_VERSION}
   cd ${BASE}/build/djgpp-${DJGPP_VERSION} || exit 1
@@ -134,6 +134,7 @@ if [ ! -z ${DJGPP_VERSION} ] || [ ! -z ${BUILD_DXEGEN} ]; then
 
   cd ../..
 
+  echo "Installing djgpp libc"
   ${SUDO} mkdir -p $PREFIX/${TARGET}/sys-include || exit 1
   ${SUDO} cp -rp include/* $PREFIX/${TARGET}/sys-include/ || exit 1
   ${SUDO} cp -rp lib $PREFIX/${TARGET}/ || exit 1
@@ -245,6 +246,7 @@ if [ ! -z ${GCC_VERSION} ]; then
 
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK_GCC ] && ${MAKE} -j${MAKE_JOBS} -s check-gcc | tee ${BASE}/tests/gcc.log
+  echo "Installing gcc"
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
   ${SUDO} ${MAKE} -j${MAKE_JOBS} -C mpfr install
 
@@ -264,16 +266,16 @@ if [ ! -z ${DJGPP_VERSION} ]; then
     cd src
     PATH=$PREFIX/bin/:$PATH ${MAKE} || exit 1
     cd dxe
+    echo "Installing DXE tools"
     ${SUDO} cp -p dxegen  $PREFIX/bin/${TARGET}-dxegen || exit 1
     ${SUDO} cp -p dxe3gen $PREFIX/bin/${TARGET}-dxe3gen || exit 1
     ${SUDO} cp -p dxe3res $PREFIX/bin/${TARGET}-dxe3res || exit 1
     cd ../..
     touch ${PREFIX}/${TARGET}/etc/dxegen-installed
-  else
-    echo "Building DXE tools requires gcc, skip."
   fi
   cd src/stub
   ${HOST_CC} -O2 ${CFLAGS} -o exe2coff exe2coff.c || exit 1
+  echo "Installing exe2coff"
   ${SUDO} cp -p exe2coff $PREFIX/bin/${TARGET}-exe2coff || exit 1
 
   # djlsr done

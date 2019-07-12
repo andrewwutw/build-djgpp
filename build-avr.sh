@@ -82,6 +82,7 @@ source ${BASE}/script/build-tools.sh
 cd ${BASE}/build/ || exit 1
 
 if [ ! -z ${SIMULAVR_VERSION} ]; then
+  echo "Downloading simulavr..."
   [ -d simulavr ] || git clone https://git.savannah.nongnu.org/git/simulavr.git --depth 1 --branch master
   cd simulavr
   git reset --hard HEAD
@@ -90,8 +91,8 @@ if [ ! -z ${SIMULAVR_VERSION} ]; then
 fi
 
 if [ ! -z ${BINUTILS_VERSION} ]; then
-  echo "Building binutils"
   if [ ! -e binutils-${BINUTILS_VERSION}/binutils-unpacked ]; then
+    echo "Unpacking binutils..."
     untar ${BINUTILS_ARCHIVE} || exit 1
     touch binutils-${BINUTILS_VERSION}/binutils-unpacked
   fi
@@ -103,7 +104,7 @@ fi
 source ${BASE}/script/build-avr-gcc.sh
 
 if [ ! -z ${SIMULAVR_VERSION} ]; then
-  echo "Building SimulAVR"
+  echo "Building simulavr"
   cd simulavr/ || exit 1
   ./bootstrap || exit 1
   #mkdir -p build-avr/
@@ -112,6 +113,7 @@ if [ ! -z ${SIMULAVR_VERSION} ]; then
   ./configure --prefix=${PREFIX} || exit 1
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/simulavr.log
+  echo "Installing simulavr"
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install || exit 1
   cd ${BASE}/build/ || exit 1
 fi
@@ -126,6 +128,7 @@ if [ ! -z ${AVARICE_VERSION} ]; then
   ../configure --prefix=${PREFIX} || exit 1
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/avarice.log
+  echo "Installing AVaRICE"
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install || exit 1
   cd ${BASE}/build/ || exit 1
 fi
@@ -140,6 +143,7 @@ if [ ! -z ${AVRDUDE_VERSION} ]; then
   ../configure --prefix=${PREFIX} || exit 1
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/avrdude.log
+  echo "Installing AVRDUDE"
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install || exit 1
   cd ${BASE}/build/ || exit 1
 fi

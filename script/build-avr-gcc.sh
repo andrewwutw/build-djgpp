@@ -12,6 +12,7 @@ if [ ! -z ${AVRLIBC_VERSION} ]; then
   cd avr-libc-${AVRLIBC_VERSION}/
   #${SUDO} mkdir -p ${PREFIX}/${TARGET}/sys-include/
   #${SUDO} cp -rv include/* ${PREFIX}/${TARGET}/sys-include/ | exit 1
+  echo "Installing avr-libc documentation"
   ${SUDO} mkdir -p ${PREFIX}/${TARGET}/share/man/
   ${SUDO} cp -rv man/* ${PREFIX}/${TARGET}/share/man/ | exit 1
   cd ..
@@ -30,7 +31,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     cd -
   fi
 
-  echo "Building gcc"
+  echo "Building gcc (stage 1)"
 
   mkdir -p gcc-${GCC_VERSION}/build-${TARGET}
   cd gcc-${GCC_VERSION}/build-${TARGET} || exit 1
@@ -53,6 +54,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   fi
 
   ${MAKE} -j${MAKE_JOBS} all-gcc || exit 1
+  echo "Installing gcc (stage 1)"
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install-gcc || exit 1
 
   export CFLAGS="$TEMP_CFLAGS"
@@ -61,6 +63,7 @@ fi
 cd ${BASE}/build/
 
 if [ ! -z ${AVRLIBC_VERSION} ]; then
+  echo "Building avr-libc"
   mkdir -p avr-libc-${AVRLIBC_VERSION}/build-${TARGET}
   cd avr-libc-${AVRLIBC_VERSION}/build-${TARGET} || exit 1
   
@@ -78,6 +81,7 @@ if [ ! -z ${AVRLIBC_VERSION} ]; then
   
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/avr-libc.log
+  echo "Installing avr-libc"
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install || exit 1
 fi
 
@@ -86,8 +90,10 @@ cd ${BASE}/build/
 if [ ! -z ${GCC_VERSION} ]; then
   cd gcc-${GCC_VERSION}/build-${TARGET} || exit 1
   
+  echo "Building gcc (stage 2)"
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK_GCC ] && ${MAKE} -j${MAKE_JOBS} -s check-gcc | tee ${BASE}/tests/gcc.log
+  echo "Installing gcc"
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || \
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
   ${SUDO} ${MAKE} -j${MAKE_JOBS} -C mpfr install

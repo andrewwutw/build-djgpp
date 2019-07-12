@@ -30,6 +30,7 @@ case $TARGET in
   ;;
 esac
 
+echo "Installing setenv-${TARGET}"
 ${SUDO} cp ${BASE}/build/setenv-${TARGET} ${PREFIX}/
 cp ${BASE}/build/setenv-${TARGET}.bat ${PREFIX}/ 2> /dev/null
 
