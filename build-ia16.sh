@@ -93,13 +93,14 @@ cd ..
 
 if [ ! -z ${BINUTILS_VERSION} ]; then
   if [ "$BINUTILS_VERSION" = "ia16" ]; then
-    [ -d binutils-ia16 ] || git clone https://github.com/tkchia/binutils-ia16.git --depth 1 --branch master
+    echo "Downloading binutils..."
+    [ -d binutils-ia16 ] || git clone https://github.com/tkchia/binutils-ia16.git --depth 1 --branch binutils-ia16-tkchia
     cd binutils-ia16
     git reset --hard HEAD
     git pull || exit 1
     cd ..
   elif [ ! -e binutils-${BINUTILS_VERSION}/binutils-unpacked ]; then
-    echo "Unpacking binutils.."
+    echo "Unpacking binutils..."
     untar ${BINUTILS_ARCHIVE} || exit 1
     touch binutils-${BINUTILS_VERSION}/binutils-unpacked
   fi
