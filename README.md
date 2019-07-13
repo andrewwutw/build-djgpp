@@ -78,7 +78,7 @@ pacman -Syuu base-devel mingw-w64-x86_64-toolchain mingw-w64-x86_64-curl mingw-w
 Several environment variables control the build process. Usually you only need to specify `TARGET`. Here is the full list:
 ```
 # Primary build options:
-TARGET=                     # Target duplet or triplet.
+TARGET=                     # Target name.
 PREFIX=                     # Install location.
 ENABLE_LANGUAGES=           # Comma-separated list of languages to build compilers for.
 
@@ -88,6 +88,8 @@ GCC_CONFIGURE_OPTIONS=      # Extra options to pass to gcc's ./configure
 BINUTILS_CONFIGURE_OPTIONS= # Same, for binutils
 GDB_CONFIGURE_OPTIONS=      # Same, for gdb
 NEWLIB_CONFIGURE_OPTIONS=   # Same, for newlib
+AVRLIBC_CONFIGURE_OPTIONS=  # Same, for avr-libc
+DJGPP_CFLAGS=               # CFLAGS for building djgpp's libc.
 
 # Misc.
 HOST=                       # The platform you are building for, when building a cross-cross compiler
