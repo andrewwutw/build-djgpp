@@ -93,39 +93,7 @@ diff -ur djlsr205-orig/src/dxe/dxe3gen.c djlsr205/src/dxe/dxe3gen.c
    {
      if (VALID_RELOC(relocs[i]))
        fwrite(&relocs[i].r_vaddr, 1, sizeof(relocs[0].r_vaddr), outf);
-diff -ur djlsr205-orig/src/makefile djlsr205/src/makefile
---- djlsr205-orig/src/makefile	2017-04-29 14:32:47.000000000 +0800
-+++ djlsr205/src/makefile	2017-04-29 14:32:57.000000000 +0800
-@@ -40,17 +40,18 @@
- 	$(MAKE) -C stub native
- 	$(MAKE) -C utils native
- 	$(MAKE) -C dxe native
--	$(MAKE) -C mkdoc
--	$(MAKE) -C libc
--	$(MAKE) -C debug
--	$(MAKE) -C djasm
--	$(MAKE) -C stub
--	$(MAKE) -C dxe
--	$(MAKE) -C libemu
--	$(MAKE) -C libm
--	$(MAKE) -C utils
--	$(MAKE) -C docs
--	-$(MAKE) -C ../zoneinfo/src
-+	$(MAKE) -C dxe -f makefile.dxe
-+	#$(MAKE) -C mkdoc
-+	#$(MAKE) -C libc
-+	#$(MAKE) -C debug
-+	#$(MAKE) -C djasm
-+	#$(MAKE) -C stub
-+	#$(MAKE) -C dxe
-+	#$(MAKE) -C libemu
-+	#$(MAKE) -C libm
-+	#$(MAKE) -C utils
-+	#$(MAKE) -C docs
-+	#-$(MAKE) -C ../zoneinfo/src
- 	$(MAKE) -f makempty
- 
- .PHONY : clean
+
 diff -ur djlsr205-orig/src/misc.c djlsr205/src/misc.c
 --- djlsr205-orig/src/misc.c	2017-04-29 14:32:47.000000000 +0800
 +++ djlsr205/src/misc.c	2017-04-29 14:32:57.000000000 +0800
@@ -158,3 +126,136 @@ diff -ur djlsr205-orig/src/stub/exe2coff.c djlsr205/src/stub/exe2coff.c
  
  static void
  exe2aout(char *fname)
+
+--- a/src/makefile.def
++++ b/src/makefile.def
+@@ -47,11 +47,12 @@
+
+ # For building distributed (djgpp) libraries and programs
+
+-CROSS_GCC = i586-pc-msdosdjgpp-gcc -pipe
+-CROSS_AR = i586-pc-msdosdjgpp-ar
+-CROSS_AS = i586-pc-msdosdjgpp-as
+-CROSS_LD = i586-pc-msdosdjgpp-ld
+-CROSS_STRIP = i586-pc-msdosdjgpp-strip
++CROSS_PREFIX = i586-pc-msdosdjgpp-
++CROSS_GCC = $(CROSS_PREFIX)gcc -pipe
++CROSS_AR = $(CROSS_PREFIX)ar
++CROSS_AS = $(CROSS_PREFIX)as
++CROSS_LD = $(CROSS_PREFIX)ld
++CROSS_STRIP = $(CROSS_PREFIX)strip
+ CROSS_BISON = bison
+
+ # For building programs that *run* during the build (hostbin/*);
+diff --git a/src/debug/common/dbgcom.c b/src/debug/common/dbgcom.c
+index 77ca122b..1480f27c 100644
+--- a/src/debug/common/dbgcom.c
++++ b/src/debug/common/dbgcom.c
+@@ -1338,13 +1338,13 @@ int invalid_sel_addr(short sel, unsigned a, unsigned len, char for_write)
+     ("										\n\
+       movw  %2,%%ax								\n\
+       verr  %%ax								\n\
+-      jnz   .Ldoes_not_has_read_right						\n\
++      jnz   .Ldoes_not_has_read_right%=					\n\
+       movb  $1,%0								\n\
+-.Ldoes_not_has_read_right:							\n\
++.Ldoes_not_has_read_right%=:							\n\
+       verw  %%ax								\n\
+-      jnz   .Ldoes_not_has_write_right						\n\
++      jnz   .Ldoes_not_has_write_right%=					\n\
+       movb  $1,%1								\n\
+-.Ldoes_not_has_write_right: "
++.Ldoes_not_has_write_right%=: "
+      : "=qm" (read_allowed), "=qm" (write_allowed)
+      : "g" (sel)
+      );
+diff --git a/src/dxe/makefile b/src/dxe/makefile
+index cf715867..b856b9ed 100644
+--- a/src/dxe/makefile
++++ b/src/dxe/makefile
+@@ -13,7 +13,8 @@ all :: native \
+ 	$(BIN)/dxe3res.exe \
+ 	$E
+ 
+-native :: $(HOSTBIN)/dxegen.exe
++native :: $(HOSTBIN)/dxegen.exe \
++	$(HOSTBIN)/dxe3res.exe
+ 	$(NOP)
+ 
+ .o.h:
+@@ -36,5 +37,8 @@ CROSS_CC = $(word 1,$(CROSS_GCC))
+ $(HOSTBIN)/dxegen.exe : dxe3gen.c init1.h init2.h init3.h init4.h init5.h fini1.h fini2.h fini3.h fini4.h fini5.h
+ 	$(GCC) -DDXE_LD=\"$(CROSS_LD)\" -DDXE_CC=\"$(CROSS_CC)\" -DDXE_AR=\"$(CROSS_AR)\" -DDXE_AS=\"$(CROSS_AS)\" dxe3gen.c -o $@
+ 
++$(HOSTBIN)/dxe3res.exe: dxe3res.c
++	$(GCC) -O2 -Wall dxe3res.c -o $@
++
+ clean ::
+ 	@-$(MISC) rm *.o *.h $(HOSTBIN)/dxegen.exe
+diff --git a/src/makefile b/src/makefile
+index f62b70e4..e6f397fd 100644
+--- a/src/makefile
++++ b/src/makefile
+@@ -21,7 +21,7 @@ DIRS = \
+ 	../info		\
+ 	../lib
+ 
+-all : misc.exe config $(DIRS) makemake.exe subs ../lib/libg.a ../lib/libpc.a
++all : misc.exe config $(DIRS) makemake.exe subs
+ 
+ misc.exe : misc.c
+ 	gcc -O2 -Wall misc.c -o misc.exe
+diff --git a/src/makefile.inc b/src/makefile.inc
+index 664fdf9f..09c6f997 100644
+--- a/src/makefile.inc
++++ b/src/makefile.inc
+@@ -165,7 +165,7 @@ ifneq ($(MAKEFILE_LIB),1)
+ all :: makefile.oh
+ makefile.oh : makefile
+ 	@$(MISC) echo - building new response file
+-	@$(MISC) echo makefile.oh $(addprefix \&/,$(OBJS))
++	@echo "$(addprefix &/,$(OBJS))" > makefile.oh
+ endif
+ 
+ clean ::
+diff --git a/src/makefile.lib b/src/makefile.lib
+index 3a72a464..a3b5bd1e 100644
+--- a/src/makefile.lib
++++ b/src/makefile.lib
+@@ -23,6 +23,7 @@ $(LIB)/lib$(LIBNAME).a : $(OBJS) makefile.rf $(TOP)/../ident.c
+ ifeq ($(CROSS_BUILD),0)
+ 	$(CROSS_AR) q $(LIB)/lib$(LIBNAME).a @makefile.rf id_$(LIBNAME).o
+ else
++	dos2unix makefile.rf
+ 	$(CROSS_AR) q $(LIB)/lib$(LIBNAME).a `cat makefile.rf` id_$(LIBNAME).o
+ endif
+ 	$(CROSS_AR) s $(LIB)/lib$(LIBNAME).a
+diff --git a/src/stub/makefile b/src/stub/makefile
+index 83de0f1d..fef8ac8f 100644
+--- a/src/stub/makefile
++++ b/src/stub/makefile
+@@ -22,6 +22,7 @@ all :: native \
+ native :: \
+ 	$(HOSTBIN)/stubedit.exe \
+ 	$(HOSTBIN)/stubify.exe \
++	$(HOSTBIN)/exe2coff.exe \
+ 	$(INC)/stubinfo.h \
+ 	$E
+ 	$(NOP)
+@@ -63,10 +64,13 @@ $(BIN)/stubedit.exe : $(C) stubedit.o $(L)
+ 
+ 
+ $(HOSTBIN)/stubify.exe : stubify.c stub.h
+-	$(GCC) stubify.c -o $@
++	$(GCC) -O2 stubify.c -o $@
+ 
+ $(HOSTBIN)/stubedit.exe : stubedit.c $(INC)/stubinfo.h
+-	$(GCC) stubedit.c -o $@
++	$(GCC) -O2 stubedit.c -o $@
++
++$(HOSTBIN)/exe2coff.exe : exe2coff.c
++	$(GCC) -O2 $< -o $@
+ 
+ ./stub2inc.exe : stub2inc.c
+ 	$(GCC) stub2inc.c -o $@
+

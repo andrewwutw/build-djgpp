@@ -115,38 +115,44 @@ fi
 
 cd ${BASE}/build/ || exit 1
 
-if [ ! -z ${DJGPP_VERSION} ] || [ ! -z ${BUILD_DXEGEN} ]; then
-  echo "Unpacking djgpp..."
-  rm -rf ${BASE}/build/djgpp-${DJGPP_VERSION}
-  mkdir -p ${BASE}/build/djgpp-${DJGPP_VERSION}
-  cd ${BASE}/build/djgpp-${DJGPP_VERSION} || exit 1
-  unzip -uo ../../download/djdev${DJGPP_VERSION}.zip || exit 1
-  unzip -uo ../../download/djlsr${DJGPP_VERSION}.zip || exit 1
-  unzip -uo ../../download/djcrx${DJGPP_VERSION}.zip || exit 1
-  patch -p1 -u < ../../patch/patch-djlsr${DJGPP_VERSION}.txt || exit 1
-  patch -p1 -u < ../../patch/patch-djcrx${DJGPP_VERSION}.txt || exit 1
+if [ ! -z ${DJGPP_VERSION} ]; then
+  if [ "${DJGPP_VERSION}" == "cvs" ]; then
+    download_git https://github.com/jwt27/djgpp-cvs.git jwt27
+    cd djgpp-cvs
+  else
+    echo "Unpacking djgpp..."
+    rm -rf djgpp-${DJGPP_VERSION}/
+    mkdir -p djgpp-${DJGPP_VERSION}/
+    cd djgpp-${DJGPP_VERSION}/ || exit 1
+    unzip -uo ../../download/djdev${DJGPP_VERSION}.zip || exit 1
+    unzip -uo ../../download/djlsr${DJGPP_VERSION}.zip || exit 1
+    unzip -uo ../../download/djcrx${DJGPP_VERSION}.zip || exit 1
+    patch -p1 -u < ../../patch/patch-djlsr${DJGPP_VERSION}.txt || exit 1
+    patch -p1 -u < ../../patch/patch-djcrx${DJGPP_VERSION}.txt || exit 1
+  fi
 
-  cd src/stub
-  ${CC} -O2 ${CFLAGS} stubify.c -o stubify || exit 1
-  ${CC} -O2 ${CFLAGS} stubedit.c -o stubedit || exit 1
-  ${HOST_CC} -O2 ${CFLAGS} stubify.c -o ${TARGET}-stubify || exit 1
-  ${HOST_CC} -O2 ${CFLAGS} stubedit.c -o ${TARGET}-stubedit || exit 1
+  cd src
+  unset COMSPEC
+  sed -i '50cCROSS_PREFIX = ${TARGET}-' makefile.def
+  ${MAKE} misc.exe makemake.exe ../hostbin || exit 1
+  ${MAKE} config || exit 1
+  echo "-Wno-error" >> gcc.opt
+  ${MAKE} -C djasm native || exit 1
+  ${MAKE} -C stub native || exit 1
+  cd ..
 
-  cd ../..
+  case `uname` in
+  MINGW*) EXE=.exe ;;
+  MSYS*) EXE=.exe ;;
+  *) EXE= ;;
+  esac
 
-  echo "Installing djgpp libc"
+  echo "Installing djgpp headers"
   ${SUDO} mkdir -p $PREFIX/${TARGET}/sys-include || exit 1
   ${SUDO} cp -rp include/* $PREFIX/${TARGET}/sys-include/ || exit 1
-  ${SUDO} cp -rp lib $PREFIX/${TARGET}/ || exit 1
   ${SUDO} mkdir -p $PREFIX/bin || exit 1
-  ${SUDO} cp -p src/stub/${TARGET}-stubify $PREFIX/bin/ || exit 1
-  ${SUDO} cp -p src/stub/${TARGET}-stubedit $PREFIX/bin/ || exit 1
-
-  ${SUDO} mkdir -p ${PREFIX}/${TARGET}/share/info
-  ${SUDO} cp -pf info/* ${PREFIX}/${TARGET}/share/info/
-
-  ${SUDO} rm -f ${PREFIX}/${TARGET}/etc/djgpp-*-installed
-  ${SUDO} touch ${PREFIX}/${TARGET}/etc/djgpp-${DJGPP_VERSION}-installed
+  ${SUDO} cp -p hostbin/stubify.exe $PREFIX/bin/${TARGET}-stubify${EXE} || exit 1
+  ${SUDO} cp -p hostbin/stubedit.exe $PREFIX/bin/${TARGET}-stubedit${EXE} || exit 1
 fi
 
 cd ${BASE}/build/
@@ -205,7 +211,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     cd -
 
     # copy stubify programs
-    cp -p ${BASE}/build/djgpp-${DJGPP_VERSION}/src/stub/stubify $BUILDDIR/tmpinst/bin/
+    cp $PREFIX/bin/${TARGET}-stubify $BUILDDIR/tmpinst/bin/stubify
 
     cd $BUILDDIR/
 
@@ -259,26 +265,28 @@ fi
 # gcc done
 
 if [ ! -z ${DJGPP_VERSION} ]; then
-  # build djlsr (for dxegen / exe2coff)
-  cd ${BASE}/build/djgpp-${DJGPP_VERSION}
-  if [ "$CC" == "gcc" ] && [ ! -z ${BUILD_DXEGEN} ]; then
-    echo "Building DXE tools."
-    cd src
-    PATH=$PREFIX/bin/:$PATH ${MAKE} || exit 1
-    cd dxe
+  echo "Building djgpp libc"
+  cd ${BASE}/build/djgpp-${DJGPP_VERSION}/src
+  ${MAKE} -j${MAKE_JOBS}|| exit 1
+  cd ..
+
+  echo "Installing djgpp libc"
+  ${SUDO} mkdir -p ${PREFIX}/${TARGET}/lib
+  ${SUDO} cp -rp lib/* $PREFIX/${TARGET}/lib || exit 1
+  ${SUDO} cp -p hostbin/exe2coff.exe $PREFIX/bin/${TARGET}-exe2coff${EXE} || exit 1
+  ${SUDO} mkdir -p ${PREFIX}/${TARGET}/share/info
+  ${SUDO} cp -rp info/* ${PREFIX}/${TARGET}/share/info
+
+  if [ ! -z ${BUILD_DXEGEN} ]; then
     echo "Installing DXE tools"
-    ${SUDO} cp -p dxegen  $PREFIX/bin/${TARGET}-dxegen || exit 1
-    ${SUDO} cp -p dxe3gen $PREFIX/bin/${TARGET}-dxe3gen || exit 1
-    ${SUDO} cp -p dxe3res $PREFIX/bin/${TARGET}-dxe3res || exit 1
-    cd ../..
+    ${SUDO} cp -p hostbin/dxegen.exe  $PREFIX/bin/${TARGET}-dxegen${EXE} || exit 1
+    ${SUDO} ln -s $PREFIX/bin/${TARGET}-dxegen${EXE} $PREFIX/bin/${TARGET}-dxe3gen${EXE} || exit 1
+    ${SUDO} cp -p hostbin/dxe3res.exe $PREFIX/bin/${TARGET}-dxe3res${EXE} || exit 1
     touch ${PREFIX}/${TARGET}/etc/dxegen-installed
   fi
-  cd src/stub
-  ${HOST_CC} -O2 ${CFLAGS} -o exe2coff exe2coff.c || exit 1
-  echo "Installing exe2coff"
-  ${SUDO} cp -p exe2coff $PREFIX/bin/${TARGET}-exe2coff || exit 1
 
-  # djlsr done
+  ${SUDO} rm -f ${PREFIX}/${TARGET}/etc/djgpp-*-installed
+  ${SUDO} touch ${PREFIX}/${TARGET}/etc/djgpp-${DJGPP_VERSION}-installed
 fi
 
 cd ${BASE}/build
