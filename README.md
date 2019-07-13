@@ -23,6 +23,8 @@
 * arm-eabi
 * avr
 
+See the [build logs](https://travis-ci.org/jwt27/build-gcc) on Travis-CI for a detailed status of individual targets.
+
 ### Requirements
 
 Before running this script, you need to install these programs first:
