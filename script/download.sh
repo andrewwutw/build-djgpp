@@ -46,6 +46,9 @@ fi
 if [ ! -z ${AVRLIBC_VERSION} ]; then
   echo "    AVRLIBC_CONFIGURE_OPTIONS=`echo ${AVRLIBC_CONFIGURE_OPTIONS}`"
 fi
+if [ ! -z ${DJGPP_VERSION} ]; then
+  echo "    DJGPP_CFLAGS=`echo ${DJGPP_CFLAGS}`"
+fi
 echo ""
 
 mkdir -p ${PREFIX}
@@ -53,10 +56,10 @@ mkdir -p ${PREFIX}
 if [ ! -d ${PREFIX} ] || [ ! -w ${PREFIX} ]; then
   echo "WARNING: no write access to ${PREFIX}."
   echo "You may need to enter your sudo password several times during the build process."
+  echo ""
   SUDO=sudo
 fi
 
-echo ""
 echo "If you wish to change anything, press CTRL-C now. Otherwise, press any other key to continue."
 read -s -n 1
 

@@ -134,6 +134,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   cd src
   unset COMSPEC
   sed -i '50cCROSS_PREFIX = ${TARGET}-' makefile.def
+  sed -i '61cGCC = \$(CC) -g -O2 \$(HOST_CFLAGS)' makefile.def
   ${MAKE} misc.exe makemake.exe ../hostbin || exit 1
   ${MAKE} config || exit 1
   echo "-Wno-error" >> gcc.opt
@@ -267,7 +268,10 @@ fi
 if [ ! -z ${DJGPP_VERSION} ]; then
   echo "Building djgpp libc"
   cd ${BASE}/build/djgpp-${DJGPP_VERSION}/src
+  TEMP_CFLAGS="$CFLAGS"
+  CFLAGS="$DJGPP_CFLAGS"
   ${MAKE} -j${MAKE_JOBS}|| exit 1
+  CFLAGS="$TEMP_CFLAGS"
   cd ..
 
   echo "Installing djgpp libc"
