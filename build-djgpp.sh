@@ -197,12 +197,14 @@ if [ ! -z ${GCC_VERSION} ]; then
   cd $BUILDDIR
 
   if [ ! -e gcc-unpacked ]; then
-    echo "Patch unpack-gcc.sh"
+    rm -rf $BUILDDIR/gnu/
 
     if [ `uname` = "FreeBSD" ]; then
       # The --verbose option is not recognized by BSD patch
       sed -i 's/patch --verbose/patch/' unpack-gcc.sh || exit 1
     fi
+    # prevent renaming source directory.
+    sed -i 's/gcc-\$short_ver/gcc-\$gcc_version/' unpack-gcc.sh || exit 1
 
     echo "Running unpack-gcc.sh"
     sh unpack-gcc.sh --no-djgpp-source ../../download/$(basename ${GCC_ARCHIVE}) || exit 1
@@ -213,15 +215,12 @@ if [ ! -z ${GCC_VERSION} ]; then
     sed -i "s/[^^]@\(\(tex\)\|\(end\)\)/\n@\1/g" gcc.texi || exit 1
     cd -
 
-    # copy stubify programs
-    cp $PREFIX/bin/${TARGET}-stubify $BUILDDIR/tmpinst/bin/stubify
-
     cd $BUILDDIR/
 
     # download mpc/gmp/mpfr/isl libraries
     echo "Downloading gcc dependencies"
-    cd gnu/gcc-${GCC_VERSION_SHORT}
-    ./contrib/download_prerequisites
+    cd gnu/gcc-${GCC_VERSION} || exit 1
+    ./contrib/download_prerequisites || exit 1
 
     # apply extra patches if necessary
     [ -e ${BASE}/patch/patch-djgpp-gcc-${GCC_VERSION}.txt ] && patch -p 1 -u -i ${BASE}/patch/patch-djgpp-gcc-${GCC_VERSION}.txt
@@ -246,12 +245,14 @@ if [ ! -z ${GCC_VERSION} ]; then
 
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${GCC_CONFIGURE_OPTIONS}" ]; then
     rm -rf *
-    ../gnu/gcc-${GCC_VERSION_SHORT}/configure ${GCC_CONFIGURE_OPTIONS} || exit 1
+    ../gnu/gcc-${GCC_VERSION}/configure ${GCC_CONFIGURE_OPTIONS} || exit 1
     echo ${GCC_CONFIGURE_OPTIONS} > configure-prefix
   else
     echo "Note: gcc already configured. To force a rebuild, use: rm -rf $(pwd)"
     sleep 5
   fi
+
+  cp $PREFIX/bin/${TARGET}-stubify $BUILDDIR/tmpinst/bin/stubify || exit 1
 
   ${MAKE} -j${MAKE_JOBS} all-gcc || exit 1
   echo "Installing gcc (stage 1)"
