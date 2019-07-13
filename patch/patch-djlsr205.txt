@@ -271,26 +271,24 @@ index 1bb6aa55..f0ba9919 100644
  void
  __crt1_startup(void)
  {
-diff --git a/src/makefile.cfg b/src/makefile.cfg
-index 11bb06db..1a709f97 100644
 --- a/src/makefile.cfg
 +++ b/src/makefile.cfg
-@@ -55,6 +55,7 @@ gcc.opt: makefile.cfg
-        @./misc.exe echo - "-Wsign-compare" >>gcc.opt
-        @./misc.exe echo - "-nostdinc" >>gcc.opt
-        @./misc.exe echo - "$(IQUOTE)" >>gcc.opt
-+       @./misc.exe echo - "-mpreferred-stack-boundary=4" >>gcc.opt
-
-
+@@ -48,6 +48,7 @@
+ 	@./misc.exe echo - "-Wsign-compare" >>gcc.opt
+ 	@./misc.exe echo - "-nostdinc" >>gcc.opt
+ 	@./misc.exe echo - "$(IQUOTE)" >>gcc.opt
++	@./misc.exe echo - "-mpreferred-stack-boundary=4" >>gcc.opt
+ 
+ 
  gcc-l.opt: makefile.cfg
-@@ -65,6 +66,7 @@ gcc-l.opt: makefile.cfg
-        @./misc.exe echo - "-Wall" >>gcc-l.opt
-        @./misc.exe echo - "-nostdinc" >>gcc-l.opt
-        @./misc.exe echo - "$(IQUOTE)" >>gcc-l.opt
-+       @./misc.exe echo - "-mpreferred-stack-boundary=4" >>gcc-l.opt
-
+@@ -58,6 +59,7 @@
+ 	@./misc.exe echo - "-Wall" >>gcc-l.opt
+ 	@./misc.exe echo - "-nostdinc" >>gcc-l.opt
+ 	@./misc.exe echo - "$(IQUOTE)" >>gcc-l.opt
++	@./misc.exe echo - "-mpreferred-stack-boundary=4" >>gcc.opt
+ 
  gpp.opt: gcc.opt
-        sed -f gpp.sed $< > $@
+ 	sed -f gpp.sed $< > $@
 --- a/src/libc/ansi/stdlib/nmalloc.c
 +++ b/src/libc/ansi/stdlib/nmalloc.c
 @@ -1145,6 +1145,7 @@
