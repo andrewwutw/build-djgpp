@@ -45,7 +45,7 @@ if [ -z ${IGNORE_DEPENDENCIES} ]; then
   [ ! -z ${GCC_VERSION} ] && DEPS+=" djgpp binutils"
   [ ! -z ${BINUTILS_VERSION} ] && DEPS+=" "
   [ ! -z ${GDB_VERSION} ] && DEPS+=" "
-  [ ! -z ${DJGPP_VERSION} ] && DEPS+=" "
+  [ ! -z ${DJGPP_VERSION} ] && DEPS+=" binutils gcc"
   [ ! -z ${BUILD_DXEGEN} ] && DEPS+=" djgpp binutils gcc"
   
   for DEP in ${DEPS}; do
