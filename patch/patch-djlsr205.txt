@@ -258,4 +258,36 @@ index 83de0f1d..fef8ac8f 100644
  
  ./stub2inc.exe : stub2inc.c
  	$(GCC) stub2inc.c -o $@
+diff --git a/src/libc/crt0/crt1.c b/src/libc/crt0/crt1.c
+index 1bb6aa55..f0ba9919 100644
+--- a/src/libc/crt0/crt1.c
++++ b/src/libc/crt0/crt1.c
+@@ -208,7 +208,7 @@ setup_os_version(void)
+   _osminor = v & 0xff;
+ }
 
+-
++__attribute__((force_align_arg_pointer))
+ void
+ __crt1_startup(void)
+ {
+diff --git a/src/makefile.cfg b/src/makefile.cfg
+index 11bb06db..1a709f97 100644
+--- a/src/makefile.cfg
++++ b/src/makefile.cfg
+@@ -55,6 +55,7 @@ gcc.opt: makefile.cfg
+        @./misc.exe echo - "-Wsign-compare" >>gcc.opt
+        @./misc.exe echo - "-nostdinc" >>gcc.opt
+        @./misc.exe echo - "$(IQUOTE)" >>gcc.opt
++       @./misc.exe echo - "-mpreferred-stack-boundary=4" >>gcc.opt
+
+
+ gcc-l.opt: makefile.cfg
+@@ -65,6 +66,7 @@ gcc-l.opt: makefile.cfg
+        @./misc.exe echo - "-Wall" >>gcc-l.opt
+        @./misc.exe echo - "-nostdinc" >>gcc-l.opt
+        @./misc.exe echo - "$(IQUOTE)" >>gcc-l.opt
++       @./misc.exe echo - "-mpreferred-stack-boundary=4" >>gcc-l.opt
+
+ gpp.opt: gcc.opt
+        sed -f gpp.sed $< > $@
