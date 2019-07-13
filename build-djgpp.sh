@@ -21,6 +21,8 @@ prepend GCC_CONFIGURE_OPTIONS "--disable-nls
 prepend GDB_CONFIGURE_OPTIONS "--disable-werror
                                --disable-nls"
 
+prepend DJGPP_CFLAGS "-O2"
+
 if [ -z $1 ]; then
   echo "Usage: $0 [packages...]"
   echo "Supported packages:"
@@ -269,7 +271,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   echo "Building djgpp libc"
   cd ${BASE}/build/djgpp-${DJGPP_VERSION}/src
   TEMP_CFLAGS="$CFLAGS"
-  CFLAGS="$DJGPP_CFLAGS"
+  export CFLAGS="$DJGPP_CFLAGS"
   ${MAKE} -j${MAKE_JOBS}|| exit 1
   CFLAGS="$TEMP_CFLAGS"
   cd ..
