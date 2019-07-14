@@ -97,7 +97,7 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
   cd bnu${BINUTILS_VERSION}s
   if [ ! -e binutils-unpacked ]; then
     echo "Unpacking binutils..."
-    unzip -o ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
+    unzip -oq ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
 
     # patch for binutils 2.27
     [ ${BINUTILS_VERSION} == 227 ] && (patch gnu/binutils-*/bfd/init.c ${BASE}/patch/patch-bnu27-bfd-init.txt || exit 1 )
@@ -126,9 +126,9 @@ if [ ! -z ${DJGPP_VERSION} ]; then
     rm -rf djgpp-${DJGPP_VERSION}/
     mkdir -p djgpp-${DJGPP_VERSION}/
     cd djgpp-${DJGPP_VERSION}/ || exit 1
-    unzip -uo ../../download/djdev${DJGPP_VERSION}.zip || exit 1
-    unzip -uo ../../download/djlsr${DJGPP_VERSION}.zip || exit 1
-    unzip -uo ../../download/djcrx${DJGPP_VERSION}.zip || exit 1
+    unzip -uoq ../../download/djdev${DJGPP_VERSION}.zip || exit 1
+    unzip -uoq ../../download/djlsr${DJGPP_VERSION}.zip || exit 1
+    unzip -uoq ../../download/djcrx${DJGPP_VERSION}.zip || exit 1
     patch -p1 -u < ../../patch/patch-djlsr${DJGPP_VERSION}.txt || exit 1
     patch -p1 -u < ../../patch/patch-djcrx${DJGPP_VERSION}.txt || exit 1
   fi
