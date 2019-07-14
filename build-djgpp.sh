@@ -269,7 +269,15 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   cd ${BASE}/build/djgpp-${DJGPP_VERSION}/src
   TEMP_CFLAGS="$CFLAGS"
   export CFLAGS="$DJGPP_CFLAGS"
-  ${MAKE} -j${MAKE_JOBS}|| exit 1
+  ${MAKE} -j${MAKE_JOBS} -C mkdoc || exit 1
+  ${MAKE} -j${MAKE_JOBS} -C libc || exit 1
+  #${MAKE} -j${MAKE_JOBS} -C debug || exit 1
+  ${MAKE} -j${MAKE_JOBS} -C libemu || exit 1
+  ${MAKE} -j${MAKE_JOBS} -C libm || exit 1
+  ${MAKE} -j${MAKE_JOBS} -C utils native || exit 1
+  ${MAKE} -j${MAKE_JOBS} -C docs || exit 1
+  #${MAKE} -j${MAKE_JOBS} -C ../zoneinfo/src
+  ${MAKE} -j${MAKE_JOBS} -f makempty || exit 1
   CFLAGS="$TEMP_CFLAGS"
   cd ..
 
@@ -281,6 +289,8 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   ${SUDO} cp -rp info/* ${PREFIX}/${TARGET}/share/info
 
   if [ ! -z ${BUILD_DXEGEN} ]; then
+    echo "Building DXE tools"
+    ${MAKE} -j${MAKE_JOBS} -C dxe native || exit 1
     echo "Installing DXE tools"
     ${SUDO} cp -p hostbin/dxegen.exe  $PREFIX/bin/${TARGET}-dxegen${EXE} || exit 1
     ${SUDO} ln -s $PREFIX/bin/${TARGET}-dxegen${EXE} $PREFIX/bin/${TARGET}-dxe3gen${EXE} || exit 1
