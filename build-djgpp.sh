@@ -289,6 +289,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   echo "Installing djgpp libraries and utilities"
   ${SUDO} cp -rp lib/* $PREFIX/${TARGET}/lib || exit 1
   ${SUDO} cp -p hostbin/exe2coff.exe $PREFIX/bin/${TARGET}-exe2coff${EXE} || exit 1
+  ${SUDO} cp -p hostbin/djasm.exe $PREFIX/bin/${TARGET}-djasm${EXE} || exit 1
   ${SUDO} mkdir -p ${PREFIX}/${TARGET}/share/info
   ${SUDO} cp -rp info/* ${PREFIX}/${TARGET}/share/info
 

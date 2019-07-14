@@ -2,7 +2,7 @@ echo "Copy long name executables to short name."
 (
   cd $PREFIX || exit 1
   ${SUDO} mkdir -p ${TARGET}/bin
-  SHORT_NAME_LIST="gcc g++ c++ addr2line c++filt cpp size strings dxegen dxe3gen dxe3res exe2coff stubify stubedit gdb"
+  SHORT_NAME_LIST="gcc g++ c++ addr2line c++filt cpp size strings dxegen dxe3gen dxe3res exe2coff stubify stubedit gdb djasm"
   for SHORT_NAME in $SHORT_NAME_LIST; do
     if [ -f bin/${TARGET}-$SHORT_NAME ]; then
       ${SUDO} cp -p bin/${TARGET}-$SHORT_NAME ${TARGET}/bin/$SHORT_NAME
