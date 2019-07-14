@@ -301,11 +301,11 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   cd ${BASE}/build/djgpp-${DJGPP_VERSION}/src
   TEMP_CFLAGS="$CFLAGS"
   export CFLAGS="$DJGPP_CFLAGS"
+  ${MAKE} -j${MAKE_JOBS} -C utils native || exit 1
   ${MAKE} -j${MAKE_JOBS} -C dxe native || exit 1
   ${MAKE} -j${MAKE_JOBS} -C debug || exit 1
   ${MAKE} -j${MAKE_JOBS} -C libemu || exit 1
   ${MAKE} -j${MAKE_JOBS} -C libm || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C utils native || exit 1
   ${MAKE} -j${MAKE_JOBS} -C docs || exit 1
   ${MAKE} -j${MAKE_JOBS} -C ../zoneinfo/src
   ${MAKE} -j${MAKE_JOBS} -f makempty || exit 1
