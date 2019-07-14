@@ -138,8 +138,6 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   sed -i "50cCROSS_PREFIX = ${TARGET}-" makefile.def
   sed -i '61cGCC = \$(CC) -g -O2 \$(HOST_CFLAGS)' makefile.def
   ${MAKE} misc.exe makemake.exe ../hostbin || exit 1
-  ${MAKE} config || exit 1
-  echo "-Wno-error" >> gcc.opt
   ${MAKE} -C djasm native || exit 1
   ${MAKE} -C stub native || exit 1
   cd ..
@@ -269,6 +267,8 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   cd ${BASE}/build/djgpp-${DJGPP_VERSION}/src
   TEMP_CFLAGS="$CFLAGS"
   export CFLAGS="$DJGPP_CFLAGS"
+  ${MAKE} config || exit 1
+  echo "-Wno-error" >> gcc.opt
   ${MAKE} -j${MAKE_JOBS} -C mkdoc || exit 1
   ${MAKE} -j${MAKE_JOBS} -C libc || exit 1
   #${MAKE} -j${MAKE_JOBS} -C debug || exit 1
