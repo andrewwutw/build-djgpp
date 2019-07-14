@@ -271,6 +271,11 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   echo "-Wno-error" >> gcc.opt
   ${MAKE} -j${MAKE_JOBS} -C mkdoc || exit 1
   ${MAKE} -j${MAKE_JOBS} -C libc || exit 1
+
+  echo "Installing djgpp libc"
+  ${SUDO} mkdir -p ${PREFIX}/${TARGET}/lib
+  ${SUDO} cp -rp ../lib/* $PREFIX/${TARGET}/lib || exit 1
+
   #${MAKE} -j${MAKE_JOBS} -C debug || exit 1
   ${MAKE} -j${MAKE_JOBS} -C libemu || exit 1
   ${MAKE} -j${MAKE_JOBS} -C libm || exit 1
@@ -281,8 +286,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   CFLAGS="$TEMP_CFLAGS"
   cd ..
 
-  echo "Installing djgpp libc"
-  ${SUDO} mkdir -p ${PREFIX}/${TARGET}/lib
+  echo "Installing djgpp libraries and utilities"
   ${SUDO} cp -rp lib/* $PREFIX/${TARGET}/lib || exit 1
   ${SUDO} cp -p hostbin/exe2coff.exe $PREFIX/bin/${TARGET}-exe2coff${EXE} || exit 1
   ${SUDO} mkdir -p ${PREFIX}/${TARGET}/share/info
