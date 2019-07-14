@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 NEWLIB_VERSION=3.0.0.20180226
-NEWLIB_ARCHIVE="ftp://sourceware.org/pub/newlib/newlib-${NEWLIB_VERSION}.tar.gz"
+NEWLIB_ARCHIVE="http://sourceware.org/pub/newlib/newlib-${NEWLIB_VERSION}.tar.gz"
