@@ -135,7 +135,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
 
   cd src
   unset COMSPEC
-  sed -i '50cCROSS_PREFIX = ${TARGET}-' makefile.def
+  sed -i "50cCROSS_PREFIX = ${TARGET}-" makefile.def
   sed -i '61cGCC = \$(CC) -g -O2 \$(HOST_CFLAGS)' makefile.def
   ${MAKE} misc.exe makemake.exe ../hostbin || exit 1
   ${MAKE} config || exit 1
