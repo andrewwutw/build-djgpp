@@ -267,8 +267,8 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   cd ${BASE}/build/djgpp-${DJGPP_VERSION}/src
   TEMP_CFLAGS="$CFLAGS"
   export CFLAGS="$DJGPP_CFLAGS"
+  sed -i 's/Werror/Wno-error/' makefile.cfg
   ${MAKE} config || exit 1
-  echo "-Wno-error" >> gcc.opt
   ${MAKE} -j${MAKE_JOBS} -C mkdoc || exit 1
   ${MAKE} -j${MAKE_JOBS} -C libc || exit 1
 
