@@ -275,36 +275,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   echo "Installing djgpp libc"
   ${SUDO} mkdir -p ${PREFIX}/${TARGET}/lib
   ${SUDO} cp -rp ../lib/* $PREFIX/${TARGET}/lib || exit 1
-
-  #${MAKE} -j${MAKE_JOBS} -C debug || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C libemu || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C libm || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C utils native || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C docs || exit 1
-  #${MAKE} -j${MAKE_JOBS} -C ../zoneinfo/src
-  ${MAKE} -j${MAKE_JOBS} -f makempty || exit 1
   CFLAGS="$TEMP_CFLAGS"
-  cd ..
-
-  echo "Installing djgpp libraries and utilities"
-  ${SUDO} cp -rp lib/* $PREFIX/${TARGET}/lib || exit 1
-  ${SUDO} cp -p hostbin/exe2coff.exe $PREFIX/bin/${TARGET}-exe2coff${EXE} || exit 1
-  ${SUDO} cp -p hostbin/djasm.exe $PREFIX/bin/${TARGET}-djasm${EXE} || exit 1
-  ${SUDO} mkdir -p ${PREFIX}/${TARGET}/share/info
-  ${SUDO} cp -rp info/* ${PREFIX}/${TARGET}/share/info
-
-  if [ ! -z ${BUILD_DXEGEN} ]; then
-    echo "Building DXE tools"
-    ${MAKE} -j${MAKE_JOBS} -C dxe native || exit 1
-    echo "Installing DXE tools"
-    ${SUDO} cp -p hostbin/dxegen.exe  $PREFIX/bin/${TARGET}-dxegen${EXE} || exit 1
-    ${SUDO} ln -s $PREFIX/bin/${TARGET}-dxegen${EXE} $PREFIX/bin/${TARGET}-dxe3gen${EXE} || exit 1
-    ${SUDO} cp -p hostbin/dxe3res.exe $PREFIX/bin/${TARGET}-dxe3res${EXE} || exit 1
-    touch ${PREFIX}/${TARGET}/etc/dxegen-installed
-  fi
-
-  ${SUDO} rm -f ${PREFIX}/${TARGET}/etc/djgpp-*-installed
-  ${SUDO} touch ${PREFIX}/${TARGET}/etc/djgpp-${DJGPP_VERSION}-installed
 fi
 
 if [ ! -z ${GCC_VERSION} ]; then
@@ -323,6 +294,41 @@ if [ ! -z ${GCC_VERSION} ]; then
 
   ${SUDO} rm -f ${PREFIX}/${TARGET}/etc/gcc-*-installed
   ${SUDO} touch ${PREFIX}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
+fi
+
+if [ ! -z ${DJGPP_VERSION} ]; then
+  echo "Building djgpp libraries"
+  cd ${BASE}/build/djgpp-${DJGPP_VERSION}/src
+  TEMP_CFLAGS="$CFLAGS"
+  export CFLAGS="$DJGPP_CFLAGS"
+  ${MAKE} -j${MAKE_JOBS} -C dxe native || exit 1
+  ${MAKE} -j${MAKE_JOBS} -C debug || exit 1
+  ${MAKE} -j${MAKE_JOBS} -C libemu || exit 1
+  ${MAKE} -j${MAKE_JOBS} -C libm || exit 1
+  ${MAKE} -j${MAKE_JOBS} -C utils native || exit 1
+  ${MAKE} -j${MAKE_JOBS} -C docs || exit 1
+  ${MAKE} -j${MAKE_JOBS} -C ../zoneinfo/src
+  ${MAKE} -j${MAKE_JOBS} -f makempty || exit 1
+  CFLAGS="$TEMP_CFLAGS"
+  cd ..
+
+  echo "Installing djgpp libraries and utilities"
+  ${SUDO} cp -rp lib/* $PREFIX/${TARGET}/lib || exit 1
+  ${SUDO} cp -p hostbin/exe2coff.exe $PREFIX/bin/${TARGET}-exe2coff${EXE} || exit 1
+  ${SUDO} cp -p hostbin/djasm.exe $PREFIX/bin/${TARGET}-djasm${EXE} || exit 1
+  ${SUDO} mkdir -p ${PREFIX}/${TARGET}/share/info
+  ${SUDO} cp -rp info/* ${PREFIX}/${TARGET}/share/info
+
+  if [ ! -z ${BUILD_DXEGEN} ]; then
+    echo "Installing DXE tools"
+    ${SUDO} cp -p hostbin/dxegen.exe  $PREFIX/bin/${TARGET}-dxegen${EXE} || exit 1
+    ${SUDO} ln -s $PREFIX/bin/${TARGET}-dxegen${EXE} $PREFIX/bin/${TARGET}-dxe3gen${EXE} || exit 1
+    ${SUDO} cp -p hostbin/dxe3res.exe $PREFIX/bin/${TARGET}-dxe3res${EXE} || exit 1
+    touch ${PREFIX}/${TARGET}/etc/dxegen-installed
+  fi
+
+  ${SUDO} rm -f ${PREFIX}/${TARGET}/etc/djgpp-*-installed
+  ${SUDO} touch ${PREFIX}/${TARGET}/etc/djgpp-${DJGPP_VERSION}-installed
 fi
 
 cd ${BASE}/build
