@@ -16,6 +16,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     # download mpc/gmp/mpfr/isl libraries
     echo "Downloading gcc dependencies"
     cd gcc-${GCC_VERSION}/
+    sed -i 's/ftp/http/' contrib/download_prerequisites
     ./contrib/download_prerequisites
     touch gcc-unpacked
     cd -
