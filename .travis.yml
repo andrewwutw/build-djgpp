@@ -53,6 +53,12 @@ compiler:
   - gcc
   - clang
 
+matrix:
+  exclude:
+    - os: linux
+      compiler: clang
+      env: TARGET=avr                PACKAGES="gdb avarice simulavr avrdude"
+
 env:
   - TARGET=i586-pc-msdosdjgpp PACKAGES="binutils gcc djgpp-2.05"
   - TARGET=i586-pc-msdosdjgpp PACKAGES="binutils gcc djgpp-cvs"
@@ -61,7 +67,7 @@ env:
   - TARGET=arm-eabi           PACKAGES="gdb"
   - TARGET=avr                PACKAGES="binutils gcc avr-libc"
   - TARGET=avr                PACKAGES="gdb avarice simulavr avrdude"
-#  - TARGET=ia16               PACKAGES="binutils gcc newlib"
+#  - TARGET=ia16-elf           PACKAGES="binutils gcc newlib"
 
 script:
   - ./script/test.sh
