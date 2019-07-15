@@ -119,6 +119,7 @@ if [ ! -z ${AVARICE_VERSION} ]; then
   echo "Building AVaRICE"
   untar ${AVARICE_ARCHIVE}
   cd avarice-${AVARICE_VERSION}
+  [ -e ${BASE}/patch/patch-avarice-${AVARICE_VERSION}.txt ] && patch -p1 -u < ${BASE}/patch/patch-avarice-${AVARICE_VERSION}.txt || exit 1
   mkdir -p build-avr/
   cd build-avr/ || exit 1
   rm -rf *

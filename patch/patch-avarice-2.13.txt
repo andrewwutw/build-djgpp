@@ -1,0 +1,23 @@
+Description: Fix FTBFS for GCC 5
+Author: Tobias Frost <tobi@debian.org>
+Bug: https://sourceforge.net/p/avarice/patches/34/
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=777789
+Last-Update: 2015-05-18
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/src/pragma.h
++++ b/src/pragma.h
+@@ -28,9 +28,10 @@
+  */
+ #if defined(__GNUC__)
+ #  if __GNUC__ > 4
+-#      define PRAGMA_DIAG_PUSH       _Pragma(GCC diagnostic push)
+-#      define PRAGMA_DIAG_POP        _Pragma(GCC diagnostic pop)
+-#      define PRAGMA_DIAG_IGNORED(x) _Pragma(GCC diagnostic ignored x)
++#      define PRAGMA_DIAG_PUSH       _Pragma("GCC diagnostic push")
++#      define PRAGMA_DIAG_POP        _Pragma("GCC diagnostic pop")
++#      define PRAGMA_(x)             _Pragma(#x)
++#      define PRAGMA_DIAG_IGNORED(x) PRAGMA_(GCC diagnostic ignored x)
+ #  elif __GNUC__ == 4
+ #    if __GNUC_MINOR__ >= 6
+ #      define PRAGMA_DIAG_PUSH       _Pragma("GCC diagnostic push")
