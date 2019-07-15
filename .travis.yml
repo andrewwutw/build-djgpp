@@ -8,6 +8,10 @@ language: c++
 
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - sourceline: 'deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial main'
+        key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
     packages:
       - bison
       - flex
@@ -22,6 +26,13 @@ addons:
       - unzip
       - dos2unix
       - libtool-bin
+      - gcc-9
+      - g++-9
+      - libstdc++-9-dev
+      - clang-9
+      - llvm-9
+      - libc++-9-dev
+      - libc++abi-9-dev
   homebrew:
     update: true
     packages:
@@ -50,11 +61,7 @@ env:
   - TARGET=arm-eabi           PACKAGES="gdb"
   - TARGET=avr                PACKAGES="binutils gcc avr-libc"
   - TARGET=avr                PACKAGES="gdb avarice simulavr avrdude"
-  - TARGET=ia16               PACKAGES="binutils gcc newlib"
-
-before_install:
-#  - if [ $TRAVIS_OS_NAME = 'linux' ] && [ $CC = 'clang' ] ; then sudo apt-get -y install ; fi
-#  - if [ $TRAVIS_OS_NAME = 'osx' ] && [ $CC = 'clang' ]; then brew install ; fi
+#  - TARGET=ia16               PACKAGES="binutils gcc newlib"
 
 script:
   - ./script/test.sh
