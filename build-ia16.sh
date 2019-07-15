@@ -79,9 +79,16 @@ source ${BASE}/script/build-tools.sh
 
 cd ${BASE}/build/ || exit 1
 
-download_git https://github.com/tkchia/gcc-ia16.git gcc-6_3_0-ia16-tkchia
+if [ ! -z ${GCC_VERSION} ]; then
+  download_git https://github.com/tkchia/gcc-ia16.git gcc-6_3_0-ia16-tkchia
+  cd gcc-ia16/
+  patch -p1 -u < ../../patch/patch-gcc-ia16.txt || exit 1
+  cd ..
+fi
 
-download_git https://github.com/tkchia/newlib-ia16.git newlib-2_4_0-ia16-tkchia
+if [ ! -z ${NEWLIB_VERSION} ]; then
+  download_git https://github.com/tkchia/newlib-ia16.git newlib-2_4_0-ia16-tkchia
+fi
 
 if [ ! -z ${BINUTILS_VERSION} ]; then
   if [ "$BINUTILS_VERSION" = "ia16" ]; then
