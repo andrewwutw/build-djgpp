@@ -98,6 +98,8 @@ fi
 
 source ${BASE}/script/build-avr-gcc.sh
 
+cd ${BASE}/build/
+
 if [ ! -z ${SIMULAVR_VERSION} ]; then
   echo "Building simulavr"
   cd simulavr/ || exit 1
