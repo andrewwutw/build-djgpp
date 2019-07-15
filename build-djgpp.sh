@@ -201,11 +201,15 @@ if [ ! -z ${GCC_VERSION} ]; then
       # The --verbose option is not recognized by BSD patch
       sed -i 's/patch --verbose/patch/' unpack-gcc.sh || exit 1
     fi
-    # prevent renaming source directory.
-    sed -i 's/gcc-\$short_ver/gcc-\$gcc_version/' unpack-gcc.sh || exit 1
+    patch -p1 -u < ${BASE}/patch/patch-unpack-gcc.txt || exit 1
+
+    mkdir gnu/
+    cd gnu/ || exit 1
+    untar ${GCC_ARCHIVE}
+    cd ..
 
     echo "Running unpack-gcc.sh"
-    sh unpack-gcc.sh --no-djgpp-source ../../download/$(basename ${GCC_ARCHIVE}) || exit 1
+    sh unpack-gcc.sh --no-djgpp-source || exit 1
 
     # patch gnu/gcc-X.XX/gcc/doc/gcc.texi
     echo "Patch gcc/doc/gcc.texi"
