@@ -58,6 +58,10 @@ matrix:
     - os: linux
       compiler: clang
       env: TARGET=avr                PACKAGES="gdb avarice simulavr avrdude"
+    - os: osx
+      env: TARGET=arm-eabi           PACKAGES="binutils gcc newlib"
+    - os: osx
+      env: TARGET=avr                PACKAGES="binutils gcc avr-libc"
 
 env:
   - TARGET=i586-pc-msdosdjgpp PACKAGES="binutils gcc djgpp-2.05"
