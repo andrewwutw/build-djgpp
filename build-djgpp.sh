@@ -248,7 +248,7 @@ if [ ! -z ${GCC_VERSION} ]; then
 
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${GCC_CONFIGURE_OPTIONS}" ]; then
     rm -rf *
-    ../gnu/gcc-${GCC_VERSION}/configure ${GCC_CONFIGURE_OPTIONS} || exit 1
+    eval "../gnu/gcc-${GCC_VERSION}/configure ${GCC_CONFIGURE_OPTIONS}" || exit 1
     echo ${GCC_CONFIGURE_OPTIONS} > configure-prefix
   else
     echo "Note: gcc already configured. To force a rebuild, use: rm -rf $(pwd)"
