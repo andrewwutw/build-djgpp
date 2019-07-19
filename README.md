@@ -1,15 +1,15 @@
-## Build gcc cross compiler on Windows, Mac OSX, Linux and FreeBSD.
+## Build gcc cross compiler on Windows, Mac OSX, Linux and FreeBSD. [![Build Status](https://travis-ci.org/jwt27/build-gcc.svg?branch=master)](https://travis-ci.org/jwt27/build-gcc)
 
 ### Upgrade notes:
 
 * 2019-06-06: `master` is now the default branch again.
 
-### Current package versions, as of 2019-07-11:
+### Current package versions, as of 2019-07-19:
 
 * gcc 9.1.0
 * binutils 2.32
 * gdb 8.3
-* djgpp 2.05
+* djgpp 2.05 / cvs
 * newlib 3.1.0
 * avr-libc 2.0.0
 * avrdude 6.3
