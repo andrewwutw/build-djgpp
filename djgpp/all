@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
 
 source djgpp/default
-source djgpp/dxegen
 source djgpp/gdb
