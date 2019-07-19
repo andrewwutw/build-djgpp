@@ -21,6 +21,8 @@ echo "    CC=${CC}"
 echo "    CXX=${CXX}"
 echo "    CFLAGS=${CFLAGS}"
 echo "    CXXFLAGS=${CXXFLAGS}"
+echo "    CFLAGS_FOR_TARGET=${CFLAGS_FOR_TARGET}"
+echo "    CXXFLAGS_FOR_TARGET=${CXXFLAGS_FOR_TARGET}"
 echo "    LDFLAGS=${LDFLAGS}"
 echo "    MAKE=${MAKE}"
 echo "    MAKE_JOBS=${MAKE_JOBS}"
@@ -45,9 +47,6 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
 fi
 if [ ! -z ${AVRLIBC_VERSION} ]; then
   echo "    AVRLIBC_CONFIGURE_OPTIONS=`echo ${AVRLIBC_CONFIGURE_OPTIONS}`"
-fi
-if [ ! -z ${DJGPP_VERSION} ]; then
-  echo "    DJGPP_CFLAGS=`echo ${DJGPP_CFLAGS}`"
 fi
 echo ""
 

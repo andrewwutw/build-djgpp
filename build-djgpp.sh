@@ -21,7 +21,7 @@ prepend GCC_CONFIGURE_OPTIONS "--disable-nls
 prepend GDB_CONFIGURE_OPTIONS "--disable-werror
                                --disable-nls"
 
-prepend DJGPP_CFLAGS "-O2"
+prepend CFLAGS_FOR_TARGET "-O2"
 
 if [ -z $1 ]; then
   echo "Usage: $0 [packages...]"
@@ -136,7 +136,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   cd src
   unset COMSPEC
   sed -i "50cCROSS_PREFIX = ${TARGET}-" makefile.def
-  sed -i '61cGCC = \$(CC) -g -O2 \$(HOST_CFLAGS)' makefile.def
+  sed -i "61cGCC = \$(CC) -g -O2 ${CFLAGS}" makefile.def
   ${MAKE} misc.exe makemake.exe ../hostbin || exit 1
   ${MAKE} -C djasm native || exit 1
   ${MAKE} -C stub native || exit 1
@@ -270,7 +270,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   echo "Building djgpp libc"
   cd ${BASE}/build/djgpp-${DJGPP_VERSION}/src
   TEMP_CFLAGS="$CFLAGS"
-  export CFLAGS="$DJGPP_CFLAGS"
+  export CFLAGS="$CFLAGS_FOR_TARGET"
   sed -i 's/Werror/Wno-error/' makefile.cfg
   ${MAKE} config || exit 1
   ${MAKE} -j${MAKE_JOBS} -C mkdoc || exit 1
@@ -304,7 +304,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   echo "Building djgpp libraries"
   cd ${BASE}/build/djgpp-${DJGPP_VERSION}/src
   TEMP_CFLAGS="$CFLAGS"
-  export CFLAGS="$DJGPP_CFLAGS"
+  export CFLAGS="$CFLAGS_FOR_TARGET"
   ${MAKE} -j${MAKE_JOBS} -C utils native || exit 1
   ${MAKE} -j${MAKE_JOBS} -C dxe native || exit 1
   ${MAKE} -j${MAKE_JOBS} -C debug || exit 1
