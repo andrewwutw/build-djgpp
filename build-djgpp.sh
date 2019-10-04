@@ -75,8 +75,8 @@ if [ ! -z ${DJGPP_VERSION} ]; then
     unzip -uoq ../../download/djdev${DJGPP_VERSION}.zip || exit 1
     unzip -uoq ../../download/djlsr${DJGPP_VERSION}.zip || exit 1
     unzip -uoq ../../download/djcrx${DJGPP_VERSION}.zip || exit 1
-    patch -p1 -u < ../../patch/patch-djlsr${DJGPP_VERSION}.txt || exit 1
     patch -p1 -u < ../../patch/patch-djcrx${DJGPP_VERSION}.txt || exit 1
+    cat ../../patch/djlsr${DJGPP_VERSION}/* | patch -p1 -u || exit 1
   fi
 
   cd src

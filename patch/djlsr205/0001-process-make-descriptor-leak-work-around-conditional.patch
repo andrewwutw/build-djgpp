@@ -1,0 +1,63 @@
+From 12d00dab0e179b4ec1c5a6a7d6e93eb907ef606d Mon Sep 17 00:00:00 2001
+From: Stas Sergeev <stsp@users.sourceforge.net>
+Date: Sat, 17 Aug 2019 19:00:10 +0300
+Subject: [PATCH] process: make descriptor leak work-around conditional
+
+This patch adds the __spawn_flags variable and __spawn_leak_workaround
+flag to allow the software to control the leak work-around.
+Previous behaviour was to always enable the work-around unless
+the DPMI host is cwsdpmi.
+
+Without this patch it is not possible to spawn a prot-mode TSR
+program like 32rtm. djgpp treats it as a leak and wipes out of
+memory. With this patch things work properly if the DPMI server
+is smart enough to direct the control to prev client after 32rtm
+TSRed. The problem is that 32rtm just jumps to the realmode exit
+addr, so the DPMI server doesn't see the exit and may get confused
+unless the special logic is implemented for that case (i.e. not all
+DPMI servers treat that correctly even after that patch).
+---
+ include/process.h              | 4 ++++
+ src/libc/dos/process/dosexec.c | 4 +++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/include/process.h b/include/process.h
+index 2816ce25..e57467d4 100644
+--- a/include/process.h
++++ b/include/process.h
+@@ -52,6 +52,10 @@ int __djgpp_spawn(int _mode, const char *_path, char *const _argv[], char *const
+ #define SPAWN_EXTENSION_SRCH    1
+ #define SPAWN_NO_EXTENSION_SRCH 2
+ 
++#define __spawn_leak_workaround             0x0001 /* free descriptor leaks */
++
++extern int __spawn_flags;
++
+ #endif /* !_POSIX_SOURCE */
+ #endif /* !__STRICT_ANSI__ */
+ #endif /* !__dj_ENFORCE_ANSI_FREESTANDING */
+diff --git a/src/libc/dos/process/dosexec.c b/src/libc/dos/process/dosexec.c
+index 87d7fbd9..d547a31f 100644
+--- a/src/libc/dos/process/dosexec.c
++++ b/src/libc/dos/process/dosexec.c
+@@ -45,6 +45,7 @@
+ extern char **_environ;
+ 
+ int __dosexec_in_system = 0;
++int __spawn_flags = __spawn_leak_workaround;
+ 
+ typedef struct {
+   unsigned short eseg;
+@@ -492,7 +493,8 @@ static int direct_exec_tail (const char *program, const char *args,
+     /* r5 as corresponding DPMI call is supported beginning with v5.  */
+ 
+     ret = __dpmi_get_capabilities(&flags, dpmi_vendor);
+-    if (ret == 0 && strcmp(dpmi_vendor + 2, "CWSDPMI") == 0)
++    if ((ret == 0 && strcmp(dpmi_vendor + 2, "CWSDPMI") == 0)
++        || (__spawn_flags & __spawn_leak_workaround) == 0)
+       workaround_descriptor_leaks = 0;
+     else
+     {
+-- 
+2.20.1
+
