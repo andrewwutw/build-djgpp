@@ -109,7 +109,7 @@ index 62dee9e9..76b2edd6 100644
  msg_not_coff:
  	.db	": not COFF (Check for viruses)$"
 +msg_no_env:
-+	.db	"no environment segment$"
++	.db	"no envseg$"
  msg_no_dpmi:
  	.db	"no DPMI - Get csdpmi*b.zip$"
  msg_no_dos_memory:
