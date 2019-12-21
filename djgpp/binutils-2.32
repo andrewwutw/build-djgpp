@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 export BINUTILS_VERSION=232
-export BINUTILS_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2gnu/bnu${BINUTILS_VERSION}s.zip"
+export BINUTILS_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/deleted/v2gnu/bnu${BINUTILS_VERSION}s.zip"
