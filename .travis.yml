@@ -1,0 +1,19 @@
+dist: bionic
+
+addons:
+  apt:
+    packages:
+    - bison
+    - flex
+    - curl
+    - gcc
+    - g++
+    - make
+    - texinfo
+    - zlib1g-dev
+    - unzip
+    - patch
+    - xz-utils
+
+script:
+  - ./build-djgpp `ls script/ | sort -V | tail -n 1`
