@@ -2,6 +2,9 @@
 
 source script/init.sh
 
+PACKAGE_SOURCES="ia16 binutils"
+source script/parse-args.sh
+
 TARGET="ia16-elf"
 
 prepend BINUTILS_CONFIGURE_OPTIONS "--disable-werror
@@ -16,62 +19,9 @@ prepend GDB_CONFIGURE_OPTIONS "--disable-werror
 prepend NEWLIB_CONFIGURE_OPTIONS "--enable-newlib-nano-malloc
                                   --disable-newlib-multithread"
 
-if [ -z ${TARGET} ]; then
-  echo "Please specify a target with: export TARGET=..."
-  exit 1
-fi
-
-if [ -z $1 ]; then
-  echo "Usage: $0 [packages...]"
-  echo "Supported packages:"
-  ls ia16/
-  ls binutils/
-  exit 1
-fi
-
-while [ ! -z $1 ]; do
-  if [ -e ia16/$1 ]; then
-    source ia16/$1
-  elif [ -e binutils/$1 ]; then
-    source binutils/$1
-  else
-    echo "Unsupported package: $1"
-    exit 1
-  fi
-  shift
-done
-
-if [ -z ${IGNORE_DEPENDENCIES} ]; then
-  DEPS=""
-  
-  [ ! -z ${GCC_VERSION} ] && DEPS+=" newlib binutils"
-  [ ! -z ${BINUTILS_VERSION} ] && DEPS+=" "
-  [ ! -z ${GDB_VERSION} ] && DEPS+=" "
-  [ ! -z ${NEWLIB_VERSION} ] && DEPS+=" gcc binutils"
-  
-  for DEP in ${DEPS}; do
-    case $DEP in
-      newlib)
-        [ -z ${NEWLIB_VERSION} ] \
-          && source ia16/newlib
-        ;;
-      binutils)
-        [ -z "`ls ${PREFIX}/${TARGET}/etc/binutils-*-installed 2> /dev/null`" ] \
-          && [ -z ${BINUTILS_VERSION} ] \
-          && source ia16/binutils
-        ;;
-      gcc)
-        [ -z ${GCC_VERSION} ] \
-          && source ia16/gcc
-        ;;
-      gdb)
-        [ -z "`ls ${PREFIX}/${TARGET}/etc/gdb-*-installed 2> /dev/null`" ] \
-          && [ -z ${GDB_VERSION} ] \
-          && source common/gdb
-        ;;
-    esac
-  done
-fi
+DEPS=""
+[ ! -z ${GCC_VERSION} ] && DEPS+=" newlib binutils"
+[ ! -z ${NEWLIB_VERSION} ] && DEPS+=" gcc binutils"
 
 source ${BASE}/script/download.sh
 

@@ -2,12 +2,14 @@
 
 source script/init.sh
 
+DJGPP_DOWNLOAD_BASE="http://www.mirrorservice.org/sites/ftp.delorie.com/pub"
+PACKAGE_SOURCES="djgpp common"
+source script/parse-args.sh
+
 case $TARGET in
 *-msdosdjgpp) ;;
 *) TARGET="i586-pc-msdosdjgpp" ;;
 esac
-
-export DJGPP_DOWNLOAD_BASE="http://www.mirrorservice.org/sites/ftp.delorie.com/pub"
 
 prepend BINUTILS_CONFIGURE_OPTIONS "--disable-werror
                                     --disable-nls"
@@ -23,68 +25,9 @@ prepend GDB_CONFIGURE_OPTIONS "--disable-werror
 
 prepend CFLAGS_FOR_TARGET "-O2"
 
-if [ -z $1 ]; then
-  echo "Usage: $0 [packages...]"
-  echo "Supported packages:"
-  ls djgpp/
-  ls common/
-  exit 1
-fi
-
-while [ ! -z $1 ]; do
-  if [ ! -x djgpp/$1 ] && [ ! -x common/$1 ]; then
-    echo "Unsupported package: $1"
-    exit 1
-  fi
-
-  [ -e djgpp/$1 ] && source djgpp/$1 || source common/$1
-  shift
-done
-
 DEPS=""
-
-if [ -z ${IGNORE_DEPENDENCIES} ]; then
-  [ ! -z ${GCC_VERSION} ] && DEPS+=" djgpp binutils"
-  [ ! -z ${BINUTILS_VERSION} ] && DEPS+=" "
-  [ ! -z ${GDB_VERSION} ] && DEPS+=" "
-  [ ! -z ${DJGPP_VERSION} ] && DEPS+=" binutils gcc"
-  [ ! -z ${BUILD_DXEGEN} ] && DEPS+=" djgpp binutils gcc"
-  
-  for DEP in ${DEPS}; do
-    case $DEP in
-      djgpp)
-        [ -z ${DJGPP_VERSION} ] \
-          && source djgpp/djgpp
-        ;;
-      binutils)
-        [ -z "`ls ${PREFIX}/${TARGET}/etc/binutils-*-installed 2> /dev/null`" ] \
-          && [ -z ${BINUTILS_VERSION} ] \
-          && source djgpp/binutils
-        ;;
-      gcc)
-        [ -z "`ls ${PREFIX}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ] \
-          && [ -z ${GCC_VERSION} ] \
-          && source common/gcc
-        ;;
-      gdb)
-        [ -z "`ls ${PREFIX}/${TARGET}/etc/gdb-*-installed 2> /dev/null`" ] \
-          && [ -z ${GDB_VERSION} ] \
-          && source common/gdb
-        ;;
-      dxegen)
-        [ -z "`ls ${PREFIX}/${TARGET}/etc/dxegen-installed 2> /dev/null`" ] \
-          && [ -z ${BUILD_DXEGEN} ] \
-          && source djgpp/dxegen
-        ;;
-    esac
-  done
-fi
-
-if [ ! -z ${GCC_VERSION} ] && [ -z ${DJCROSS_GCC_ARCHIVE} ]; then
-  DJCROSS_GCC_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/rpms/djcross-gcc-${GCC_VERSION}/djcross-gcc-${GCC_VERSION}.tar.bz2"
-  # djcross-gcc-X.XX-tar.* maybe moved from /djgpp/rpms/ to /djgpp/deleted/rpms/ directory.
-  OLD_DJCROSS_GCC_ARCHIVE=${DJCROSS_GCC_ARCHIVE/rpms\//deleted\/rpms\/}
-fi
+[ ! -z ${GCC_VERSION} ] && DEPS+=" djgpp binutils"
+[ ! -z ${DJGPP_VERSION} ] && DEPS+=" binutils gcc"
 
 source ${BASE}/script/download.sh
 

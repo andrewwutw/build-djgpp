@@ -1,5 +1,44 @@
+if [ -z ${TARGET} ]; then
+  echo "Please specify a target with: export TARGET=..."
+  exit 1
+fi
+
+if [ -z ${IGNORE_DEPENDENCIES} ]; then
+  for DEP in ${DEPS}; do
+    case $DEP in
+      djgpp)
+        [ -z ${DJGPP_VERSION} ] \
+          && add_pkg djgpp
+        ;;
+      newlib)
+        [ -z ${NEWLIB_VERSION} ] \
+          && add_pkg newlib
+        ;;
+      avr-libc)
+        [ -z ${AVRLIBC_VERSION} ] \
+          && add_pkg avr-libc
+        ;;
+      binutils)
+        [ -z "`ls ${PREFIX}/${TARGET}/etc/binutils-*-installed 2> /dev/null`" ] \
+          && [ -z ${BINUTILS_VERSION} ] \
+          && add_pkg binutils
+        ;;
+      gcc)
+        [ -z "`ls ${PREFIX}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ] \
+          && [ -z ${GCC_VERSION} ] \
+          && add_pkg gcc
+        ;;
+      gdb)
+        [ -z "`ls ${PREFIX}/${TARGET}/etc/gdb-*-installed 2> /dev/null`" ] \
+          && [ -z ${GDB_VERSION} ] \
+          && add_pkg gdb
+        ;;
+    esac
+  done
+fi
+
 echo "You are about to build and install:"
-[ -z ${DJGPP_VERSION} ]    || echo "    - DJGPP base library ${DJGPP_VERSION}"
+[ -z ${DJGPP_VERSION} ]    || echo "    - DJGPP libraries and utilities ${DJGPP_VERSION}"
 [ -z ${NEWLIB_VERSION} ]   || echo "    - newlib ${NEWLIB_VERSION}"
 [ -z ${BINUTILS_VERSION} ] || echo "    - binutils ${BINUTILS_VERSION}"
 [ -z ${GCC_VERSION} ]      || echo "    - gcc ${GCC_VERSION}"
@@ -102,38 +141,54 @@ fi
 rm test-zlib 2>/dev/null
 rm test-zlib.exe 2>/dev/null
 
+if [ ! -z ${GCC_VERSION} ] && [ -z ${DJCROSS_GCC_ARCHIVE} ]; then
+  DJCROSS_GCC_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/rpms/djcross-gcc-${GCC_VERSION}/djcross-gcc-${GCC_VERSION}.tar.bz2"
+  # djcross-gcc-X.XX-tar.* maybe moved from /djgpp/rpms/ to /djgpp/deleted/rpms/ directory.
+  OLD_DJCROSS_GCC_ARCHIVE=${DJCROSS_GCC_ARCHIVE/rpms\//deleted\/rpms\/}
+fi
+
 # download source files
 ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $DJLSR_ARCHIVE $DJDEV_ARCHIVE
               $SED_ARCHIVE $DJCROSS_GCC_ARCHIVE $OLD_DJCROSS_GCC_ARCHIVE $GCC_ARCHIVE
               $AUTOCONF_ARCHIVE $AUTOMAKE_ARCHIVE $GDB_ARCHIVE $NEWLIB_ARCHIVE
               $AVRLIBC_ARCHIVE $AVRLIBC_DOC_ARCHIVE $AVRDUDE_ARCHIVE $AVARICE_ARCHIVE"
 
-echo "Download source files..."
-mkdir -p download || exit 1
-cd download
+if [ -z ${NO_DOWNLOAD} ]; then
+  echo "Download source files..."
+  mkdir -p download || exit 1
+  cd download
+
+  for ARCHIVE in $ARCHIVE_LIST; do
+    FILE=`basename $ARCHIVE`
+    if ! [ -f $FILE ]; then
+      echo "Download $ARCHIVE ..."
+      if [ ! -z $USE_WGET ]; then
+        DL_CMD="wget -U firefox $ARCHIVE"
+      else
+        DL_CMD="curl -f $ARCHIVE -L -o $FILE"
+      fi
+      echo "Command : $DL_CMD"
+      if ! eval $DL_CMD; then
+        if [ "$ARCHIVE" == "$DJCROSS_GCC_ARCHIVE" ]; then
+          echo "$FILE maybe moved to deleted/ directory."
+        else
+          rm $FILE
+          echo "Download $ARCHIVE failed."
+          exit 1
+        fi
+      fi
+    fi
+  done
+  cd ..
+fi
 
 for ARCHIVE in $ARCHIVE_LIST; do
   FILE=`basename $ARCHIVE`
-  if ! [ -f $FILE ]; then
-    echo "Download $ARCHIVE ..."
-    if [ ! -z $USE_WGET ]; then
-      DL_CMD="wget -U firefox $ARCHIVE"
-    else
-      DL_CMD="curl -f $ARCHIVE -L -o $FILE"
-    fi
-    echo "Command : $DL_CMD"
-    if ! eval $DL_CMD; then
-      if [ "$ARCHIVE" == "$DJCROSS_GCC_ARCHIVE" ]; then
-        echo "$FILE maybe moved to deleted/ directory."
-      else
-        rm $FILE
-        echo "Download $ARCHIVE failed."
-        exit 1
-      fi
-    fi
+  if ! [ -f download/$FILE ]; then
+    echo "Missing: $FILE"
+    exit 1
   fi
 done
-cd ..
 
 echo "Creating install directory: ${PREFIX}"
 [ -d ${PREFIX} ] || ${SUDO} mkdir -p ${PREFIX} || exit 1
