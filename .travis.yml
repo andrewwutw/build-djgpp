@@ -29,10 +29,10 @@ addons:
       - gcc-9
       - g++-9
       - libstdc++-9-dev
-      - clang-9
-      - llvm-9
-      - libc++-9-dev
-      - libc++abi-9-dev
+      - clang-11
+      - llvm-11
+      - libc++-11-dev
+      - libc++abi-11-dev
   homebrew:
     update: true
     packages:
