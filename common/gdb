@@ -1,4 +1,2 @@
-#!/usr/bin/env bash
-
-source common/gdb-8.3
+source common/gdb-8.3.1
 
