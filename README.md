@@ -10,7 +10,7 @@
 * binutils 2.34
 * gdb 8.3.1
 * djgpp 2.05 / cvs
-* newlib 3.1.0
+* newlib 3.3.0
 * avr-libc 2.0.0
 * avrdude 6.3
 * avarice 2.13
