@@ -4,11 +4,11 @@
 
 * 2019-06-06: `master` is now the default branch again.
 
-### Current package versions, as of 2019-07-19:
+### Current package versions, as of 2020-02-03:
 
-* gcc 9.1.0
-* binutils 2.32
-* gdb 8.3
+* gcc 9.2.0
+* binutils 2.34
+* gdb 8.3.1
 * djgpp 2.05 / cvs
 * newlib 3.1.0
 * avr-libc 2.0.0
@@ -89,7 +89,6 @@ BINUTILS_CONFIGURE_OPTIONS= # Same, for binutils
 GDB_CONFIGURE_OPTIONS=      # Same, for gdb
 NEWLIB_CONFIGURE_OPTIONS=   # Same, for newlib
 AVRLIBC_CONFIGURE_OPTIONS=  # Same, for avr-libc
-DJGPP_CFLAGS=               # CFLAGS for building djgpp's libc.
 
 # Misc.
 HOST=                       # The platform you are building for, when building a cross-cross compiler
@@ -173,6 +172,7 @@ $PREFIX/setenv-$TARGET.bat
 * exe2coff
 * stubedit
 * stubify
+* djasm
 
 ### Supported AVR utilities
 
