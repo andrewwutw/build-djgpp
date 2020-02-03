@@ -21,12 +21,7 @@ prepend AVRLIBC_CONFIGURE_OPTIONS "--enable-device-lib"
 
 DEPS=""
 [ ! -z ${GCC_VERSION} ] && DEPS+=" avr-libc binutils"
-[ ! -z ${BINUTILS_VERSION} ] && DEPS+=" "
-[ ! -z ${GDB_VERSION} ] && DEPS+=" "
 [ ! -z ${AVRLIBC_VERSION} ] && DEPS+=" gcc binutils"
-[ ! -z ${AVRDUDE_VERSION} ] && DEPS+=" "
-[ ! -z ${AVARICE_VERSION} ] && DEPS+=" "
-[ ! -z ${SIMULAVR_VERSION} ] && DEPS+=" "
 
 source ${BASE}/script/download.sh
 
@@ -56,11 +51,12 @@ cd ${BASE}/build/
 if [ ! -z ${SIMULAVR_VERSION} ]; then
   echo "Building simulavr"
   cd simulavr/ || exit 1
-  ./bootstrap || exit 1
-  #mkdir -p build-avr/
-  #cd build-avr/ || exit 1
-  make distclean
-  ./configure --prefix=${PREFIX} || exit 1
+  case `uname` in
+  MINGW*) ;&
+  MSYS*) sed -i 's/CMAKE_CONFIG_OPTS=/CMAKE_CONFIG_OPTS=-G "MSYS Makefiles" /' Makefile ;;
+  esac
+  sed -i 's/\/bin\///' cmake/GetGitInfo.cmake
+  make build
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/simulavr.log
   echo "Installing simulavr"
