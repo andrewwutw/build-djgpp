@@ -1,0 +1,41 @@
+--- a/unpack-gcc.sh	2020-02-03 21:17:50.083456100 +0100
++++ b/unpack-gcc.sh	2020-02-03 21:18:18.017456100 +0100
+@@ -31,29 +31,6 @@
+     esac
+ done
+ 
+-archive=${1-gcc-$gcc_version.tar.bz2}
+-
+-#
+-#  Detect required tar command line parameters for unpacking source archice
+-#
+-tar_param=xf`case $archive in *.gz|*.tgz) echo 'z';; *.bz2) echo 'j';; *.xz) echo 'J';; esac`
+-
+-if test "$tar_param" = "xf" ; then
+-    echo "Failed to detect how to decompress $archive"
+-    exit 1
+-fi
+-
+-rm -rf gnu
+-mkdir gnu
+-
+-rm -f $top/s-sources
+-( cd gnu && tar $tar_param $top/$archive && echo $archive >$top/s-sources )
+-
+-if ! [ -f s-sources ] ; then
+-    echo "Cannot unpack GCC sources"
+-    exit 1
+-fi
+-
+ orig_dir_name=`(cd gnu && ls -d gcc* | sed 1q; )`
+ 
+ base_ver=$(cat gnu/$orig_dir_name/gcc/BASE-VER)
+@@ -75,7 +52,7 @@
+     short_ver_2=${short_ver_2}-$datestamp
+ fi
+ 
+-dir_name=gcc-$short_ver
++dir_name=gcc-$gcc_version
+ 
+ if ! test "$dir_name" = "$orig_dir_name" ; then
+     mv -f gnu/$orig_dir_name gnu/$dir_name || exit 1

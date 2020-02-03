@@ -144,7 +144,16 @@ if [ ! -z ${GCC_VERSION} ]; then
       # The --verbose option is not recognized by BSD patch
       sed -i 's/patch --verbose/patch/' unpack-gcc.sh || exit 1
     fi
-    patch -p1 -u < ${BASE}/patch/patch-unpack-gcc.txt || exit 1
+
+    case ${GCC_VERSION} in
+    4.7.3) UNPACK_PATCH=patch-unpack-gcc-4.7.3.txt ;;
+    4.8.0) ;&
+    4.8.1) ;&
+    4.8.2) UNPACK_PATCH=patch-unpack-gcc-4.8.0.txt ;;
+    *)     UNPACK_PATCH=patch-unpack-gcc.txt ;;
+    esac
+
+    patch -p1 -u < ${BASE}/patch/${UNPACK_PATCH} || exit 1
 
     echo "Unpacking gcc..."
     mkdir gnu/
