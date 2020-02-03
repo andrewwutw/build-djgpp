@@ -146,6 +146,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     fi
     patch -p1 -u < ${BASE}/patch/patch-unpack-gcc.txt || exit 1
 
+    echo "Unpacking gcc..."
     mkdir gnu/
     cd gnu/ || exit 1
     untar ${GCC_ARCHIVE}
