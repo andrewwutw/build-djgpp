@@ -22,8 +22,8 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  #    if __GNUC_MINOR__ >= 6
  #      define PRAGMA_DIAG_PUSH       _Pragma("GCC diagnostic push")
 
---- src/jtagrw.cc.orig	2018-06-27 21:49:14 UTC
-+++ src/jtagrw.cc
+--- a/src/jtagrw.cc	2018-06-27 21:49:14 UTC
++++ b/src/jtagrw.cc
 @@ -131,7 +131,7 @@ uchar *jtag1::jtagRead(unsigned long add
  	else
  	    numLocations = (numBytes + 1) / 2;
