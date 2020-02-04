@@ -40,17 +40,12 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
   download_git https://github.com/tkchia/newlib-ia16.git newlib-2_4_0-ia16-tkchia
 fi
 
-if [ ! -z ${BINUTILS_VERSION} ]; then
-  if [ "$BINUTILS_VERSION" = "ia16" ]; then
-    download_git https://github.com/tkchia/binutils-ia16.git binutils-ia16-tkchia
-  elif [ ! -e binutils-${BINUTILS_VERSION}/binutils-unpacked ]; then
-    echo "Unpacking binutils..."
-    untar ${BINUTILS_ARCHIVE} || exit 1
-    touch binutils-${BINUTILS_VERSION}/binutils-unpacked
-  fi
-
+if [ "$BINUTILS_VERSION" = "ia16" ]; then
+  download_git https://github.com/tkchia/binutils-ia16.git binutils-ia16-tkchia
   cd binutils-${BINUTILS_VERSION} || exit 1
   source ${BASE}/script/build-binutils.sh
+else
+  source ${BASE}/script/unpack-build-binutils.sh
 fi
 
 source ${BASE}/script/build-newlib-gcc.sh

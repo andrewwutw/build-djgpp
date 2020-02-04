@@ -26,16 +26,7 @@ source ${BASE}/script/build-tools.sh
 
 cd ${BASE}/build/ || exit 1
 
-if [ ! -z ${BINUTILS_VERSION} ]; then
-  if [ ! -e binutils-${BINUTILS_VERSION}/binutils-unpacked ]; then
-    echo "Unpacking binutils..."
-    untar ${BINUTILS_ARCHIVE} || exit 1
-    touch binutils-${BINUTILS_VERSION}/binutils-unpacked
-  fi
-
-  cd binutils-${BINUTILS_VERSION} || exit 1
-  source ${BASE}/script/build-binutils.sh
-fi
+source ${BASE}/script/unpack-build-binutils.sh
 
 source ${BASE}/script/build-newlib-gcc.sh
 

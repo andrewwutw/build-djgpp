@@ -33,16 +33,7 @@ if [ ! -z ${SIMULAVR_VERSION} ]; then
   download_git https://git.savannah.nongnu.org/git/simulavr.git master
 fi
 
-if [ ! -z ${BINUTILS_VERSION} ]; then
-  if [ ! -e binutils-${BINUTILS_VERSION}/binutils-unpacked ]; then
-    echo "Unpacking binutils..."
-    untar ${BINUTILS_ARCHIVE} || exit 1
-    touch binutils-${BINUTILS_VERSION}/binutils-unpacked
-  fi
-
-  cd binutils-${BINUTILS_VERSION} || exit 1
-  source ${BASE}/script/build-binutils.sh
-fi
+source ${BASE}/script/unpack-build-binutils.sh
 
 source ${BASE}/script/build-avr-gcc.sh
 
