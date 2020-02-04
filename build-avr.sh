@@ -45,7 +45,7 @@ if [ ! -z ${SIMULAVR_VERSION} ]; then
   case `uname` in
   MINGW*) sed -i 's/CMAKE_CONFIG_OPTS=/CMAKE_CONFIG_OPTS=-G "MSYS Makefiles" /' Makefile ;;
   esac
-  sed -i "s/-DCMAKE_INSTALL_PREFIX=/-DCMAKE_INSTALL_PREFIX=${PREFIX} #/" Makefile ;;
+  sed -i "s/-DCMAKE_INSTALL_PREFIX=/-DCMAKE_INSTALL_PREFIX=${PREFIX} #/" Makefile
   sed -i 's/\/bin\///' cmake/GetGitInfo.cmake
   ${MAKE} -j${MAKE_JOBS} build || exit 1
   ${MAKE} -j${MAKE_JOBS} doc || exit 1
