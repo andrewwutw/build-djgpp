@@ -1,4 +1,4 @@
-## Build gcc cross compiler on Windows, Mac OSX, Linux and FreeBSD. [![Build Status](https://travis-ci.org/jwt27/build-gcc.svg?branch=master)](https://travis-ci.org/jwt27/build-gcc)
+## Build gcc cross compiler on Windows, Mac OSX, Linux and FreeBSD. [![Build Status](https://github.com/jwt27/build-gcc/workflows/Test%20builds/badge.svg?branch=master)](https://github.com/jwt27/build-gcc/actions)
 
 ### Upgrade notes:
 
@@ -23,7 +23,7 @@
 * arm-eabi
 * avr
 
-See the [build logs](https://travis-ci.org/jwt27/build-gcc) on Travis-CI for a detailed status of individual targets.
+See the [Actions tab](https://github.com/jwt27/build-gcc/actions) on Github for a detailed status of individual targets.
 
 ### Requirements
 

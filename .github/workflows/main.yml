@@ -1,0 +1,57 @@
+name: Test builds
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+        env:
+          -
+            TARGET: i586-pc-msdosdjgpp
+            PACKAGES: binutils gcc djgpp-2.05
+          -
+            TARGET: i586-pc-msdosdjgpp
+            PACKAGES: binutils gcc djgpp-cvs
+          -
+            TARGET: i586-pc-msdosdjgpp
+            PACKAGES: gdb
+          -
+            TARGET: arm-eabi
+            PACKAGES: binutils gcc newlib
+          -
+            TARGET: arm-eabi
+            PACKAGES: gdb
+          -
+            TARGET: avr
+            PACKAGES: binutils gcc avr-libc
+          -
+            TARGET: avr
+            PACKAGES: gdb avarice simulavr avrdude
+          -
+            TARGET: ia16-elf
+            PACKAGES: binutils gcc newlib
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies (ubuntu)
+        if: contains(matrix.os, 'ubuntu')
+        run: |
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install bison flex curl make texinfo zlib1g-dev tar bzip2 gzip xz-utils unzip dos2unix libtool-bin gcc-9 g++-9
+          sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+          export CC=gcc-9 CXX=g++-9
+      - name: Install dependencies (macos)
+        if: contains(matrix.os, 'macos')
+        run: |
+          brew update
+          brew install bash bison flex curl make texinfo zlib bzip2 gzip xz unzip dos2unix libtool
+      - name: Build
+        env: 
+          TARGET: ${{ matrix.env.TARGET }}
+          PACKAGES: ${{ matrix.env.PACKAGES }}
+        run: ./script/test.sh

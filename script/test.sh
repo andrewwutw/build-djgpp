@@ -3,10 +3,6 @@ set -e
 
 PREFIX="`pwd`/install"
 
-[ $TRAVIS_OS_NAME = 'linux' ] && MAKE_JOBS=`nproc`
-[ $TRAVIS_OS_NAME = 'osx' ] && MAKE_JOBS=`sysctl -n hw.ncpu`
-MAKE_JOBS+=" --quiet"
-
 CFLAGS="-w"
 CXXFLAGS="-w"
 
