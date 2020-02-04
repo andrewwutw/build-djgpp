@@ -20,8 +20,12 @@ DEPS=""
 [ ! -z ${GCC_VERSION} ] && DEPS+=" newlib binutils"
 [ ! -z ${NEWLIB_VERSION} ] && DEPS+=" gcc binutils"
 
+source ${BASE}/script/check-deps-and-confirm.sh
 source ${BASE}/script/download.sh
 
+[ ! -z ${ONLY_DOWNLOAD} ] && exit 0
+
+source ${BASE}/script/mkdirs.sh
 source ${BASE}/script/build-tools.sh
 
 cd ${BASE}/build/ || exit 1

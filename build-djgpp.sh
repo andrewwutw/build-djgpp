@@ -29,8 +29,18 @@ DEPS=""
 [ ! -z ${GCC_VERSION} ] && DEPS+=" djgpp binutils"
 [ ! -z ${DJGPP_VERSION} ] && DEPS+=" binutils gcc"
 
+source ${BASE}/script/check-deps-and-confirm.sh
 source ${BASE}/script/download.sh
 
+if [ "${DJGPP_VERSION}" == "cvs" ]; then
+  mkdir ${BASE}/build
+  cd ${BASE}/build/ || exit 1
+  download_git https://github.com/jwt27/djgpp-cvs.git jwt27
+fi
+
+[ ! -z ${ONLY_DOWNLOAD} ] && exit 0
+
+source ${BASE}/script/mkdirs.sh
 source ${BASE}/script/build-tools.sh
 
 cd ${BASE}/build/ || exit 1
@@ -65,7 +75,6 @@ cd ${BASE}/build/ || exit 1
 
 if [ ! -z ${DJGPP_VERSION} ]; then
   if [ "${DJGPP_VERSION}" == "cvs" ]; then
-    download_git https://github.com/jwt27/djgpp-cvs.git jwt27
     cd djgpp-cvs
   else
     echo "Unpacking djgpp..."

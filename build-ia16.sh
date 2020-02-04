@@ -23,10 +23,10 @@ DEPS=""
 [ ! -z ${GCC_VERSION} ] && DEPS+=" newlib binutils"
 [ ! -z ${NEWLIB_VERSION} ] && DEPS+=" gcc binutils"
 
+source ${BASE}/script/check-deps-and-confirm.sh
 source ${BASE}/script/download.sh
 
-source ${BASE}/script/build-tools.sh
-
+mkdir -p ${BASE}/build
 cd ${BASE}/build/ || exit 1
 
 if [ ! -z ${GCC_VERSION} ]; then
@@ -42,6 +42,15 @@ fi
 
 if [ "$BINUTILS_VERSION" = "ia16" ]; then
   download_git https://github.com/tkchia/binutils-ia16.git binutils-ia16-tkchia
+fi
+
+[ ! -z ${ONLY_DOWNLOAD} ] && exit 0
+
+source ${BASE}/script/mkdirs.sh
+source ${BASE}/script/build-tools.sh
+
+cd ${BASE}/build/ || exit 1
+if [ "$BINUTILS_VERSION" = "ia16" ]; then
   cd binutils-${BINUTILS_VERSION} || exit 1
   source ${BASE}/script/build-binutils.sh
 else

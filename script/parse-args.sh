@@ -23,10 +23,8 @@ add_pkg()
 
 for A in "$@"; do
   case $A in
-  --no-download)
-    # assumes tar archives are already present in ./download/
-    # does not prevent downloading from git sources.
-    NO_DOWNLOAD=y ;;
+  --no-download) NO_DOWNLOAD=y ;;
+  --only-download) ONLY_DOWNLOAD=y ;;
   --prefix=*) PREFIX=${A#*=} ;;
   --target=*) TARGET=${A#*=} ;;
   *) add_pkg $A ;;
