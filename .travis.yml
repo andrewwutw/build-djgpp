@@ -36,6 +36,7 @@ addons:
   homebrew:
     update: true
     packages:
+      - bash
       - bison
       - flex
       - curl
