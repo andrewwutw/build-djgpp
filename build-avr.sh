@@ -43,15 +43,15 @@ if [ ! -z ${SIMULAVR_VERSION} ]; then
   echo "Building simulavr"
   cd simulavr/ || exit 1
   case `uname` in
-  MINGW*) ;&
-  MSYS*) sed -i 's/CMAKE_CONFIG_OPTS=/CMAKE_CONFIG_OPTS=-G "MSYS Makefiles" /' Makefile ;;
+  MINGW*) sed -i 's/CMAKE_CONFIG_OPTS=/CMAKE_CONFIG_OPTS=-G "MSYS Makefiles" /' Makefile ;;
   esac
+  sed -i "s/-DCMAKE_INSTALL_PREFIX=/-DCMAKE_INSTALL_PREFIX=${PREFIX} #/" Makefile ;;
   sed -i 's/\/bin\///' cmake/GetGitInfo.cmake
-  make build
-  ${MAKE} -j${MAKE_JOBS} || exit 1
+  ${MAKE} -j${MAKE_JOBS} build || exit 1
+  ${MAKE} -j${MAKE_JOBS} doc || exit 1
   [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/simulavr.log
   echo "Installing simulavr"
-  ${SUDO} ${MAKE} -j${MAKE_JOBS} install || exit 1
+  ${SUDO} ${MAKE} -C build install || exit 1
   cd ${BASE}/build/ || exit 1
 fi
 
