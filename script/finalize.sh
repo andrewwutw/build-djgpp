@@ -35,19 +35,21 @@ echo "Installing setenv-${TARGET}"
 ${SUDO} cp ${BASE}/build/setenv-${TARGET} ${PREFIX}/
 cp ${BASE}/build/setenv-${TARGET}.bat ${PREFIX}/ 2> /dev/null
 
-for x in $(echo $ENABLE_LANGUAGES | tr "," " ")
-do
-  case $x in
-    c++)
-      echo "Testing C++ compiler: "
-      ($PREFIX/bin/${TARGET}-c++ ${BASE}/script/hello-cpp.cpp -o hello-cpp && echo "PASS") || echo "FAIL"
-      ;;
-    c)
-      echo "Testing C compiler: "
-      ($PREFIX/bin/${TARGET}-gcc ${BASE}/script/hello.c -o hello && echo "PASS") || echo "FAIL"
-      ;;
-  esac
-done
+if [ ! -z "`ls ${PREFIX}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ]; then
+  for x in $(echo $ENABLE_LANGUAGES | tr "," " ")
+  do
+    case $x in
+      c++)
+        echo "Testing C++ compiler: "
+        ($PREFIX/bin/${TARGET}-c++ ${BASE}/script/hello-cpp.cpp -o hello-cpp && echo "PASS") || echo "FAIL"
+        ;;
+      c)
+        echo "Testing C compiler: "
+        ($PREFIX/bin/${TARGET}-gcc ${BASE}/script/hello.c -o hello && echo "PASS") || echo "FAIL"
+        ;;
+    esac
+  done
+fi
 
 echo "Done."
 echo "To remove temporary build files, use: rm -rf build/"
