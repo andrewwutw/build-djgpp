@@ -72,7 +72,7 @@ else
 fi
 
 # check zlib is installed
-if ! ${CC} test-zlib.c -o test-zlib -lz; then
+if ! ${CC} ${BASE}/script/test-zlib.c -o test-zlib -lz; then
   echo "zlib not installed"
   exit 1
 fi

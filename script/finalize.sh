@@ -35,18 +35,16 @@ echo "Installing setenv-${TARGET}"
 ${SUDO} cp ${BASE}/build/setenv-${TARGET} ${PREFIX}/
 cp ${BASE}/build/setenv-${TARGET}.bat ${PREFIX}/ 2> /dev/null
 
-cd ${BASE}/build
-
 for x in $(echo $ENABLE_LANGUAGES | tr "," " ")
 do
   case $x in
     c++)
       echo "Testing C++ compiler: "
-      ($PREFIX/bin/${TARGET}-c++ ../hello-cpp.cpp -o hello-cpp && echo "PASS") || echo "FAIL"
+      ($PREFIX/bin/${TARGET}-c++ ${BASE}/script/hello-cpp.cpp -o hello-cpp && echo "PASS") || echo "FAIL"
       ;;
     c)
       echo "Testing C compiler: "
-      ($PREFIX/bin/${TARGET}-gcc ../hello.c -o hello && echo "PASS") || echo "FAIL"
+      ($PREFIX/bin/${TARGET}-gcc ${BASE}/script/hello.c -o hello && echo "PASS") || echo "FAIL"
       ;;
   esac
 done
