@@ -49,7 +49,12 @@ if [ ! -z "`ls ${PREFIX}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ]; then
         ;;
       c)
         echo "Testing C compiler: "
-        ($PREFIX/bin/${TARGET}-gcc ${BASE}/script/hello.c -o hello && echo "PASS") || echo "FAIL"
+        if $PREFIX/bin/${TARGET}-gcc ${BASE}/script/hello.c -o hello; then
+          echo "PASS"
+        else
+          echo "FAIL"
+          exit 1
+        fi
         ;;
     esac
   done
