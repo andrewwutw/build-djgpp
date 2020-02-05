@@ -12,7 +12,7 @@ fi
 [ ! -z ${ONLY_DOWNLOAD} ] && return
 
 if [ -z ${TARGET} ]; then
-  echo "Please specify a target with: export TARGET=..."
+  echo "Please specify a target with: --target=..."
   exit 1
 fi
 

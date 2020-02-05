@@ -1,7 +1,10 @@
 #!/usr/bin/env false
 
 if [ -z $1 ]; then
-  echo "Usage: $0 [packages...]"
+  echo "Usage: $0 [options...] [packages...]"
+  echo "Supported options:"
+  echo "    --prefix=[...]"
+  echo "    --target=[...]"
   echo "Supported packages:"
   for DIR in ${PACKAGE_SOURCES}; do
     ls $DIR

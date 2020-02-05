@@ -78,8 +78,8 @@ pacman -Syuu base-devel mingw-w64-x86_64-toolchain mingw-w64-x86_64-curl mingw-w
 Several environment variables control the build process. Usually you only need to specify `TARGET`. Here is the full list:
 ```
 # Primary build options:
-TARGET=                     # Target name.
-PREFIX=                     # Install location.
+TARGET=                     # Target name. (deprecated, use option --target=[...])
+PREFIX=                     # Install location. (deprecated, use option --prefix=[...])
 ENABLE_LANGUAGES=           # Comma-separated list of languages to build compilers for.
 
 # Advanced build options:
