@@ -45,7 +45,7 @@ if [ ! -z "`ls ${PREFIX}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ]; then
     case $x in
       c++)
         echo "Testing C++ compiler: "
-        ($PREFIX/bin/${TARGET}-c++ ${BASE}/script/hello-cpp.cpp -o hello-cpp && echo "PASS") || echo "FAIL"
+        ($PREFIX/bin/${TARGET}-c++ ${BASE}/script/hello.c -o hello && echo "PASS") || echo "FAIL"
         ;;
       c)
         echo "Testing C compiler: "
