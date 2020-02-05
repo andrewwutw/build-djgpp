@@ -1,3 +1,14 @@
+if [ -z ${NO_DOWNLOAD} ]; then
+  # MinGW32 doesn't have curl, so we use wget.
+  if ! which curl > /dev/null; then
+    USE_WGET=1
+    if ! which wget > /dev/null; then
+      echo "curl or wget not installed"
+      exit 1
+    fi
+  fi
+fi
+
 [ ! -z ${ONLY_DOWNLOAD} ] && return
 
 if [ -z ${TARGET} ]; then
@@ -42,18 +53,6 @@ fi
 # check required programs
 REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch tar xz bunzip2 gunzip"
 
-# MinGW doesn't have curl, so we use wget.
-if ! which curl > /dev/null; then
-  USE_WGET=1
-fi
-
-# use curl or wget?
-if [ ! -z $USE_WGET ]; then
-  REQ_PROG_LIST+=" wget"
-else
-  REQ_PROG_LIST+=" curl"
-fi
-
 for REQ_PROG in $REQ_PROG_LIST; do
   if ! which $REQ_PROG > /dev/null; then
     echo "$REQ_PROG not installed"
@@ -63,7 +62,7 @@ done
 
 # check GNU sed is installed or not.
 # It is for OSX, which doesn't ship with GNU sed.
-if ! sed --version 2>/dev/null |grep "GNU sed" > /dev/null ;then
+if ! sed --version 2>/dev/null | grep "GNU sed" > /dev/null ;then
   echo GNU sed is not installed, need to download.
   SED_VERSION=4.4
   SED_ARCHIVE="http://ftpmirror.gnu.org/sed/sed-${SED_VERSION}.tar.xz"
