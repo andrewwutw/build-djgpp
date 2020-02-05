@@ -11,14 +11,14 @@ echo "Copy long name executables to short name."
   ${SUDO} cp -p bin/${TARGET}-g++ bin/${TARGET}-g++-${GCC_VERSION}
 )
 
-cat << STOP > ${BASE}/build/setenv-${TARGET}
+cat << STOP > ${BASE}/build/${TARGET}-setenv
 export PATH="${PREFIX}/${TARGET}/bin/:${PREFIX}/bin/:\$PATH"
 export GCC_EXEC_PREFIX="${PREFIX}/lib/gcc/"
 export MANPATH="${PREFIX}/${TARGET}/share/man:${PREFIX}/share/man:\$MANPATH"
 export INFOPATH="${PREFIX}/${TARGET}/share/info:${PREFIX}/share/info:\$INFOPATH"
 STOP
 
-cat << STOP > ${BASE}/build/setenv-${TARGET}.bat
+cat << STOP > ${BASE}/build/${TARGET}-setenv.bat
 @echo off
 PATH=%~dp0${TARGET}\\bin;%~dp0bin;%PATH%
 set GCC_EXEC_PREFIX=%~dp0lib\\gcc\\
@@ -26,14 +26,18 @@ STOP
 
 case $TARGET in
 *-msdosdjgpp)
-  echo "export DJDIR=\"${PREFIX}/${TARGET}\""   >> ${BASE}/build/setenv-${TARGET}
-  echo "set DJDIR=%~dp0${TARGET}"               >> ${BASE}/build/setenv-${TARGET}.bat
+  echo "export DJDIR=\"${PREFIX}/${TARGET}\""   >> ${BASE}/build/${TARGET}-setenv
+  echo "set DJDIR=%~dp0${TARGET}"               >> ${BASE}/build/${TARGET}-setenv.bat
   ;;
 esac
 
-echo "Installing setenv-${TARGET}"
-${SUDO} cp ${BASE}/build/setenv-${TARGET} ${PREFIX}/
-cp ${BASE}/build/setenv-${TARGET}.bat ${PREFIX}/ 2> /dev/null
+echo "Installing ${TARGET}-setenv"
+chmod +x ${BASE}/build/${TARGET}-setenv
+${SUDO} cp -p ${BASE}/build/${TARGET}-setenv ${PREFIX}/bin/
+case `uname` in
+MINGW*) ;&
+MSYS*) cp -p ${BASE}/build/setenv-${TARGET}.bat ${PREFIX}/bin/ 2> /dev/null ;;
+esac
 
 if [ ! -z "`ls ${PREFIX}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ]; then
   for x in $(echo $ENABLE_LANGUAGES | tr "," " ")
