@@ -12,7 +12,7 @@ if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" = "${BINUTILS_CONFI
   echo ${BINUTILS_CONFIGURE_OPTIONS} > configure-prefix
 else
   echo "Note: binutils already configured. To force a rebuild, use: rm -rf $(pwd)"
-  sleep 5
+  [ -z ${BUILD_BATCH} ] && sleep 5
 fi
 
 case $TARGET in

@@ -21,7 +21,7 @@ if [ ! -z ${GDB_VERSION} ]; then
     echo ${GDB_CONFIGURE_OPTIONS} > configure-prefix
   else
     echo "Note: gdb already configured. To force a rebuild, use: rm -rf $(pwd)"
-    sleep 5
+    [ -z ${BUILD_BATCH} ] && sleep 5
   fi
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/gdb.log

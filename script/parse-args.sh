@@ -25,6 +25,8 @@ for A in "$@"; do
   case $A in
   --no-download) NO_DOWNLOAD=y ;;
   --only-download) ONLY_DOWNLOAD=y ;;
+  --ignore-dependencies) IGNORE_DEPENDENCIES=y ;;
+  --batch) BUILD_BATCH=y ;;
   --prefix=*) PREFIX=${A#*=} ;;
   --target=*) TARGET=${A#*=} ;;
   *) add_pkg $A ;;

@@ -44,7 +44,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     echo ${GCC_CONFIGURE_OPTIONS} > configure-prefix
   else
     echo "Note: gcc already configured. To force a rebuild, use: rm -rf $(pwd)"
-    sleep 5
+    [ -z ${BUILD_BATCH} ] && sleep 5
   fi
 
   ${MAKE} -j${MAKE_JOBS} all-gcc || exit 1
@@ -70,7 +70,7 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
     echo ${NEWLIB_CONFIGURE_OPTIONS} > configure-prefix
   else
     echo "Note: newlib already configured. To force a rebuild, use: rm -rf $(pwd)"
-    sleep 5
+    [ -z ${BUILD_BATCH} ] && sleep 5
   fi
   
   ${MAKE} -j${MAKE_JOBS} || exit 1

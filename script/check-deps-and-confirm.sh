@@ -134,10 +134,13 @@ mkdir -p ${PREFIX}
 
 if [ ! -d ${PREFIX} ] || [ ! -w ${PREFIX} ]; then
   echo "WARNING: no write access to ${PREFIX}."
+  [ ! -z ${BUILD_BATCH} ] && exit 1
   echo "You may need to enter your sudo password several times during the build process."
   echo ""
   SUDO=sudo
 fi
 
-echo "If you wish to change anything, press CTRL-C now. Otherwise, press any other key to continue."
-read -s -n 1
+if [ -z ${BUILD_BATCH} ]; then
+  echo "If you wish to change anything, press CTRL-C now. Otherwise, press any other key to continue."
+  read -s -n 1
+fi
