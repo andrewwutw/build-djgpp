@@ -62,6 +62,7 @@ prepend() { eval "$1=\"$2 ${!1}\""; }
 
 download_git()
 {
+  [ ! -z ${NO_DOWNLOAD} ] && return
   local repo=$(basename $1)
   repo=${repo%.*}
   echo "Downloading ${repo}..."
