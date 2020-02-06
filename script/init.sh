@@ -62,14 +62,15 @@ prepend() { eval "$1=\"$2 ${!1}\""; }
 
 download_git()
 {
-  [ ! -z ${NO_DOWNLOAD} ] && return
   local repo=$(basename $1)
   repo=${repo%.*}
-  echo "Downloading ${repo}..."
-  [ -d $repo ] || git clone $1 --depth 1 $([ "$2" != "" ] && echo "--branch $2")
+  if [ -z ${NO_DOWNLOAD} ]; then
+    echo "Downloading ${repo}..."
+    [ -d $repo ] || git clone $1 --depth 1 $([ "$2" != "" ] && echo "--branch $2")
+  fi
   cd $repo || exit 1
   git reset --hard HEAD
   git checkout $2
-  git pull || exit 1
+  [ -z ${NO_DOWNLOAD} ] && (git pull || exit 1)
   cd ..
 }
