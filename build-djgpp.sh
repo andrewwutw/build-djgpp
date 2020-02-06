@@ -92,6 +92,9 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   unset COMSPEC
   sed -i "50cCROSS_PREFIX = ${TARGET}-" makefile.def
   sed -i "61cGCC = \$(CC) -g -O2 ${CFLAGS}" makefile.def
+  if [ -e configure-options ] && [ ! "`cat configure-options 2> /dev/null`" == "${TARGET}:${PREFIX}:${CFLAGS_FOR_TARGET}" ]; then
+    ${MAKE} -j${MAKE_JOBS} clean
+  fi
   ${MAKE} misc.exe makemake.exe ../hostbin || exit 1
   ${MAKE} -C djasm native || exit 1
   ${MAKE} -C stub native || exit 1
@@ -238,6 +241,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   export CFLAGS="$CFLAGS_FOR_TARGET"
   sed -i 's/Werror/Wno-error/' makefile.cfg
   ${MAKE} config || exit 1
+  echo "${TARGET}:${PREFIX}:${CFLAGS_FOR_TARGET}" > configure-options
   ${MAKE} -j${MAKE_JOBS} -C mkdoc || exit 1
   ${MAKE} -j${MAKE_JOBS} -C libc || exit 1
 
