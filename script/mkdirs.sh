@@ -1,8 +1,8 @@
-echo "Creating install directory: ${PREFIX}"
-[ -d ${PREFIX} ] || ${SUDO} mkdir -p ${PREFIX} || exit 1
-[ -d ${PREFIX}/${TARGET}/etc/ ] || ${SUDO} mkdir -p ${PREFIX}/${TARGET}/etc/ || exit 1
+echo "Creating install directory: ${DST}"
+[ -d ${DST} ] || ${SUDO} mkdir -p ${DST} || exit 1
+[ -d ${DST}/${TARGET}/etc/ ] || ${SUDO} mkdir -p ${DST}/${TARGET}/etc/ || exit 1
 
-export PATH="${PREFIX}/bin:$PATH"
+export PATH="${DST}/bin:${PREFIX}/bin:$PATH"
 
 rm -rf ${BASE}/tests
 mkdir -p ${BASE}/tests

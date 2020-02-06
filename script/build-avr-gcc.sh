@@ -10,11 +10,11 @@ if [ ! -z ${AVRLIBC_VERSION} ]; then
     cd ..
   fi
   cd avr-libc-${AVRLIBC_VERSION}/
-  #${SUDO} mkdir -p ${PREFIX}/${TARGET}/sys-include/
-  #${SUDO} cp -rv include/* ${PREFIX}/${TARGET}/sys-include/ | exit 1
+  ${SUDO} mkdir -p ${DST}/${TARGET}/include/
+  ${SUDO} cp -rv include/* ${DST}/${TARGET}/include/ | exit 1
   echo "Installing avr-libc documentation"
-  ${SUDO} mkdir -p ${PREFIX}/${TARGET}/share/man/
-  ${SUDO} cp -rv man/* ${PREFIX}/${TARGET}/share/man/ | exit 1
+  ${SUDO} mkdir -p ${DST}/${TARGET}/share/man/
+  ${SUDO} cp -rv man/* ${DST}/${TARGET}/share/man/ | exit 1
   cd ..
 fi
 
@@ -44,9 +44,10 @@ if [ ! -z ${GCC_VERSION} ]; then
 
   TEMP_CFLAGS="$CFLAGS"
   export CFLAGS="$CFLAGS $GCC_EXTRA_CFLAGS"
-  
+
   GCC_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX} ${HOST_FLAG} ${BUILD_FLAG}
-                           --enable-languages=${ENABLE_LANGUAGES} --with-avrlibc --with-headers"
+                           --enable-languages=${ENABLE_LANGUAGES}
+                           --with-avrlibc"
   strip_whitespace GCC_CONFIGURE_OPTIONS
 
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${GCC_CONFIGURE_OPTIONS}" ]; then
@@ -72,10 +73,10 @@ if [ ! -z ${AVRLIBC_VERSION} ]; then
   echo "Building avr-libc"
   mkdir -p avr-libc-${AVRLIBC_VERSION}/build-${TARGET}
   cd avr-libc-${AVRLIBC_VERSION}/build-${TARGET} || exit 1
-  
+
   AVRLIBC_CONFIGURE_OPTIONS+=" --host=${TARGET} --prefix=${PREFIX} ${BUILD_FLAG}"
   strip_whitespace AVRLIBC_CONFIGURE_OPTIONS
-  
+
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${AVRLIBC_CONFIGURE_OPTIONS}" ]; then
     rm -rf *
     CC=avr-gcc ../configure ${AVRLIBC_CONFIGURE_OPTIONS} || exit 1
@@ -84,7 +85,7 @@ if [ ! -z ${AVRLIBC_VERSION} ]; then
     echo "Note: avr-libc already configured. To force a rebuild, use: rm -rf $(pwd)"
     [ -z ${BUILD_BATCH} ] && sleep 5
   fi
-  
+
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/avr-libc.log
   echo "Installing avr-libc"
@@ -94,16 +95,17 @@ fi
 cd ${BASE}/build/
 
 if [ ! -z ${GCC_VERSION} ]; then
-  cd gcc-${GCC_VERSION}/build-${TARGET} || exit 1
-  
   echo "Building gcc (stage 2)"
+  cd gcc-${GCC_VERSION}/build-${TARGET} || exit 1
+
+  export STAGE_CC_WRAPPER="${BASE}/script/destdir-hack.sh ${DST}/${TARGET}"
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK_GCC ] && ${MAKE} -j${MAKE_JOBS} -s check-gcc | tee ${BASE}/tests/gcc.log
   echo "Installing gcc"
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || \
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
   ${SUDO} ${MAKE} -j${MAKE_JOBS} -C mpfr install
-  
-  ${SUDO} rm -f ${PREFIX}/${TARGET}/etc/gcc-*-installed
-  ${SUDO} touch ${PREFIX}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
+
+  ${SUDO} rm -f ${DST}/${TARGET}/etc/gcc-*-installed
+  ${SUDO} touch ${DST}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
 fi

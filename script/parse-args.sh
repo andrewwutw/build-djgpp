@@ -31,6 +31,7 @@ for A in "$@"; do
   --only-download) ONLY_DOWNLOAD=y ;;
   --ignore-dependencies) IGNORE_DEPENDENCIES=y ;;
   --batch) BUILD_BATCH=y ;;
+  --destdir=*) DESTDIR=${A#*=} ;;
   --prefix=*) PREFIX=${A#*=} ;;
   --target=*) TARGET=${A#*=} ;;
   --enable-languages=*) ENABLE_LANGUAGES=${A#*=} ;;

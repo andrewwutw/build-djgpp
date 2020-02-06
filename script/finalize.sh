@@ -1,6 +1,6 @@
 echo "Copy long name executables to short name."
 (
-  cd $PREFIX || exit 1
+  cd ${DST} || exit 1
   ${SUDO} mkdir -p ${TARGET}/bin
   SHORT_NAME_LIST="gcc g++ c++ addr2line c++filt cpp size strings dxegen dxe3gen dxe3res exe2coff stubify stubedit gdb djasm"
   for SHORT_NAME in $SHORT_NAME_LIST; do
@@ -38,23 +38,23 @@ esac
 
 echo "Installing ${TARGET}-setenv"
 chmod +x ${BASE}/build/${TARGET}-setenv
-${SUDO} cp -p ${BASE}/build/${TARGET}-setenv ${PREFIX}/bin/
+${SUDO} cp -p ${BASE}/build/${TARGET}-setenv ${DST}/bin/
 case `uname` in
 MINGW*) ;&
-MSYS*) cp -p ${BASE}/build/setenv-${TARGET}.cmd ${PREFIX}/bin/ 2> /dev/null ;;
+MSYS*) cp -p ${BASE}/build/setenv-${TARGET}.cmd ${DST}/bin/ 2> /dev/null ;;
 esac
 
-if [ ! -z "`ls ${PREFIX}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ]; then
+if [ ! -z "`ls ${DST}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ]; then
   for x in $(echo $ENABLE_LANGUAGES | tr "," " ")
   do
     case $x in
       c++)
         echo "Testing C++ compiler: "
-        ($PREFIX/bin/${TARGET}-c++ ${BASE}/script/hello.c -o hello && echo "PASS") || echo "FAIL"
+        (${DST}/bin/${TARGET}-c++ ${BASE}/script/hello.c -o hello && echo "PASS") || echo "FAIL"
         ;;
       c)
         echo "Testing C compiler: "
-        if $PREFIX/bin/${TARGET}-gcc ${BASE}/script/hello.c -o hello; then
+        if ${DST}/bin/${TARGET}-gcc ${BASE}/script/hello.c -o hello; then
           echo "PASS"
         else
           echo "FAIL"

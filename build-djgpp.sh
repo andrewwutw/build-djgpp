@@ -66,7 +66,7 @@ cd ${BASE}/build/ || exit 1
 
 if [ ! -z ${DJGPP_VERSION} ]; then
   if [ "${DJGPP_VERSION}" == "cvs" ]; then
-    cd djgpp-cvs
+    cd djgpp-cvs || exit 1
   else
     echo "Unpacking djgpp..."
     rm -rf djgpp-${DJGPP_VERSION}/
@@ -83,7 +83,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   unset COMSPEC
   sed -i "50cCROSS_PREFIX = ${TARGET}-" makefile.def
   sed -i "61cGCC = \$(CC) -g -O2 ${CFLAGS}" makefile.def
-  if [ -e configure-options ] && [ ! "`cat configure-options 2> /dev/null`" == "${TARGET}:${PREFIX}:${CFLAGS_FOR_TARGET}" ]; then
+  if [ -e configure-options ] && [ ! "`cat configure-options 2> /dev/null`" == "${TARGET}:${DST}:${CFLAGS_FOR_TARGET}" ]; then
     ${MAKE} -j${MAKE_JOBS} clean
   fi
   ${MAKE} misc.exe makemake.exe ../hostbin || exit 1
@@ -97,12 +97,12 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   *) EXE= ;;
   esac
 
-  echo "Installing djgpp headers"
-  ${SUDO} mkdir -p $PREFIX/${TARGET}/sys-include || exit 1
-  ${SUDO} cp -rp include/* $PREFIX/${TARGET}/sys-include/ || exit 1
-  ${SUDO} mkdir -p $PREFIX/bin || exit 1
-  ${SUDO} cp -p hostbin/stubify.exe $PREFIX/bin/${TARGET}-stubify${EXE} || exit 1
-  ${SUDO} cp -p hostbin/stubedit.exe $PREFIX/bin/${TARGET}-stubedit${EXE} || exit 1
+  echo "Installing djgpp headers and utilities"
+  ${SUDO} mkdir -p ${DST}/${TARGET}/sys-include || exit 1
+  ${SUDO} cp -rp include/* ${DST}/${TARGET}/sys-include/ || exit 1
+  ${SUDO} mkdir -p ${DST}/bin || exit 1
+  ${SUDO} cp -p hostbin/stubify.exe  ${DST}/bin/${TARGET}-stubify${EXE}  || exit 1
+  ${SUDO} cp -p hostbin/stubedit.exe ${DST}/bin/${TARGET}-stubedit${EXE} || exit 1
 fi
 
 cd ${BASE}/build/
@@ -121,7 +121,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     untar ${AUTOCONF_ARCHIVE} || exit 1
     cd autoconf-${AUTOCONF_VERSION}/
       ./configure --prefix=$BUILDDIR/tmpinst || exit 1
-      ${MAKE} -j${MAKE_JOBS} all install || exit 1
+      ${MAKE} -j${MAKE_JOBS} DESTDIR=/ all install || exit 1
     rm ${BUILDDIR}/tmpinst/autoconf-*-built
     touch ${BUILDDIR}/tmpinst/autoconf-${AUTOCONF_VERSION}-built
   else
@@ -134,7 +134,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     untar ${AUTOMAKE_ARCHIVE} || exit 1
     cd automake-${AUTOMAKE_VERSION}/
     ./configure --prefix=$BUILDDIR/tmpinst || exit 1
-      ${MAKE} all install || exit 1
+      ${MAKE} DESTDIR=/ all install || exit 1
     rm ${BUILDDIR}/tmpinst/automake-*-built
     touch ${BUILDDIR}/tmpinst/automake-${AUTOMAKE_VERSION}-built
   else
@@ -218,7 +218,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     sleep 5
   fi
 
-  cp $PREFIX/bin/${TARGET}-stubify $BUILDDIR/tmpinst/bin/stubify || exit 1
+  cp ${DST}/bin/${TARGET}-stubify ${BUILDDIR}/tmpinst/bin/stubify || exit 1
 
   ${MAKE} -j${MAKE_JOBS} all-gcc || exit 1
   echo "Installing gcc (stage 1)"
@@ -227,8 +227,6 @@ if [ ! -z ${GCC_VERSION} ]; then
   export CFLAGS="$TEMP_CFLAGS"
 fi
 
-# gcc done
-
 if [ ! -z ${DJGPP_VERSION} ]; then
   echo "Building djgpp libc"
   cd ${BASE}/build/djgpp-${DJGPP_VERSION}/src
@@ -236,13 +234,13 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   export CFLAGS="$CFLAGS_FOR_TARGET"
   sed -i 's/Werror/Wno-error/' makefile.cfg
   ${MAKE} config || exit 1
-  echo "${TARGET}:${PREFIX}:${CFLAGS_FOR_TARGET}" > configure-options
+  echo "${TARGET}:${DST}:${CFLAGS_FOR_TARGET}" > configure-options
   ${MAKE} -j${MAKE_JOBS} -C mkdoc || exit 1
   ${MAKE} -j${MAKE_JOBS} -C libc || exit 1
 
   echo "Installing djgpp libc"
-  ${SUDO} mkdir -p ${PREFIX}/${TARGET}/lib
-  ${SUDO} cp -rp ../lib/* $PREFIX/${TARGET}/lib || exit 1
+  ${SUDO} mkdir -p ${DST}/${TARGET}/lib
+  ${SUDO} cp -rp ../lib/* ${DST}/${TARGET}/lib || exit 1
   CFLAGS="$TEMP_CFLAGS"
 fi
 
@@ -252,6 +250,7 @@ if [ ! -z ${GCC_VERSION} ]; then
 
   TEMP_CFLAGS="$CFLAGS"
   export CFLAGS="$CFLAGS $GCC_EXTRA_CFLAGS"
+  export STAGE_CC_WRAPPER="${BASE}/script/destdir-hack.sh ${DST}/${TARGET}"
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK_GCC ] && ${MAKE} -j${MAKE_JOBS} -s check-gcc | tee ${BASE}/tests/gcc.log
   echo "Installing gcc (stage 2)"
@@ -260,8 +259,8 @@ if [ ! -z ${GCC_VERSION} ]; then
   ${SUDO} ${MAKE} -j${MAKE_JOBS} -C mpfr install
   CFLAGS="$TEMP_CFLAGS"
 
-  ${SUDO} rm -f ${PREFIX}/${TARGET}/etc/gcc-*-installed
-  ${SUDO} touch ${PREFIX}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
+  ${SUDO} rm -f ${DST}/${TARGET}/etc/gcc-*-installed
+  ${SUDO} touch ${DST}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
 fi
 
 if [ ! -z ${DJGPP_VERSION} ]; then
@@ -281,17 +280,17 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   cd ..
 
   echo "Installing djgpp libraries and utilities"
-  ${SUDO} cp -rp lib/* $PREFIX/${TARGET}/lib || exit 1
-  ${SUDO} cp -p hostbin/exe2coff.exe $PREFIX/bin/${TARGET}-exe2coff${EXE} || exit 1
-  ${SUDO} cp -p hostbin/djasm.exe $PREFIX/bin/${TARGET}-djasm${EXE} || exit 1
-  ${SUDO} cp -p hostbin/dxegen.exe  $PREFIX/bin/${TARGET}-dxegen${EXE} || exit 1
-  ${SUDO} ln -fs $PREFIX/bin/${TARGET}-dxegen${EXE} $PREFIX/bin/${TARGET}-dxe3gen${EXE} || exit 1
-  ${SUDO} cp -p hostbin/dxe3res.exe $PREFIX/bin/${TARGET}-dxe3res${EXE} || exit 1
-  ${SUDO} mkdir -p ${PREFIX}/${TARGET}/share/info
-  ${SUDO} cp -rp info/* ${PREFIX}/${TARGET}/share/info
+  ${SUDO} cp -rp lib/* ${DST}/${TARGET}/lib || exit 1
+  ${SUDO} mkdir -p ${DST}/${TARGET}/share/info
+  ${SUDO} cp -rp info/* ${DST}/${TARGET}/share/info
+  ${SUDO} cp -p hostbin/exe2coff.exe ${DST}/bin/${TARGET}-exe2coff${EXE} || exit 1
+  ${SUDO} cp -p hostbin/djasm.exe    ${DST}/bin/${TARGET}-djasm${EXE}    || exit 1
+  ${SUDO} cp -p hostbin/dxegen.exe   ${DST}/bin/${TARGET}-dxegen${EXE}   || exit 1
+  ${SUDO} cp -p hostbin/dxegen.exe   ${DST}/bin/${TARGET}-dxe3gen${EXE}  || exit 1
+  ${SUDO} cp -p hostbin/dxe3res.exe  ${DST}/bin/${TARGET}-dxe3res${EXE}  || exit 1
 
-  ${SUDO} rm -f ${PREFIX}/${TARGET}/etc/djgpp-*-installed
-  ${SUDO} touch ${PREFIX}/${TARGET}/etc/djgpp-${DJGPP_VERSION}-installed
+  ${SUDO} rm -f ${DST}/${TARGET}/etc/djgpp-*-installed
+  ${SUDO} touch ${DST}/${TARGET}/etc/djgpp-${DJGPP_VERSION}-installed
 fi
 
 cd ${BASE}/build

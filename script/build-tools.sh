@@ -13,7 +13,7 @@ if [ ! -z $SED_VERSION ]; then
     export CFLAGS="${CFLAGS//-w}"   # configure fails if warnings are disabled.
     ./configure --prefix=${BASE}/build/tmpinst || exit 1
     ${MAKE} -j${MAKE_JOBS} || exit 1
-    ${MAKE} -j${MAKE_JOBS} install || exit 1
+    ${MAKE} -j${MAKE_JOBS} DESTDIR=/ install || exit 1
     CFLAGS="$TEMP_CFLAGS"
     touch ${BASE}/build/tmpinst/sed-${SED_VERSION}-installed
   fi

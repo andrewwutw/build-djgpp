@@ -28,5 +28,5 @@ ${MAKE} -j${MAKE_JOBS} || exit 1
 echo "Installing binutils"
 ${SUDO} ${MAKE} -j${MAKE_JOBS} install || exit 1
 
-${SUDO} rm -f ${PREFIX}/${TARGET}/etc/binutils-*-installed
-${SUDO} touch ${PREFIX}/${TARGET}/etc/binutils-${BINUTILS_VERSION}-installed
+${SUDO} rm -f ${DST}/${TARGET}/etc/binutils-*-installed
+${SUDO} touch ${DST}/${TARGET}/etc/binutils-${BINUTILS_VERSION}-installed

@@ -3,8 +3,8 @@ cd ${BASE}/build/
 if [ ! -z ${NEWLIB_VERSION} ] && [ ! -e newlib-${NEWLIB_VERSION}/newlib-unpacked ]; then
   echo "Unpacking newlib..."
   untar ${NEWLIB_ARCHIVE}
-  #${SUDO} mkdir -p ${PREFIX}/${TARGET}/sys-include/
-  #${SUDO} cp -rv newlib-${NEWLIB_VERSION}/newlib/libc/include/* ${PREFIX}/${TARGET}/sys-include/ | exit 1
+  ${SUDO} mkdir -p ${DST}/${TARGET}/include/
+  ${SUDO} cp -rv newlib-${NEWLIB_VERSION}/newlib/libc/include/* ${DST}/${TARGET}/include/ | exit 1
   touch newlib-${NEWLIB_VERSION}/newlib-unpacked
 fi
 
@@ -36,10 +36,10 @@ if [ ! -z ${GCC_VERSION} ]; then
 
   TEMP_CFLAGS="$CFLAGS"
   export CFLAGS="$CFLAGS $GCC_EXTRA_CFLAGS"
-  
+
   GCC_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX} ${HOST_FLAG} ${BUILD_FLAG}
                            --enable-languages=${ENABLE_LANGUAGES}
-                           --with-newlib --with-headers"
+                           --with-newlib"
   strip_whitespace GCC_CONFIGURE_OPTIONS
 
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${GCC_CONFIGURE_OPTIONS}" ]; then
@@ -65,10 +65,10 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
   echo "Building newlib"
   mkdir -p newlib-${NEWLIB_VERSION}/build-${TARGET}
   cd newlib-${NEWLIB_VERSION}/build-${TARGET} || exit 1
-  
+
   NEWLIB_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX} ${HOST_FLAG} ${BUILD_FLAG}"
   strip_whitespace NEWLIB_CONFIGURE_OPTIONS
-  
+
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${NEWLIB_CONFIGURE_OPTIONS}" ]; then
     rm -rf *
     ../configure ${NEWLIB_CONFIGURE_OPTIONS} || exit 1
@@ -77,7 +77,7 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
     echo "Note: newlib already configured. To force a rebuild, use: rm -rf $(pwd)"
     [ -z ${BUILD_BATCH} ] && sleep 5
   fi
-  
+
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/newlib.log
   echo "Installing newlib"
@@ -90,14 +90,15 @@ cd ${BASE}/build/
 if [ ! -z ${GCC_VERSION} ]; then
   echo "Building gcc (stage 2)"
   cd gcc-${GCC_VERSION}/build-${TARGET} || exit 1
-  
+
+  export STAGE_CC_WRAPPER="${BASE}/script/destdir-hack.sh ${DST}/${TARGET}"
   ${MAKE} -j${MAKE_JOBS} || exit 1
   [ ! -z $MAKE_CHECK_GCC ] && ${MAKE} -j${MAKE_JOBS} -s check-gcc | tee ${BASE}/tests/gcc.log
   echo "Installing gcc"
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || \
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
   ${SUDO} ${MAKE} -j${MAKE_JOBS} -C mpfr install
-  
-  ${SUDO} rm -f ${PREFIX}/${TARGET}/etc/gcc-*-installed
-  ${SUDO} touch ${PREFIX}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
+
+  ${SUDO} rm -f ${DST}/${TARGET}/etc/gcc-*-installed
+  ${SUDO} touch ${DST}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
 fi

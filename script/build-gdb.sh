@@ -12,7 +12,7 @@ if [ ! -z ${GDB_VERSION} ]; then
   echo "Building gdb"
   
   GDB_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX} ${HOST_FLAG} ${BUILD_FLAG}"
-  [ -e ${PREFIX}/lib/libmpfr.a ] && GDB_CONFIGURE_OPTIONS+=" --with-mpfr=${PREFIX}"
+  [ -e ${DST}/lib/libmpfr.a ] && GDB_CONFIGURE_OPTIONS+=" --with-mpfr=${PREFIX}"
   strip_whitespace GDB_CONFIGURE_OPTIONS
 
   if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" = "${GDB_CONFIGURE_OPTIONS}" ]; then
@@ -28,6 +28,6 @@ if [ ! -z ${GDB_VERSION} ]; then
   echo "Installing gdb"
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install || exit 1
 
-  ${SUDO} rm -f ${PREFIX}/${TARGET}/etc/gdb-*-installed
-  ${SUDO} touch ${PREFIX}/${TARGET}/etc/gdb-${GDB_VERSION}-installed
+  ${SUDO} rm -f ${DST}/${TARGET}/etc/gdb-*-installed
+  ${SUDO} touch ${DST}/${TARGET}/etc/gdb-${GDB_VERSION}-installed
 fi

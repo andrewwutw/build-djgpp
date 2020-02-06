@@ -87,6 +87,9 @@ if [ -z ${TARGET} ]; then
   exit 1
 fi
 
+DST="${DESTDIR}${PREFIX}"
+export DESTDIR
+
 # check required programs
 REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch tar xz bunzip2 gunzip"
 
@@ -120,6 +123,7 @@ echo "You are about to build and install:"
 echo ""
 echo "With the following options:"
 [ ! -z ${IGNORE_DEPENDENCIES} ] && echo "    IGNORE_DEPENDENCIES=${IGNORE_DEPENDENCIES}"
+[ ! -z ${DESTDIR} ]             && echo "    DESTDIR=${DESTDIR}"
 echo "    TARGET=${TARGET}"
 echo "    HOST=${HOST}"
 echo "    BUILD=${BUILD}"
@@ -157,16 +161,16 @@ if [ ! -z ${AVRLIBC_VERSION} ]; then
 fi
 echo ""
 
-mkdir -p ${PREFIX} 2> /dev/null
+mkdir -p ${DST} 2> /dev/null
 
-if [ ! -d ${PREFIX} ] || [ ! -w ${PREFIX} ]; then
+if [ ! -d ${DST} ] || [ ! -w ${DST} ]; then
   if [ ! -z ${BUILD_BATCH} ]; then
     if ! sudo -n : 2> /dev/null; then
-      echo "ERROR: no write access to ${PREFIX} (requires sudo)"
+      echo "ERROR: no write access to ${DST} (requires sudo)"
       exit 1
     fi
   else
-    echo "WARNING: no write access to ${PREFIX}"
+    echo "WARNING: no write access to ${DST}"
     echo "You may need to enter your sudo password several times during the build process."
     echo ""
   fi
