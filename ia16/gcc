@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-export GCC_VERSION="ia16"
+GCC_VERSION="ia16"
+ISL_VERSION=0.15
 
-export GCC_CONFIGURE_OPTIONS="--disable-plugin
-                              --enable-lto
-                              --disable-libstdcxx-dual-abi
-                              ${GCC_CONFIGURE_OPTIONS}"
+GCC_CONFIGURE_OPTIONS="--disable-plugin
+                       --enable-lto
+                       --disable-libstdcxx-dual-abi
+                       ${GCC_CONFIGURE_OPTIONS}"

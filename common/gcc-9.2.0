@@ -1,13 +1,13 @@
-export GCC_VERSION=9.2.0
-export GCC_VERSION_SHORT=9.20
-export AUTOCONF_VERSION=2.69
-export AUTOMAKE_VERSION=1.15.1
+GCC_VERSION=9.2.0
+GCC_VERSION_SHORT=9.20
+AUTOCONF_VERSION=2.69
+AUTOMAKE_VERSION=1.15.1
 
 # tarball location
-export GCC_ARCHIVE="http://ftpmirror.gnu.org/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz"
-export AUTOCONF_ARCHIVE="http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.xz"
-export AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.xz"
+GCC_ARCHIVE="http://ftpmirror.gnu.org/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz"
+AUTOCONF_ARCHIVE="http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.xz"
+AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.xz"
 
-export GCC_CONFIGURE_OPTIONS="--disable-plugin \
-                              --enable-lto \
-                              ${GCC_CONFIGURE_OPTIONS}"
+GCC_CONFIGURE_OPTIONS="--disable-plugin \
+                       --enable-lto \
+                       ${GCC_CONFIGURE_OPTIONS}"
