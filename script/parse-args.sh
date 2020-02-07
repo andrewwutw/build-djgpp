@@ -5,6 +5,7 @@ if [ -z $1 ]; then
   echo "Supported options:"
   echo "    --prefix=[...]"
   echo "    --target=[...]"
+  echo "    --enable-languages=[...]"
   echo "Supported packages:"
   for DIR in ${PACKAGE_SOURCES}; do
     ls $DIR
@@ -20,7 +21,7 @@ add_pkg()
       return
     fi
   done
-  echo "Unsupported package: $1"
+  echo "Unrecognized option or invalid package: $1"
   exit 1
 }
 
@@ -32,6 +33,7 @@ for A in "$@"; do
   --batch) BUILD_BATCH=y ;;
   --prefix=*) PREFIX=${A#*=} ;;
   --target=*) TARGET=${A#*=} ;;
+  --enable-languages=*) ENABLE_LANGUAGES=${A#*=} ;;
   *) add_pkg $A ;;
   esac
 done
