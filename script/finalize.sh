@@ -12,6 +12,11 @@ echo "Copy long name executables to short name."
 )
 
 cat << STOP > ${BASE}/build/${TARGET}-setenv
+if ! (return 2> /dev/null); then
+  echo "This script must be executed with 'source' to set environment variables:"
+  echo "source \$0"
+  exit 1
+fi
 export PATH="${PREFIX}/${TARGET}/bin/:${PREFIX}/bin/:\$PATH"
 export GCC_EXEC_PREFIX="${PREFIX}/lib/gcc/"
 export MANPATH="${PREFIX}/${TARGET}/share/man:${PREFIX}/share/man:\$MANPATH"
