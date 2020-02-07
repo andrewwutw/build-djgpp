@@ -43,7 +43,6 @@ jobs:
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test
           sudo apt-get update
           sudo apt-get install bison flex curl make texinfo zlib1g-dev tar bzip2 gzip xz-utils unzip dos2unix libtool-bin gcc-9 g++-9
-          sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
           export CC=gcc-9 CXX=g++-9
       - name: Install dependencies (macos)
         if: contains(matrix.os, 'macos')
