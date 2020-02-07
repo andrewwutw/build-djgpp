@@ -18,16 +18,16 @@ export MANPATH="${PREFIX}/${TARGET}/share/man:${PREFIX}/share/man:\$MANPATH"
 export INFOPATH="${PREFIX}/${TARGET}/share/info:${PREFIX}/share/info:\$INFOPATH"
 STOP
 
-cat << STOP > ${BASE}/build/${TARGET}-setenv.bat
+cat << STOP > ${BASE}/build/${TARGET}-setenv.cmd
 @echo off
-PATH=%~dp0${TARGET}\\bin;%~dp0bin;%PATH%
-set GCC_EXEC_PREFIX=%~dp0lib\\gcc\\
+PATH=%~dp0..\\${TARGET}\\bin;%~dp0..\\bin;%PATH%
+set GCC_EXEC_PREFIX=%~dp0..\\lib\\gcc\\
 STOP
 
 case $TARGET in
 *-msdosdjgpp)
   echo "export DJDIR=\"${PREFIX}/${TARGET}\""   >> ${BASE}/build/${TARGET}-setenv
-  echo "set DJDIR=%~dp0${TARGET}"               >> ${BASE}/build/${TARGET}-setenv.bat
+  echo "set DJDIR=%~dp0..\\${TARGET}"           >> ${BASE}/build/${TARGET}-setenv.cmd
   ;;
 esac
 
@@ -36,7 +36,7 @@ chmod +x ${BASE}/build/${TARGET}-setenv
 ${SUDO} cp -p ${BASE}/build/${TARGET}-setenv ${PREFIX}/bin/
 case `uname` in
 MINGW*) ;&
-MSYS*) cp -p ${BASE}/build/setenv-${TARGET}.bat ${PREFIX}/bin/ 2> /dev/null ;;
+MSYS*) cp -p ${BASE}/build/setenv-${TARGET}.cmd ${PREFIX}/bin/ 2> /dev/null ;;
 esac
 
 if [ ! -z "`ls ${PREFIX}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ]; then
