@@ -2,6 +2,7 @@
 
 ### Upgrade notes:
 
+* 2020-02-07: setenv script is now installed to `$PREFIX/bin/$TARGET-setenv`.
 * 2019-06-06: `master` is now the default branch again.
 
 ### Current package versions, as of 2020-02-03:
@@ -18,7 +19,7 @@
 
 ### Tested targets:
 
-* *-pc-msdosdjgpp
+* i586-pc-msdosdjgpp
 * ia16
 * arm-eabi
 * avr
@@ -49,48 +50,52 @@ Depending on your system, installation procedure maybe different.
 
 On Debian/Ubuntu, you can install these programs by :
 
-```
+```sh
 sudo apt-get update
 sudo apt-get install bison flex curl gcc g++ make texinfo zlib1g-dev tar bzip2 gzip xz-utils unzip
 ```
 
 Fedora :
 
-```
+```sh
 sudo yum install gcc-c++ bison flex texinfo patch zlib-devel tar bzip2 gzip xz unzip
 ```
 
 MinGW :
 
-```
+```sh
 mingw-get update
 mingw-get install msys-unzip libz-dev msys-wget msys-bison msys-flex msys-patch
 ```
 
 MinGW64 (msys2) :
 
-```
+```sh
 pacman -Syuu base-devel mingw-w64-x86_64-toolchain mingw-w64-x86_64-curl mingw-w64-x86_64-zlib compression
 ```
 
 ### Configuration
 
-Several environment variables control the build process. Usually you only need to specify `TARGET`. Here is the full list:
+The following command line options are recognized:
+```sh
+  --prefix=...              # Install location (default: /usr/local/cross)
+  --target=...              # Target name
+  --enable-languages=...    # Comma-separated list of languages to build compilers for (default: c,c++)
+  --no-download             # Do not download any files
+  --only-download           # Download source files, then exit
+  --ignore-dependencies     # Do not check package dependencies
+  --batch                   # Run in batch mode (will not prompt or delay to confirm settings)
 ```
-# Primary build options:
-TARGET=                     # Target name. (deprecated, use option --target=[...])
-PREFIX=                     # Install location. (deprecated, use option --prefix=[...])
-ENABLE_LANGUAGES=           # Comma-separated list of languages to build compilers for.
 
-# Advanced build options:
+Several environment variables also control the build process:
+```sh
 MAKE_JOBS=                  # Number of parallel build threads (auto-detected)
 GCC_CONFIGURE_OPTIONS=      # Extra options to pass to gcc's ./configure
 BINUTILS_CONFIGURE_OPTIONS= # Same, for binutils
 GDB_CONFIGURE_OPTIONS=      # Same, for gdb
 NEWLIB_CONFIGURE_OPTIONS=   # Same, for newlib
 AVRLIBC_CONFIGURE_OPTIONS=  # Same, for avr-libc
-
-# Misc.
+CFLAGS_FOR_TARGET=          # CFLAGS used to build target libraries
 HOST=                       # The platform you are building for, when building a cross-cross compiler
 BUILD=                      # The platform you are building on (auto-detected)
 MAKE_CHECK=                 # Run test suites on built programs.
@@ -100,71 +105,58 @@ MAKE_CHECK_GCC=             # Run gcc test suites.
 ### Building
 
 Pick the script you want to use:
-```
-build-glibc.sh      # builds a toolchain with glibc (gcc's default standard library)
-build-djgpp.sh      # builds a toolchain with the djgpp standard library (fixed TARGET: i586-pc-msdosdjgpp)
-build-newlib.sh     # builds a toolchain with the newlib standard library
-build-ia16.sh       # builds a toolchain with the newlib standard library (fixed TARGET: ia16-elf)
+```sh
+build-djgpp.sh      # builds a toolchain targeting djgpp (default TARGET: i586-pc-msdosdjgpp)
+build-newlib.sh     # builds a toolchain with the newlib C library
+build-ia16.sh       # builds a toolchain targeting 8086 processors, with the newlib C library (fixed TARGET: ia16-elf)
+build-avr.sh        # builds a toolchain targeting AVR microcontrollers (fixed TARGET: avr)
 ```
 
 To build DJGPP, just run:
-```
-./build-djgpp.sh [packages...]
+```sh
+./build-djgpp.sh [options...] [packages...]
 ```
 Run with no arguments to see a list of supported packages and versions.
 
-For example, to build gcc 7.2.0 with the djgpp base library and latest binutils:
-```
-./build-djgpp.sh base binutils gcc-7.2.0
+For example, to build gcc 9.2.0 with the latest djgpp C library from CVS and latest binutils:
+```sh
+./build-djgpp.sh --prefix=/usr/local djgpp-cvs binutils gcc-9.2.0
 ```
 
 To install or upgrade all packages:
-```
-./build-djgpp.sh all
+```sh
+./build-djgpp.sh --prefix=/usr/local all
 ```
 
-It will download all necessary files, build DJGPP compiler and binutils, and install it.
+It will download all necessary files, build DJGPP compiler, binutils, and gdb, and install it.
 
 ### Using
 
-There are 2 methods to run the compiler (`$PREFIX` and `$TARGET` here are the variables you used to build).
+In order to use your new compiler, you must add its `bin/` directory to your `PATH`.  
+You can then access the compiler through its target-prefixed name: (`$PREFIX` and `$TARGET` in these examples are the variables you used to build)
 
-* Use compiler full name:
-
-```
-export PATH=$PREFIX/bin/:$PATH
-$TARGET-g++ hello.cpp
+```sh
+$ PATH=$PREFIX/bin/:$PATH
+$ $TARGET-g++ hello.cpp
 ```
 
-* Or, use compiler short name, you have to change environment variables.
+To use the short name variant, and access documentation with `man` and `info`, use the installed setenv script:
 
-If you are using Linux:
-```
-export PATH=$PREFIX/$TARGET/bin/:$PATH
-export GCC_EXEC_PREFIX=$PREFIX/lib/gcc/
-g++ hello.cpp
-```
-Or, run :
-
-```
-source $PREFIX/setenv-$TARGET
+```sh
+$ source $TARGET-setenv
+$ g++ hello.cpp
 ```
 
 If you are using Windows command prompt :
 
-```
-PATH=$PREFIX/$TARGET/bin;%PATH%
-set GCC_EXEC_PREFIX=$PREFIX/lib/gcc/
-g++ hello.cpp
-```
-
-Or, run :
-
-```
-$PREFIX/setenv-$TARGET.bat
+```bat
+> PATH=$PREFIX/bin;%PATH%
+> $TARGET-g++ hello.cpp
+> $TARGET-setenv
+> g++ hello.cpp
 ```
 
-### Supported DJGPP Utilities
+### Supported DJGPP utilities
 
 * dxe3gen
 * dxe3res
