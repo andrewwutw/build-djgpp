@@ -13,7 +13,11 @@ if [ ! -z ${GCC_VERSION} ]; then
   GMP_VERSION=${GMP_VERSION:-6.2.0}
   MPFR_VERSION=${MPFR_VERSION:-4.0.2}
   MPC_VERSION=${MPC_VERSION:-1.1.0}
-  ISL_VERSION=${ISL_VERSION:-0.21}
+  if ${CC} -v 2>&1 | grep "clang version" > /dev/null ;then
+    ISL_VERSION=${ISL_VERSION:-0.21}
+  else
+    ISL_VERSION=${ISL_VERSION:-0.22.1}
+  fi
 
   GMP_ARCHIVE="http://ftp.gnu.org/gnu/gmp/gmp-${GMP_VERSION}.tar.xz"
   MPFR_ARCHIVE="http://ftp.gnu.org/gnu/mpfr/mpfr-${MPFR_VERSION}.tar.xz"
