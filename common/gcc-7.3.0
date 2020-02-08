@@ -1,16 +1,13 @@
-#!/usr/bin/env bash
+GCC_VERSION=7.3.0
+GCC_VERSION_SHORT=7.30
+AUTOCONF_VERSION=2.64
+AUTOMAKE_VERSION=1.11.6
 
-export GCC_VERSION=7.3.0
-export GCC_VERSION_SHORT=7.30
-export AUTOCONF_VERSION=2.64
-export AUTOMAKE_VERSION=1.11.6
+GCC_ARCHIVE="http://ftpmirror.gnu.org/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz"
+AUTOCONF_ARCHIVE="http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.xz"
+AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.xz"
 
-# tarball location
-export GCC_ARCHIVE="http://ftpmirror.gnu.org/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz"
-export AUTOCONF_ARCHIVE="http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.xz"
-export AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.xz"
-
-export GCC_CONFIGURE_OPTIONS="--disable-plugin \
-                              --enable-lto \
-                              --enable-libstdcxx-filesystem-ts \
-                              ${GCC_CONFIGURE_OPTIONS}"
+GCC_CONFIGURE_OPTIONS="--disable-plugin \
+                       --enable-lto \
+                       --enable-libstdcxx-filesystem-ts \
+                       ${GCC_CONFIGURE_OPTIONS}"

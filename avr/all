@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 source avr/avr-libc
 source avr/binutils
 source common/gcc

@@ -1,16 +1,13 @@
-#!/usr/bin/env bash
+GCC_VERSION=4.9.4
+GCC_VERSION_SHORT=4.94
+AUTOCONF_VERSION=2.64
+AUTOMAKE_VERSION=1.11.1
 
-export GCC_VERSION=4.9.4
-export GCC_VERSION_SHORT=4.94
-export AUTOCONF_VERSION=2.64
-export AUTOMAKE_VERSION=1.11.1
+GCC_ARCHIVE="http://ftpmirror.gnu.org/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.bz2"
+AUTOCONF_ARCHIVE="http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.xz"
+AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.bz2"
 
-# tarball location
-export GCC_ARCHIVE="http://ftpmirror.gnu.org/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.bz2"
-export AUTOCONF_ARCHIVE="http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.xz"
-export AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.bz2"
+GCC_CONFIGURE_OPTIONS="--enable-lto \
+                       ${GCC_CONFIGURE_OPTIONS}"
 
-export GCC_CONFIGURE_OPTIONS="--enable-lto \
-                              ${GCC_CONFIGURE_OPTIONS}"
-
-export GCC_EXTRA_CFLAGS="-std=gnu90"
+GCC_EXTRA_CFLAGS="-std=gnu90"

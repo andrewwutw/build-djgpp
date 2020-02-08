@@ -1,4 +1,2 @@
-#!/usr/bin/env bash
-
 source djgpp/default
 source djgpp/gdb

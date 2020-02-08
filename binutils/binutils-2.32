@@ -1,4 +1,2 @@
-#!/usr/bin/env bash
-
 BINUTILS_VERSION=2.32
 BINUTILS_ARCHIVE="http://ftpmirror.gnu.org/binutils/binutils-${BINUTILS_VERSION}.tar.xz"

@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 source djgpp/djgpp
 source djgpp/binutils
 source common/gcc

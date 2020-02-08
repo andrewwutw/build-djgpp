@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 source newlib/newlib
 source binutils/binutils
 source common/gcc
