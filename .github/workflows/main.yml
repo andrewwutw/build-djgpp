@@ -38,19 +38,29 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Cache dependencies (ubuntu)
-        uses: actions/cache@v1.1.2
+      - name: Cache apt package lists
+        uses: jwt27/cache@dist
         if: contains(matrix.os, 'ubuntu')
+        id: cache-apt-lists
+        with:
+          path: /var/lib/apt/lists
+          key: testbuild-apt-lists
+
+      - name: Cache apt package cache
+        uses: jwt27/cache@dist
+        if: contains(matrix.os, 'ubuntu')
+        id: cache-apt-cache
         with:
           path: /var/cache/apt
-          key: testbuilds-deps-ubuntu
+          key: testbuild-apt-cache
 
-      - name: Cache dependencies (macos)
-        uses: actions/cache@v1.1.2
+      - name: Cache brew package cache
+        uses: jwt27/cache@dist
         if: contains(matrix.os, 'macos')
+        id: cache-brew-cache
         with:
           path: ~/Library/Caches/Homebrew
-          key: testbuilds-deps-macos
+          key: testbuild-brew-cache
 
       - name: Install dependencies (ubuntu)
         if: contains(matrix.os, 'ubuntu')
@@ -67,10 +77,11 @@ jobs:
           brew install bash bison flex curl make texinfo zlib bzip2 gzip xz unzip dos2unix libtool
 
       - name: Cache sources
-        uses: actions/cache@v1.1.2
+        uses: jwt27/cache@dist
+        id: cache-sources
         with:
           path: download
-          key: 'testbuilds-sources-${{ matrix.os }}-${{ matrix.env.TARGET }}-${{ matrix.env.PACKAGES }}'
+          key: 'testbuild-sources-${{ matrix.os }}-${{ matrix.env.TARGET }}-${{ matrix.env.PACKAGES }}'
 
       - name: Download sources
         env:
