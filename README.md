@@ -5,11 +5,11 @@
 * 2020-02-07: setenv script is now installed to `$PREFIX/bin/$TARGET-setenv`.
 * 2019-06-06: `master` is now the default branch again.
 
-### Current package versions, as of 2020-02-03:
+### Current package versions, as of 2020-02-08:
 
 * gcc 9.2.0
 * binutils 2.34
-* gdb 8.3.1
+* gdb 9.1
 * djgpp 2.05 / cvs
 * newlib 3.3.0
 * avr-libc 2.0.0
