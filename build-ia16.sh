@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-source script/init.sh
-
 PACKAGE_SOURCES="ia16 binutils"
-source script/parse-args.sh
+source script/init.sh
 
 TARGET="ia16-elf"
 

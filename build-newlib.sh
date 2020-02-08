@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-source script/init.sh
-
 PACKAGE_SOURCES="newlib binutils common"
-source script/parse-args.sh
+source script/init.sh
 
 prepend BINUTILS_CONFIGURE_OPTIONS "--disable-werror
                                     --disable-nls"

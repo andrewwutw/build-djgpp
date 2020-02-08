@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-source script/init.sh
-
 PACKAGE_SOURCES="avr binutils common"
-source script/parse-args.sh
+source script/init.sh
 
 TARGET="avr"
 

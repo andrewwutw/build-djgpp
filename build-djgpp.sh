@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 
-source script/init.sh
-
 DJGPP_DOWNLOAD_BASE="http://www.mirrorservice.org/sites/ftp.delorie.com/pub"
 PACKAGE_SOURCES="djgpp common"
-source script/parse-args.sh
+source script/init.sh
 
 case $TARGET in
 *-msdosdjgpp) ;;

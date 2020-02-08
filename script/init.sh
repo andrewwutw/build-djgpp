@@ -1,13 +1,7 @@
 unset CDPATH
+unset SUDO
 
 BASE=`pwd`
-
-# target directory
-PREFIX=${PREFIX-/usr/local/cross}
-
-# enabled languages
-#ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++,f95,objc,obj-c++}
-ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
 
 # number of parallel build threads
 if nproc > /dev/null 2>&1 ; then
@@ -15,8 +9,6 @@ if nproc > /dev/null 2>&1 ; then
 else
   MAKE_JOBS=${MAKE_JOBS-`sysctl -n hw.physicalcpu`}
 fi
-
-SUDO=
 
 # use gmake/clang under FreeBSD
 if [ `uname` = "FreeBSD" ]; then
@@ -59,3 +51,49 @@ untar()
 strip_whitespace() { eval "$1=\"`echo ${!1}`\""; }
 
 prepend() { eval "$1=\"$2 ${!1}\""; }
+
+add_pkg()
+{
+  for DIR in ${PACKAGE_SOURCES}; do
+    if [ -e $DIR/$1 ]; then
+      source $DIR/$1
+      return
+    fi
+  done
+  echo "Unrecognized option or invalid package: $1"
+  exit 1
+}
+
+if [ -z $1 ]; then
+  echo "Usage: $0 [options...] [packages...]"
+  echo "Supported options:"
+  echo "    --prefix=[...]"
+  echo "    --target=[...]"
+  echo "    --enable-languages=[...]"
+  echo "Supported packages:"
+  for DIR in ${PACKAGE_SOURCES}; do
+    ls $DIR
+  done
+  exit 1
+fi
+
+for A in "$@"; do
+  case $A in
+  --no-download) NO_DOWNLOAD=y ;;
+  --only-download) ONLY_DOWNLOAD=y ;;
+  --ignore-dependencies) IGNORE_DEPENDENCIES=y ;;
+  --batch) BUILD_BATCH=y ;;
+  --destdir=*) DESTDIR=${A#*=} ;;
+  --prefix=*) PREFIX=${A#*=} ;;
+  --target=*) TARGET=${A#*=} ;;
+  --enable-languages=*) ENABLE_LANGUAGES=${A#*=} ;;
+  *) add_pkg $A ;;
+  esac
+done
+
+# install directory
+PREFIX=${PREFIX-/usr/local/cross}
+
+# enabled languages
+#ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++,f95,objc,obj-c++}
+ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
