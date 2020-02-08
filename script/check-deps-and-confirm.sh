@@ -1,21 +1,3 @@
-if [ -z ${NO_DOWNLOAD} ]; then
-  # MinGW32 doesn't have curl, so we use wget.
-  if ! which curl > /dev/null; then
-    USE_WGET=1
-    if ! which wget > /dev/null; then
-      echo "curl or wget not installed"
-      exit 1
-    fi
-  fi
-fi
-
-[ ! -z ${ONLY_DOWNLOAD} ] && return
-
-if [ -z ${TARGET} ]; then
-  echo "Please specify a target with: --target=..."
-  exit 1
-fi
-
 if [ -z ${IGNORE_DEPENDENCIES} ]; then
   for DEP in ${DEPS}; do
     case $DEP in
@@ -50,15 +32,32 @@ if [ -z ${IGNORE_DEPENDENCIES} ]; then
   done
 fi
 
-# check required programs
-REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch tar xz bunzip2 gunzip"
+if [ ! -z ${GCC_VERSION} ] && [ -z ${DJCROSS_GCC_ARCHIVE} ]; then
+  DJCROSS_GCC_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/rpms/djcross-gcc-${GCC_VERSION}/djcross-gcc-${GCC_VERSION}.tar.bz2"
+  # djcross-gcc-X.XX-tar.* maybe moved from /djgpp/rpms/ to /djgpp/deleted/rpms/ directory.
+  OLD_DJCROSS_GCC_ARCHIVE=${DJCROSS_GCC_ARCHIVE/rpms\//deleted\/rpms\/}
+fi
 
-for REQ_PROG in $REQ_PROG_LIST; do
-  if ! which $REQ_PROG > /dev/null; then
-    echo "$REQ_PROG not installed"
-    exit 1
+case $TARGET in
+*-msdosdjgpp) ;;
+*) unset DJCROSS_GCC_ARCHIVE OLD_DJCROSS_GCC_ARCHIVE ;;
+esac
+
+if [ ! -z ${GCC_VERSION} ]; then
+  GMP_VERSION=${GMP_VERSION:-6.2.0}
+  MPFR_VERSION=${MPFR_VERSION:-4.0.2}
+  MPC_VERSION=${MPC_VERSION:-1.1.0}
+  if ${CC} -v 2>&1 | grep "clang version" > /dev/null ;then
+    ISL_VERSION=${ISL_VERSION:-0.21}
+  else
+    ISL_VERSION=${ISL_VERSION:-0.22.1}
   fi
-done
+
+  GMP_ARCHIVE="http://ftp.gnu.org/gnu/gmp/gmp-${GMP_VERSION}.tar.xz"
+  MPFR_ARCHIVE="http://ftp.gnu.org/gnu/mpfr/mpfr-${MPFR_VERSION}.tar.xz"
+  MPC_ARCHIVE="http://ftp.gnu.org/gnu/mpc/mpc-${MPC_VERSION}.tar.gz"
+  ISL_ARCHIVE="http://isl.gforge.inria.fr/isl-${ISL_VERSION}.tar.xz"
+fi
 
 # check GNU sed is installed or not.
 # It is for OSX, which doesn't ship with GNU sed.
@@ -69,6 +68,34 @@ if ! sed --version 2>/dev/null | grep "GNU sed" > /dev/null ;then
 else
   SED_ARCHIVE=""
 fi
+
+if [ -z ${NO_DOWNLOAD} ]; then
+  # MinGW32 doesn't have curl, so we use wget.
+  if ! which curl > /dev/null; then
+    USE_WGET=1
+    if ! which wget > /dev/null; then
+      echo "curl or wget not installed"
+      exit 1
+    fi
+  fi
+fi
+
+[ ! -z ${ONLY_DOWNLOAD} ] && return
+
+if [ -z ${TARGET} ]; then
+  echo "Please specify a target with: --target=..."
+  exit 1
+fi
+
+# check required programs
+REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch tar xz bunzip2 gunzip"
+
+for REQ_PROG in $REQ_PROG_LIST; do
+  if ! which $REQ_PROG > /dev/null; then
+    echo "$REQ_PROG not installed"
+    exit 1
+  fi
+done
 
 # check zlib is installed
 if ! ${CC} ${BASE}/script/test-zlib.c -o test-zlib -lz; then

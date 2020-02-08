@@ -1,30 +1,3 @@
-if [ ! -z ${GCC_VERSION} ] && [ -z ${DJCROSS_GCC_ARCHIVE} ]; then
-  DJCROSS_GCC_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/rpms/djcross-gcc-${GCC_VERSION}/djcross-gcc-${GCC_VERSION}.tar.bz2"
-  # djcross-gcc-X.XX-tar.* maybe moved from /djgpp/rpms/ to /djgpp/deleted/rpms/ directory.
-  OLD_DJCROSS_GCC_ARCHIVE=${DJCROSS_GCC_ARCHIVE/rpms\//deleted\/rpms\/}
-fi
-
-case $TARGET in
-*-msdosdjgpp) ;;
-*) unset DJCROSS_GCC_ARCHIVE OLD_DJCROSS_GCC_ARCHIVE ;;
-esac
-
-if [ ! -z ${GCC_VERSION} ]; then
-  GMP_VERSION=${GMP_VERSION:-6.2.0}
-  MPFR_VERSION=${MPFR_VERSION:-4.0.2}
-  MPC_VERSION=${MPC_VERSION:-1.1.0}
-  if ${CC} -v 2>&1 | grep "clang version" > /dev/null ;then
-    ISL_VERSION=${ISL_VERSION:-0.21}
-  else
-    ISL_VERSION=${ISL_VERSION:-0.22.1}
-  fi
-
-  GMP_ARCHIVE="http://ftp.gnu.org/gnu/gmp/gmp-${GMP_VERSION}.tar.xz"
-  MPFR_ARCHIVE="http://ftp.gnu.org/gnu/mpfr/mpfr-${MPFR_VERSION}.tar.xz"
-  MPC_ARCHIVE="http://ftp.gnu.org/gnu/mpc/mpc-${MPC_VERSION}.tar.gz"
-  ISL_ARCHIVE="http://isl.gforge.inria.fr/isl-${ISL_VERSION}.tar.xz"
-fi
-
 # download source files
 ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $DJLSR_ARCHIVE $DJDEV_ARCHIVE
               $SED_ARCHIVE $DJCROSS_GCC_ARCHIVE $OLD_DJCROSS_GCC_ARCHIVE $GCC_ARCHIVE
