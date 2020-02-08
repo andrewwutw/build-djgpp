@@ -37,6 +37,21 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Cache dependencies (ubuntu)
+        uses: actions/cache@v1.1.2
+        if: contains(matrix.os, 'ubuntu')
+        with:
+          path: /var/cache/apt
+          key: testbuilds-deps-ubuntu
+
+      - name: Cache dependencies (macos)
+        uses: actions/cache@v1.1.2
+        if: contains(matrix.os, 'macos')
+        with:
+          path: ~/Library/Caches/Homebrew
+          key: testbuilds-deps-macos
+
       - name: Install dependencies (ubuntu)
         if: contains(matrix.os, 'ubuntu')
         run: |
@@ -44,16 +59,25 @@ jobs:
           sudo apt-get update
           sudo apt-get install bison flex curl make texinfo zlib1g-dev tar bzip2 gzip xz-utils unzip dos2unix libtool-bin gcc-9 g++-9
           export CC=gcc-9 CXX=g++-9
+
       - name: Install dependencies (macos)
         if: contains(matrix.os, 'macos')
         run: |
           brew update
           brew install bash bison flex curl make texinfo zlib bzip2 gzip xz unzip dos2unix libtool
+
+      - name: Cache sources
+        uses: actions/cache@v1.1.2
+        with:
+          path: download
+          key: 'testbuilds-sources-${{ matrix.env.TARGET }}-${{ matrix.env.PACKAGES }}'
+
       - name: Download sources
         env:
           TARGET: ${{ matrix.env.TARGET }}
           PACKAGES: ${{ matrix.env.PACKAGES }}
         run: ./script/test.sh --only-download
+
       - name: Build
         env:
           TARGET: ${{ matrix.env.TARGET }}
