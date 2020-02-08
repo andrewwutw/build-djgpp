@@ -19,16 +19,20 @@ if [ -z ${NO_DOWNLOAD} ]; then
       else
         DL_CMD="curl -f $ARCHIVE -L -o $FILE"
       fi
-      echo "Command : $DL_CMD"
-      if ! eval $DL_CMD; then
-        if [ "$ARCHIVE" == "$DJCROSS_GCC_ARCHIVE" ]; then
-          echo "$FILE maybe moved to deleted/ directory."
+      while true; do
+        if eval $DL_CMD; then
+          break
         else
-          rm $FILE
-          echo "Download $ARCHIVE failed."
-          exit 1
+          if [ "$ARCHIVE" == "$DJCROSS_GCC_ARCHIVE" ]; then
+            echo "$FILE maybe moved to deleted/ directory."
+            break
+          else
+            rm $FILE
+            echo "Download $FILE failed, retrying in 5 seconds... (press CTRL-C to abort)"
+            sleep 5
+          fi
         fi
-      fi
+      done
     fi
   done
   cd ..
