@@ -25,7 +25,6 @@ DEPS=""
 
 source ${BASE}/script/check-deps-and-confirm.sh
 source ${BASE}/script/download.sh
-source ${BASE}/script/mkdirs.sh
 source ${BASE}/script/build-tools.sh
 
 cd ${BASE}/build/ || exit 1

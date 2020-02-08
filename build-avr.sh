@@ -25,7 +25,6 @@ DEPS=""
 
 source ${BASE}/script/check-deps-and-confirm.sh
 source ${BASE}/script/download.sh
-source ${BASE}/script/mkdirs.sh
 source ${BASE}/script/build-tools.sh
 source ${BASE}/script/unpack-build-binutils.sh
 source ${BASE}/script/build-avr-gcc.sh
