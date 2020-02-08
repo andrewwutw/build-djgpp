@@ -7,8 +7,8 @@ ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $DJLSR_ARCHIVE $DJDEV_ARCHIVE
 
 if [ -z ${NO_DOWNLOAD} ]; then
   echo "Download source files..."
-  mkdir -p download || exit 1
-  cd download
+  mkdir -p download
+  cd download || exit 1
 
   for ARCHIVE in $ARCHIVE_LIST; do
     FILE=`basename $ARCHIVE`
@@ -34,6 +34,37 @@ if [ -z ${NO_DOWNLOAD} ]; then
   cd ..
 fi
 
+download_git()
+{
+  local repo=$(basename $1)
+  repo=${repo%.*}
+  if [ ! -d $repo ]; then
+    if [ -z ${NO_DOWNLOAD} ]; then
+      echo "Downloading ${repo}..."
+      git clone $1 --depth 1 $([ "$2" != "" ] && echo "--branch $2")
+    else
+      echo "Missing: ${repo}"
+      exit 1
+    fi
+  fi
+  cd $repo || exit 1
+  git reset --hard HEAD
+  git checkout $2
+  [ -z ${NO_DOWNLOAD} ] && (git pull || exit 1)
+  cd ..
+}
+
+# these variables are of the form "git://url/repo.git::branch"
+# if 'branch' is empty then the default branch is checked out.
+GIT_LIST="$DJGPP_GIT $GCC_GIT $BINUTILS_GIT $NEWLIB_GIT $SIMULAVR_GIT"
+(
+  mkdir -p build
+  cd build || exit 1
+  for REPO in $GIT_LIST; do
+    download_git ${REPO%::*} ${REPO##*::}
+  done
+)
+
 for ARCHIVE in $ARCHIVE_LIST; do
   FILE=`basename $ARCHIVE`
   if ! [ -f download/$FILE ]; then
@@ -41,3 +72,5 @@ for ARCHIVE in $ARCHIVE_LIST; do
     exit 1
   fi
 done
+
+[ ! -z ${ONLY_DOWNLOAD} ] && exit 0

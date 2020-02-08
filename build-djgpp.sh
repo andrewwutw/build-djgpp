@@ -31,15 +31,6 @@ DEPS=""
 
 source ${BASE}/script/check-deps-and-confirm.sh
 source ${BASE}/script/download.sh
-
-if [ "${DJGPP_VERSION}" == "cvs" ]; then
-  mkdir ${BASE}/build
-  cd ${BASE}/build/ || exit 1
-  download_git https://github.com/jwt27/djgpp-cvs.git jwt27
-fi
-
-[ ! -z ${ONLY_DOWNLOAD} ] && exit 0
-
 source ${BASE}/script/mkdirs.sh
 source ${BASE}/script/build-tools.sh
 
@@ -306,5 +297,4 @@ fi
 cd ${BASE}/build
 
 source ${BASE}/script/build-gdb.sh
-
 source ${BASE}/script/finalize.sh

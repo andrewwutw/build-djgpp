@@ -25,27 +25,6 @@ DEPS=""
 
 source ${BASE}/script/check-deps-and-confirm.sh
 source ${BASE}/script/download.sh
-
-mkdir -p ${BASE}/build
-cd ${BASE}/build/ || exit 1
-
-if [ ! -z ${GCC_VERSION} ]; then
-  download_git https://github.com/tkchia/gcc-ia16.git gcc-6_3_0-ia16-tkchia
-  cd gcc-ia16/
-  patch -p1 -u < ../../patch/patch-gcc-ia16.txt || exit 1
-  cd ..
-fi
-
-if [ ! -z ${NEWLIB_VERSION} ]; then
-  download_git https://github.com/tkchia/newlib-ia16.git newlib-2_4_0-ia16-tkchia
-fi
-
-if [ "$BINUTILS_VERSION" = "ia16" ]; then
-  download_git https://github.com/tkchia/binutils-ia16.git binutils-ia16-tkchia
-fi
-
-[ ! -z ${ONLY_DOWNLOAD} ] && exit 0
-
 source ${BASE}/script/mkdirs.sh
 source ${BASE}/script/build-tools.sh
 
@@ -57,8 +36,12 @@ else
   source ${BASE}/script/unpack-build-binutils.sh
 fi
 
+if [ ! -z ${GCC_VERSION} ]; then
+  cd ${BASE}/build/gcc-ia16/
+  patch -p1 -u < ../../patch/patch-gcc-ia16.txt || exit 1
+  cd -
+fi
+
 source ${BASE}/script/build-newlib-gcc.sh
-
 source ${BASE}/script/build-gdb.sh
-
 source ${BASE}/script/finalize.sh

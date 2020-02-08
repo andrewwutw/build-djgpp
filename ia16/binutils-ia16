@@ -1,3 +1,2 @@
-#!/usr/bin/env bash
-
 BINUTILS_VERSION=ia16
+BINUTILS_GIT="https://github.com/tkchia/binutils-ia16.git::binutils-ia16-tkchia"

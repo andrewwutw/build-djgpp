@@ -22,18 +22,9 @@ DEPS=""
 
 source ${BASE}/script/check-deps-and-confirm.sh
 source ${BASE}/script/download.sh
-
-[ ! -z ${ONLY_DOWNLOAD} ] && exit 0
-
 source ${BASE}/script/mkdirs.sh
 source ${BASE}/script/build-tools.sh
-
-cd ${BASE}/build/ || exit 1
-
 source ${BASE}/script/unpack-build-binutils.sh
-
 source ${BASE}/script/build-newlib-gcc.sh
-
 source ${BASE}/script/build-gdb.sh
-
 source ${BASE}/script/finalize.sh

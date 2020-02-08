@@ -1,3 +1,2 @@
-#!/usr/bin/env bash
-
 NEWLIB_VERSION="ia16"
+NEWLIB_GIT="https://github.com/tkchia/newlib-ia16.git::newlib-2_4_0-ia16-tkchia"

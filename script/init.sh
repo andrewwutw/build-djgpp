@@ -59,18 +59,3 @@ untar()
 strip_whitespace() { eval "$1=\"`echo ${!1}`\""; }
 
 prepend() { eval "$1=\"$2 ${!1}\""; }
-
-download_git()
-{
-  local repo=$(basename $1)
-  repo=${repo%.*}
-  if [ -z ${NO_DOWNLOAD} ]; then
-    echo "Downloading ${repo}..."
-    [ -d $repo ] || git clone $1 --depth 1 $([ "$2" != "" ] && echo "--branch $2")
-  fi
-  cd $repo || exit 1
-  git reset --hard HEAD
-  git checkout $2
-  [ -z ${NO_DOWNLOAD} ] && (git pull || exit 1)
-  cd ..
-}

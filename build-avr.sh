@@ -25,20 +25,9 @@ DEPS=""
 
 source ${BASE}/script/check-deps-and-confirm.sh
 source ${BASE}/script/download.sh
-
-mkdir -p ${BASE}/build
-cd ${BASE}/build/ || exit 1
-if [ ! -z ${SIMULAVR_VERSION} ]; then
-  download_git https://git.savannah.nongnu.org/git/simulavr.git master
-fi
-
-[ ! -z ${ONLY_DOWNLOAD} ] && exit 0
-
 source ${BASE}/script/mkdirs.sh
 source ${BASE}/script/build-tools.sh
-
 source ${BASE}/script/unpack-build-binutils.sh
-
 source ${BASE}/script/build-avr-gcc.sh
 
 cd ${BASE}/build/
@@ -91,5 +80,4 @@ if [ ! -z ${AVRDUDE_VERSION} ]; then
 fi
 
 source ${BASE}/script/build-gdb.sh
-
 source ${BASE}/script/finalize.sh

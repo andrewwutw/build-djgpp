@@ -1,3 +1,2 @@
-#!/usr/bin/env bash
-
 SIMULAVR_VERSION=git
+SIMULAVR_GIT="https://git.savannah.nongnu.org/git/simulavr.git::master"

@@ -1,3 +1,5 @@
+cd ${BASE}/build/ || exit 1
+
 if [ ! -z ${BINUTILS_VERSION} ]; then
   if [ ! -e binutils-${BINUTILS_VERSION}/binutils-unpacked ]; then
     echo "Unpacking binutils..."
