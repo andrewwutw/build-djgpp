@@ -157,13 +157,19 @@ if [ ! -z ${AVRLIBC_VERSION} ]; then
 fi
 echo ""
 
-mkdir -p ${PREFIX}
+mkdir -p ${PREFIX} 2> /dev/null
 
 if [ ! -d ${PREFIX} ] || [ ! -w ${PREFIX} ]; then
-  echo "WARNING: no write access to ${PREFIX}."
-  [ ! -z ${BUILD_BATCH} ] && exit 1
-  echo "You may need to enter your sudo password several times during the build process."
-  echo ""
+  if [ ! -z ${BUILD_BATCH} ]; then
+    if ! sudo -n : 2> /dev/null; then
+      echo "ERROR: no write access to ${PREFIX} (requires sudo)"
+      exit 1
+    fi
+  else
+    echo "WARNING: no write access to ${PREFIX}"
+    echo "You may need to enter your sudo password several times during the build process."
+    echo ""
+  fi
   SUDO=sudo
 fi
 
