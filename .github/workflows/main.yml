@@ -70,7 +70,7 @@ jobs:
         uses: actions/cache@v1.1.2
         with:
           path: download
-          key: 'testbuilds-sources-${{ matrix.env.TARGET }}-${{ matrix.env.PACKAGES }}'
+          key: 'testbuilds-sources-${{ matrix.os }}-${{ matrix.env.TARGET }}-${{ matrix.env.PACKAGES }}'
 
       - name: Download sources
         env:
