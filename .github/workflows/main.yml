@@ -49,8 +49,13 @@ jobs:
         run: |
           brew update
           brew install bash bison flex curl make texinfo zlib bzip2 gzip xz unzip dos2unix libtool
-      - name: Build
-        env: 
+      - name: Download sources
+        env:
           TARGET: ${{ matrix.env.TARGET }}
           PACKAGES: ${{ matrix.env.PACKAGES }}
-        run: ./script/test.sh
+        run: ./script/test.sh --only-download
+      - name: Build
+        env:
+          TARGET: ${{ matrix.env.TARGET }}
+          PACKAGES: ${{ matrix.env.PACKAGES }}
+        run: ./script/test.sh --no-download
