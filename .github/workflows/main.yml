@@ -38,29 +38,42 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Clear apt package cache
+        if: contains(matrix.os, 'ubuntu')
+        run: |
+          sudo apt-get clean
+
+      - name: Clear brew package cache
+        if: contains(matrix.os, 'macos')
+        run: |
+          rm -rf $(brew --cache)
+
       - name: Cache apt package lists
         uses: jwt27/cache@dist
         if: contains(matrix.os, 'ubuntu')
-        id: cache-apt-lists
         with:
           path: /var/lib/apt/lists
-          key: testbuild-apt-lists
+          key: testbuild-apt-lists-${{ github.sha }}
+          restore-keys: |
+            testbuild-apt-lists-
 
       - name: Cache apt package cache
         uses: jwt27/cache@dist
         if: contains(matrix.os, 'ubuntu')
-        id: cache-apt-cache
         with:
           path: /var/cache/apt
-          key: testbuild-apt-cache
+          key: testbuild-apt-cache-${{ github.sha }}
+          restore-keys: |
+            testbuild-apt-cache-
 
       - name: Cache brew package cache
         uses: jwt27/cache@dist
         if: contains(matrix.os, 'macos')
-        id: cache-brew-cache
         with:
           path: ~/Library/Caches/Homebrew
-          key: testbuild-brew-cache
+          key: testbuild-brew-cache-${{ github.sha }}
+          restore-keys: |
+            testbuild-brew-cache-
 
       - name: Install dependencies (ubuntu)
         if: contains(matrix.os, 'ubuntu')
@@ -79,10 +92,11 @@ jobs:
 
       - name: Cache sources
         uses: jwt27/cache@dist
-        id: cache-sources
         with:
           path: download
-          key: 'testbuild-sources-${{ matrix.os }}-${{ matrix.env.TARGET }}-${{ matrix.env.PACKAGES }}'
+          key: testbuild-sources-${{ matrix.os }}-${{ matrix.env.TARGET }}-${{ matrix.env.PACKAGES }}-${{ github.sha }}
+          restore-keys: |
+            testbuild-sources-${{ matrix.os }}-${{ matrix.env.TARGET }}-${{ matrix.env.PACKAGES }}-
 
       - name: Download sources
         env:
