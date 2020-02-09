@@ -176,18 +176,17 @@ if [ ! -z ${GCC_VERSION} ]; then
     cd $BUILDDIR/
 
     echo "Unpacking gcc dependencies"
-    (
-      cd gnu/gcc-${GCC_VERSION} || exit 1
+    pushd gnu/gcc-${GCC_VERSION} || exit 1
 
-      for URL in $GMP_ARCHIVE $MPFR_ARCHIVE $MPC_ARCHIVE $ISL_ARCHIVE; do
-          FILE=`basename $URL`
-          untar ${FILE}
-          mv ${FILE%.*.*} ${FILE%%-*}
-      done
+    for URL in $GMP_ARCHIVE $MPFR_ARCHIVE $MPC_ARCHIVE $ISL_ARCHIVE; do
+        FILE=`basename $URL`
+        untar ${FILE}
+        mv ${FILE%.*.*} ${FILE%%-*} || exit 1
+    done
 
-      # apply extra patches if necessary
-      [ -e ${BASE}/patch/patch-djgpp-gcc-${GCC_VERSION}.txt ] && patch -p 1 -u -i ${BASE}/patch/patch-djgpp-gcc-${GCC_VERSION}.txt
-    )
+    # apply extra patches if necessary
+    [ -e ${BASE}/patch/patch-djgpp-gcc-${GCC_VERSION}.txt ] && patch -p 1 -u -i ${BASE}/patch/patch-djgpp-gcc-${GCC_VERSION}.txt
+    popd
 
     touch gcc-unpacked
   else

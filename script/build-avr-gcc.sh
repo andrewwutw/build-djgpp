@@ -24,17 +24,16 @@ if [ ! -z ${GCC_VERSION} ]; then
     untar ${GCC_ARCHIVE}
 
     echo "Unpacking gcc dependencies"
-    (
-      cd gcc-${GCC_VERSION} || exit 1
+    pushd gcc-${GCC_VERSION} || exit 1
 
-      for URL in $GMP_ARCHIVE $MPFR_ARCHIVE $MPC_ARCHIVE $ISL_ARCHIVE; do
-          FILE=`basename $URL`
-          untar ${FILE}
-          mv ${FILE%.*.*} ${FILE%%-*}
-      done
+    for URL in $GMP_ARCHIVE $MPFR_ARCHIVE $MPC_ARCHIVE $ISL_ARCHIVE; do
+        FILE=`basename $URL`
+        untar ${FILE}
+        mv ${FILE%.*.*} ${FILE%%-*} || exit 1
+    done
 
-      touch gcc-unpacked
-    )
+    touch gcc-unpacked
+    popd
   fi
 
   echo "Building gcc (stage 1)"
