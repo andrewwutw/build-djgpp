@@ -37,6 +37,7 @@ fi
 
 untar()
 {
+  [ -z $1 ] && return
   local file=$(basename $1)
   local ext=${file##*.}
   local param="-a"
@@ -45,7 +46,7 @@ untar()
     bz2) param="-j" ;;
     gz)  param="-z" ;;
   esac
-  tar -x ${param} -f ${BASE}/download/${file}
+  tar -x ${param} -f ${BASE}/download/${file} || exit 1
 }
 
 strip_whitespace() { eval "$1=\"`echo ${!1}`\""; }
