@@ -112,6 +112,7 @@ jobs:
       - name: Cache build output
         uses: jwt27/cache@dist
         if: matrix.build-type == 'rebuild'
+        id: cache-build
         with:
           path: build
           key: testbuild-build-${{ matrix.os }}-${{ matrix.env.TARGET }}-${{ matrix.env.PACKAGES }}-${{ github.sha }}
@@ -126,6 +127,12 @@ jobs:
 
       - name: Rebuild
         if: matrix.build-type == 'rebuild'
+        env:
+          TARGET: ${{ matrix.env.TARGET }}
+        run: ./script/select-script.sh --no-download --prefix=${{ github.workspace }}-${{ github.sha }} ${{ matrix.env.PACKAGES }}
+
+      - name: Rebuild if uncached
+        if: matrix.build-type == 'rebuild' && steps.cache-build.outputs.cache-hit != 'true'
         env:
           TARGET: ${{ matrix.env.TARGET }}
         run: ./script/select-script.sh --no-download --prefix=${{ github.workspace }}-${{ github.sha }} ${{ matrix.env.PACKAGES }}
