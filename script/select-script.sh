@@ -8,4 +8,4 @@ avr)          SCRIPT=./build-avr.sh ;;
 *)            SCRIPT=./build-newlib.sh ;;
 esac
 
-${SCRIPT} --batch --prefix=`pwd`/install --target=${TARGET} ${PACKAGES} "$@"
+${SCRIPT} --batch --target=${TARGET} ${PACKAGES} "$@"
