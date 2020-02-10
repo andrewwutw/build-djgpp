@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        build-type: [ clean, rebuild ]
+        build-type: [ clean ]
         env:
           -
             TARGET: i586-pc-msdosdjgpp
