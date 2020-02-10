@@ -270,7 +270,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   ${MAKE} -j${MAKE_JOBS} -C libemu || exit 1
   ${MAKE} -j${MAKE_JOBS} -C libm || exit 1
   ${MAKE} -j${MAKE_JOBS} -C docs || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C ../zoneinfo/src
+  ${MAKE} -j${MAKE_JOBS} -C ../zoneinfo/src 2> /dev/null
   ${MAKE} -j${MAKE_JOBS} -f makempty || exit 1
   CFLAGS="$TEMP_CFLAGS"
   cd ..
