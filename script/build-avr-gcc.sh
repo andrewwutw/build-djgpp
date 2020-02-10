@@ -103,7 +103,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   echo "Installing gcc"
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || \
   ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
-  ${SUDO} ${MAKE} -j${MAKE_JOBS} -C mpfr install
+  ${SUDO} ${MAKE} -j${MAKE_JOBS} -C mpfr install DESTDIR=${BASE}/build/tmpinst
 
   ${SUDO} rm -f ${DST}/${TARGET}/etc/gcc-*-installed
   ${SUDO} touch ${DST}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
