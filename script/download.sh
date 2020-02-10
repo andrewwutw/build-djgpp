@@ -40,8 +40,8 @@ fi
 
 download_git()
 {
-  mkdir -p ${BASE}/build
-  pushd ${BASE}/build || exit 1
+  mkdir -p ${BASE}/download
+  pushd ${BASE}/download || exit 1
   local repo=$(basename $1)
   repo=${repo%.*}
   if [ ! -d $repo/ ] || [ "`cd $repo/ && git remote get-url origin`" != "$1" ]; then
@@ -60,6 +60,9 @@ download_git()
   if [ -z ${NO_DOWNLOAD} ]; then
     git pull || exit 1
   fi
+  mkdir -p ${BASE}/build
+  rm -rf ${BASE}/build/$repo
+  ln -fs ../download/$repo ${BASE}/build/$repo
   popd
 }
 
