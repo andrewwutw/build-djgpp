@@ -1,13 +1,20 @@
 echo "Copy long name executables to short name."
 pushd ${DST} || exit 1
 ${SUDO} mkdir -p ${TARGET}/bin
-SHORT_NAME_LIST="gcc g++ c++ addr2line c++filt cpp size strings dxegen dxe3gen dxe3res exe2coff stubify stubedit gdb djasm"
+SHORT_NAME_LIST="dxegen dxe3gen dxe3res exe2coff stubify stubedit djasm gdb
+                 g++ c++ cpp gcc gprof gcc-nm gcov-tool gcc-ranlib gcc-ar gcov-dump gcov
+                 strings ld readelf ld.bfd size addr2line setenv strip objcopy c++filt ar gprof ranlib as nm elfedit objdump"
 for SHORT_NAME in $SHORT_NAME_LIST; do
   if [ -f bin/${TARGET}-$SHORT_NAME ]; then
     ${SUDO} cp -p bin/${TARGET}-$SHORT_NAME ${TARGET}/bin/$SHORT_NAME
   fi
 done
-${SUDO} cp -p bin/${TARGET}-g++ bin/${TARGET}-g++-${GCC_VERSION}
+if [ ! -z ${GCC_VERSION} ]; then
+  ${SUDO} cp -p bin/${TARGET}-gcc bin/${TARGET}-gcc-${GCC_VERSION} 2> /dev/null
+  ${SUDO} cp -p bin/${TARGET}-g++ bin/${TARGET}-g++-${GCC_VERSION} 2> /dev/null
+  ${SUDO} cp -p ${TARGET}/bin/gcc ${TARGET}/bin/gcc-${GCC_VERSION} 2> /dev/null
+  ${SUDO} cp -p ${TARGET}/bin/g++ ${TARGET}/bin/g++-${GCC_VERSION} 2> /dev/null
+fi
 popd
 
 cat << STOP > ${BASE}/build/${TARGET}-setenv
