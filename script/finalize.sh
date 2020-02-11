@@ -28,7 +28,7 @@ for INFO_FILE in $INFO_LIST; do
 done
 
 echo "Installing man pages"
-${SUDO} mkdir -p ${TARGET}/man/man7
+${SUDO} mkdir -p ${TARGET}/share/man/man7
 MAN_LIST="fsf-funding.7 gpl.7 gfdl.7"
 for MAN_FILE in $MAN_LIST; do
   if [ -f share/man/man7/$MAN_FILE ]; then
