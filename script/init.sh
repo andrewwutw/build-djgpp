@@ -22,7 +22,12 @@ else
   CXX=${CXX-g++}
 fi
 
-MAKE_J="${MAKE} -j${MAKE_JOBS} -Otarget"
+MAKE_J="${MAKE} -j${MAKE_JOBS}"
+
+case `uname -s` in
+Darwin*) ;;
+*) MAKE_J+=" -Otarget" ;;
+esac
 
 export CC CXX MAKE
 
