@@ -37,9 +37,9 @@ if [ ! -z ${SIMULAVR_VERSION} ]; then
   esac
   sed -i "s/-DCMAKE_INSTALL_PREFIX=/-DCMAKE_INSTALL_PREFIX=${DST} #/" Makefile
   sed -i 's/\/bin\///' cmake/GetGitInfo.cmake
-  ${MAKE} -j${MAKE_JOBS} build || exit 1
-  ${MAKE} -j${MAKE_JOBS} doc || exit 1
-  [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/simulavr.log
+  ${MAKE_J} build || exit 1
+  ${MAKE_J} doc || exit 1
+  [ ! -z $MAKE_CHECK ] && ${MAKE_J} -s check | tee ${BASE}/tests/simulavr.log
   echo "Installing simulavr"
   ${SUDO} ${MAKE} -C build install || exit 1
   cd ${BASE}/build/ || exit 1
@@ -54,10 +54,10 @@ if [ ! -z ${AVARICE_VERSION} ]; then
   cd build-avr/ || exit 1
   rm -rf *
   ../configure --prefix=${PREFIX} || exit 1
-  ${MAKE} -j${MAKE_JOBS} || exit 1
-  [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/avarice.log
+  ${MAKE_J} || exit 1
+  [ ! -z $MAKE_CHECK ] && ${MAKE_J} -s check | tee ${BASE}/tests/avarice.log
   echo "Installing AVaRICE"
-  ${SUDO} ${MAKE} -j${MAKE_JOBS} install || exit 1
+  ${SUDO} ${MAKE_J} install || exit 1
   cd ${BASE}/build/ || exit 1
 fi
 
@@ -69,10 +69,10 @@ if [ ! -z ${AVRDUDE_VERSION} ]; then
   cd build-avr/ || exit 1
   rm -rf *
   ../configure --prefix=${PREFIX} || exit 1
-  ${MAKE} -j${MAKE_JOBS} || exit 1
-  [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/avrdude.log
+  ${MAKE_J} || exit 1
+  [ ! -z $MAKE_CHECK ] && ${MAKE_J} -s check | tee ${BASE}/tests/avrdude.log
   echo "Installing AVRDUDE"
-  ${SUDO} ${MAKE} -j${MAKE_JOBS} install || exit 1
+  ${SUDO} ${MAKE_J} install || exit 1
   cd ${BASE}/build/ || exit 1
 fi
 

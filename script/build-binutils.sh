@@ -17,16 +17,16 @@ fi
 
 case $TARGET in
 *-msdosdjgpp)
-  ${MAKE} -j${MAKE_JOBS} configure-bfd || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C bfd stmp-lcoff-h || exit 1
+  ${MAKE_J} configure-bfd || exit 1
+  ${MAKE_J} -C bfd stmp-lcoff-h || exit 1
   ;;
 *) ;;
 esac
 
-${MAKE} -j${MAKE_JOBS} || exit 1
-[ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/binutils.log
+${MAKE_J} || exit 1
+[ ! -z $MAKE_CHECK ] && ${MAKE_J} -s check | tee ${BASE}/tests/binutils.log
 echo "Installing binutils"
-${SUDO} ${MAKE} -j${MAKE_JOBS} install || exit 1
+${SUDO} ${MAKE_J} install || exit 1
 
 ${SUDO} rm -f ${DST}/${TARGET}/etc/binutils-*-installed
 ${SUDO} touch ${DST}/${TARGET}/etc/binutils-${BINUTILS_VERSION}-installed

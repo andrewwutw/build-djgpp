@@ -81,9 +81,10 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   sed -i "50cCROSS_PREFIX = ${TARGET}-" makefile.def
   sed -i "61cGCC = \$(CC) -g -O2 ${CFLAGS}" makefile.def
   if [ -e configure-options ] && [ ! "`cat configure-options 2> /dev/null`" == "${TARGET}:${DST}:${CFLAGS_FOR_TARGET}" ]; then
-    ${MAKE} -j${MAKE_JOBS} clean
+    ${MAKE_J} clean
   fi
-  ${MAKE} misc.exe makemake.exe ../hostbin || exit 1
+  ${MAKE} misc.exe makemake.exe || exit 1
+  mkdir -p ../hostbin
   ${MAKE} -C djasm native || exit 1
   ${MAKE} -C stub native || exit 1
   cd ..
@@ -118,7 +119,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     untar ${AUTOCONF_ARCHIVE} || exit 1
     cd autoconf-${AUTOCONF_VERSION}/
       ./configure --prefix=$BUILDDIR/tmpinst || exit 1
-      ${MAKE} -j${MAKE_JOBS} DESTDIR=/ all install || exit 1
+      ${MAKE_J} DESTDIR=/ all install || exit 1
     rm ${BUILDDIR}/tmpinst/autoconf-*-built
     touch ${BUILDDIR}/tmpinst/autoconf-${AUTOCONF_VERSION}-built
   else
@@ -216,9 +217,9 @@ if [ ! -z ${GCC_VERSION} ]; then
 
   cp ${DST}/bin/${TARGET}-stubify ${BUILDDIR}/tmpinst/bin/stubify || exit 1
 
-  ${MAKE} -j${MAKE_JOBS} all-gcc || exit 1
+  ${MAKE_J} all-gcc || exit 1
   echo "Installing gcc (stage 1)"
-  ${SUDO} ${MAKE} -j${MAKE_JOBS} install-gcc || exit 1
+  ${SUDO} ${MAKE_J} install-gcc || exit 1
 
   export CFLAGS="$TEMP_CFLAGS"
 fi
@@ -231,8 +232,8 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   sed -i 's/Werror/Wno-error/' makefile.cfg
   ${MAKE} config || exit 1
   echo "${TARGET}:${DST}:${CFLAGS_FOR_TARGET}" > configure-options
-  ${MAKE} -j${MAKE_JOBS} -C mkdoc || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C libc || exit 1
+  ${MAKE_J} -C mkdoc || exit 1
+  ${MAKE_J} -C libc || exit 1
 
   echo "Installing djgpp libc"
   ${SUDO} mkdir -p ${DST}/${TARGET}/lib
@@ -247,12 +248,12 @@ if [ ! -z ${GCC_VERSION} ]; then
   TEMP_CFLAGS="$CFLAGS"
   export CFLAGS="$CFLAGS $GCC_EXTRA_CFLAGS"
   export STAGE_CC_WRAPPER="${BASE}/script/destdir-hack.sh ${DST}/${TARGET}"
-  ${MAKE} -j${MAKE_JOBS} || exit 1
-  [ ! -z $MAKE_CHECK_GCC ] && ${MAKE} -j${MAKE_JOBS} -s check-gcc | tee ${BASE}/tests/gcc.log
+  ${MAKE_J} || exit 1
+  [ ! -z $MAKE_CHECK_GCC ] && ${MAKE_J} -s check-gcc | tee ${BASE}/tests/gcc.log
   echo "Installing gcc (stage 2)"
-  ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || \
-  ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
-  ${SUDO} ${MAKE} -j${MAKE_JOBS} -C mpfr install DESTDIR=${BASE}/build/tmpinst
+  ${SUDO} ${MAKE_J} install-strip || \
+  ${SUDO} ${MAKE_J} install-strip || exit 1
+  ${SUDO} ${MAKE_J} -C mpfr install DESTDIR=${BASE}/build/tmpinst
   CFLAGS="$TEMP_CFLAGS"
 
   ${SUDO} rm -f ${DST}/${TARGET}/etc/gcc-*-installed
@@ -264,14 +265,14 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   cd ${BASE}/build/djgpp-${DJGPP_VERSION}/src
   TEMP_CFLAGS="$CFLAGS"
   export CFLAGS="$CFLAGS_FOR_TARGET"
-  ${MAKE} -j${MAKE_JOBS} -C utils native || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C dxe native || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C debug || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C libemu || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C libm || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C docs || exit 1
-  ${MAKE} -j${MAKE_JOBS} -C ../zoneinfo/src 2> /dev/null
-  ${MAKE} -j${MAKE_JOBS} -f makempty || exit 1
+  ${MAKE_J} -C utils native || exit 1
+  ${MAKE_J} -C dxe native || exit 1
+  ${MAKE_J} -C debug || exit 1
+  ${MAKE_J} -C libemu || exit 1
+  ${MAKE_J} -C libm || exit 1
+  ${MAKE_J} -C docs || exit 1
+  ${MAKE_J} -C ../zoneinfo/src 2> /dev/null
+  ${MAKE_J} -f makempty || exit 1
   CFLAGS="$TEMP_CFLAGS"
   cd ..
 

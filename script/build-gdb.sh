@@ -23,10 +23,10 @@ if [ ! -z ${GDB_VERSION} ]; then
     echo "Note: gdb already configured. To force a rebuild, use: rm -rf $(pwd)"
     [ -z ${BUILD_BATCH} ] && sleep 5
   fi
-  ${MAKE} -j${MAKE_JOBS} || exit 1
-  [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/gdb.log
+  ${MAKE_J} || exit 1
+  [ ! -z $MAKE_CHECK ] && ${MAKE_J} -s check | tee ${BASE}/tests/gdb.log
   echo "Installing gdb"
-  ${SUDO} ${MAKE} -j${MAKE_JOBS} install || exit 1
+  ${SUDO} ${MAKE_J} install || exit 1
 
   ${SUDO} rm -f ${DST}/${TARGET}/etc/gdb-*-installed
   ${SUDO} touch ${DST}/${TARGET}/etc/gdb-${GDB_VERSION}-installed

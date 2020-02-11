@@ -1,5 +1,6 @@
 unset CDPATH
 unset SUDO
+unset MAKEFLAGS
 
 BASE=`pwd`
 
@@ -20,6 +21,8 @@ else
   CC=${CC-gcc}
   CXX=${CXX-g++}
 fi
+
+MAKE_J="${MAKE} -j${MAKE_JOBS} -Otarget"
 
 export CC CXX MAKE
 

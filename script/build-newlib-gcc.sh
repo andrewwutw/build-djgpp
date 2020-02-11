@@ -51,9 +51,9 @@ if [ ! -z ${GCC_VERSION} ]; then
     [ -z ${BUILD_BATCH} ] && sleep 5
   fi
 
-  ${MAKE} -j${MAKE_JOBS} all-gcc || exit 1
+  ${MAKE_J} all-gcc || exit 1
   echo "Installing gcc (stage 1)"
-  ${SUDO} ${MAKE} -j${MAKE_JOBS} install-gcc || exit 1
+  ${SUDO} ${MAKE_J} install-gcc || exit 1
 
   export CFLAGS="$TEMP_CFLAGS"
 fi
@@ -77,11 +77,11 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
     [ -z ${BUILD_BATCH} ] && sleep 5
   fi
 
-  ${MAKE} -j${MAKE_JOBS} || exit 1
-  [ ! -z $MAKE_CHECK ] && ${MAKE} -j${MAKE_JOBS} -s check | tee ${BASE}/tests/newlib.log
+  ${MAKE_J} || exit 1
+  [ ! -z $MAKE_CHECK ] && ${MAKE_J} -s check | tee ${BASE}/tests/newlib.log
   echo "Installing newlib"
-  ${SUDO} ${MAKE} -j${MAKE_JOBS} install || \
-  ${SUDO} ${MAKE} -j${MAKE_JOBS} install || exit 1
+  ${SUDO} ${MAKE_J} install || \
+  ${SUDO} ${MAKE_J} install || exit 1
 fi
 
 cd ${BASE}/build/
@@ -91,12 +91,12 @@ if [ ! -z ${GCC_VERSION} ]; then
   cd gcc-${GCC_VERSION}/build-${TARGET} || exit 1
 
   export STAGE_CC_WRAPPER="${BASE}/script/destdir-hack.sh ${DST}/${TARGET}"
-  ${MAKE} -j${MAKE_JOBS} || exit 1
-  [ ! -z $MAKE_CHECK_GCC ] && ${MAKE} -j${MAKE_JOBS} -s check-gcc | tee ${BASE}/tests/gcc.log
+  ${MAKE_J} || exit 1
+  [ ! -z $MAKE_CHECK_GCC ] && ${MAKE_J} -s check-gcc | tee ${BASE}/tests/gcc.log
   echo "Installing gcc"
-  ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || \
-  ${SUDO} ${MAKE} -j${MAKE_JOBS} install-strip || exit 1
-  ${SUDO} ${MAKE} -j${MAKE_JOBS} -C mpfr install DESTDIR=${BASE}/build/tmpinst
+  ${SUDO} ${MAKE_J} install-strip || \
+  ${SUDO} ${MAKE_J} install-strip || exit 1
+  ${SUDO} ${MAKE_J} -C mpfr install DESTDIR=${BASE}/build/tmpinst
 
   ${SUDO} rm -f ${DST}/${TARGET}/etc/gcc-*-installed
   ${SUDO} touch ${DST}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
