@@ -1,5 +1,5 @@
-pushd ${DST} || exit 1
 echo "Copy long name executables to short name."
+pushd ${DST} || exit 1
 ${SUDO} mkdir -p ${TARGET}/bin
 SHORT_NAME_LIST="dxegen dxe3gen dxe3res exe2coff stubify stubedit djasm gdb
                  g++ c++ cpp gcc gprof gcc-nm gcov-tool gcc-ranlib gcc-ar gcov-dump gcov
@@ -15,26 +15,6 @@ if [ ! -z ${GCC_VERSION} ]; then
   ${SUDO} cp -p ${TARGET}/bin/gcc ${TARGET}/bin/gcc-${GCC_VERSION} 2> /dev/null
   ${SUDO} cp -p ${TARGET}/bin/g++ ${TARGET}/bin/g++-${GCC_VERSION} 2> /dev/null
 fi
-
-echo "Installing info files"
-${SUDO} mkdir -p ${TARGET}/share/info
-INFO_LIST="libquadmath.info gccint.info gcc.info cpp.info cppinternals.info gccinstall.info
-           gprof.info binutils.info as.info ld.info bfd.info annotate.info gdb.info stabs.info"
-for INFO_FILE in $INFO_LIST; do
-  if [ -f share/info/$INFO_FILE ]; then
-    ${SUDO} cp -p share/info/$INFO_FILE ${TARGET}/share/info/$INFO_FILE
-    ${SUDO} install-info ${TARGET}/share/info/$INFO_FILE ${TARGET}/share/info/dir
-  fi
-done
-
-echo "Installing man pages"
-${SUDO} mkdir -p ${TARGET}/share/man/man7
-MAN_LIST="fsf-funding.7 gpl.7 gfdl.7"
-for MAN_FILE in $MAN_LIST; do
-  if [ -f share/man/man7/$MAN_FILE ]; then
-    ${SUDO} cp -p share/man/man7/$MAN_FILE ${TARGET}/share/man/man7/$MAN_FILE
-  fi
-done
 popd
 
 cat << STOP > ${BASE}/build/${TARGET}-setenv
