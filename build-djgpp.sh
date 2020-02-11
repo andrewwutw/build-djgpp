@@ -226,7 +226,9 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   echo "Building djgpp libc"
   cd ${BASE}/build/djgpp-${DJGPP_VERSION}/src
   TEMP_CFLAGS="$CFLAGS"
+  TEMP_LDFLAGS="$LDFLAGS"
   export CFLAGS="$CFLAGS_FOR_TARGET"
+  export LDFLAGS="$LDFLAGS_FOR_TARGET"
   sed -i 's/Werror/Wno-error/' makefile.cfg
   ${MAKE} config || exit 1
   echo "${TARGET}:${DST}:${CFLAGS_FOR_TARGET}" > configure-options
@@ -236,6 +238,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   echo "Installing djgpp libc"
   ${SUDO} mkdir -p ${DST}/${TARGET}/lib
   ${SUDO} cp -rp ../lib/* ${DST}/${TARGET}/lib || exit 1
+  LDFLAGS="$TEMP_LDFLAGS"
   CFLAGS="$TEMP_CFLAGS"
 fi
 
@@ -262,7 +265,9 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   echo "Building djgpp libraries"
   cd ${BASE}/build/djgpp-${DJGPP_VERSION}/src
   TEMP_CFLAGS="$CFLAGS"
+  TEMP_LDFLAGS="$LDFLAGS"
   export CFLAGS="$CFLAGS_FOR_TARGET"
+  export LDFLAGS="$LDFLAGS_FOR_TARGET"
   ${MAKE_J} -C utils native || exit 1
   ${MAKE_J} -C dxe native || exit 1
   ${MAKE_J} -C debug || exit 1
@@ -271,6 +276,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   ${MAKE_J} -C docs || exit 1
   ${MAKE_J} -C ../zoneinfo/src 2> /dev/null
   ${MAKE_J} -f makempty || exit 1
+  LDFLAGS="$TEMP_LDFLAGS"
   CFLAGS="$TEMP_CFLAGS"
   cd ..
 
