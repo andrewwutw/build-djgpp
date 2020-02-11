@@ -21,8 +21,6 @@ prepend GCC_CONFIGURE_OPTIONS "--disable-nls
 prepend GDB_CONFIGURE_OPTIONS "--disable-werror
                                --disable-nls"
 
-prepend CFLAGS_FOR_TARGET "-O2"
-
 DEPS=""
 [ ! -z ${GCC_VERSION} ] && DEPS+=" djgpp binutils"
 [ ! -z ${DJGPP_VERSION} ] && DEPS+=" binutils gcc"
