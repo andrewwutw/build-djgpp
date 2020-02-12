@@ -18,6 +18,7 @@ fi
 popd
 
 cat << STOP > ${BASE}/build/${TARGET}-setenv
+#!/usr/bin/env bash
 if ! (return 2> /dev/null); then
   echo "This script must be executed with 'source' to set environment variables:"
   echo "source \$0"
