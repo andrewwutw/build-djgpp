@@ -47,9 +47,9 @@ case $TARGET in
 i586-pc-msdosdjgpp) ;;
 *-pc-msdosdjgpp) cat << STOP > ${BASE}/build/${TARGET}-link-i586
 #!/usr/bin/env bash
-echo "Linking ${TARGET}-* to i586-pc-msdosdjgpp-*"
+echo "Linking i586-pc-msdosdjgpp-* to ${TARGET}-*"
 for PROG in ${PREFIX}/bin/${TARGET}-*; do
-  ln -fs `basename \$PROG` \${PROG/$TARGET/i586-pc-msdosdjgpp}
+  ln -fs \`basename \$PROG\` \${PROG/$TARGET/i586-pc-msdosdjgpp}
 done
 STOP
   echo "Installing ${TARGET}-link-i586"
