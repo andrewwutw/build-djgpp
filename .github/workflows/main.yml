@@ -16,13 +16,13 @@ jobs:
         build-type: [ clean ]
         env:
           -
-            TARGET: i586-pc-msdosdjgpp
+            TARGET: i386-pc-msdosdjgpp
             PACKAGES: binutils gcc djgpp-2.05
           -
-            TARGET: i586-pc-msdosdjgpp
+            TARGET: i386-pc-msdosdjgpp
             PACKAGES: binutils gcc djgpp-cvs
           -
-            TARGET: i586-pc-msdosdjgpp
+            TARGET: i386-pc-msdosdjgpp
             PACKAGES: gdb
           -
             TARGET: arm-eabi
