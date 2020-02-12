@@ -2,6 +2,10 @@
 
 ### Upgrade notes:
 
+* 2020-02-13: default target for djgpp has changed to `i386-pc-msdosdjgpp`.  
+If you require compatibility with distributions that use `i586`, you can either:
+    - run `sudo i386-pc-msdosdjgpp-link-i586` after installing, or
+    - build with `./build-djgpp.sh --prefix=i586-pc-msdosdjgpp`.
 * 2020-02-07: setenv script is now installed to `$PREFIX/bin/$TARGET-setenv`.
 * 2019-06-06: `master` is now the default branch again.
 
@@ -19,7 +23,7 @@
 
 ### Tested targets:
 
-* i586-pc-msdosdjgpp
+* i386-pc-msdosdjgpp
 * ia16
 * arm-eabi
 * avr
@@ -106,7 +110,7 @@ MAKE_CHECK_GCC=             # Run gcc test suites.
 
 Pick the script you want to use:
 ```sh
-build-djgpp.sh      # builds a toolchain targeting djgpp (default TARGET: i586-pc-msdosdjgpp)
+build-djgpp.sh      # builds a toolchain targeting djgpp (default TARGET: i386-pc-msdosdjgpp)
 build-newlib.sh     # builds a toolchain with the newlib C library
 build-ia16.sh       # builds a toolchain targeting 8086 processors, with the newlib C library (fixed TARGET: ia16-elf)
 build-avr.sh        # builds a toolchain targeting AVR microcontrollers (fixed TARGET: avr)
