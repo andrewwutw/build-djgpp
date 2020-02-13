@@ -1,3 +1,9 @@
+djgpp-toolchain (0.20200213.2+gcc9.2.0+bnu2.33.1+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
+
+  * remove binutils-djgpp and binutils-djgpp-doc for focal and require upstream binutils-djgpp.
+
+ -- jwt27 <jwjagersma@gmail.com>  Thu, 13 Feb 2020 21:51:35 +0100
+
 djgpp-toolchain (0.20200213.1+gcc9.2.0+bnu2.33.1+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
 
   * fix package names in control file.
