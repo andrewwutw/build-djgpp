@@ -1,6 +1,7 @@
 unset CDPATH
 unset SUDO
 unset MAKEFLAGS
+unset INSTALL
 
 BASE=`pwd`
 
