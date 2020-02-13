@@ -25,10 +25,10 @@ Homepage: https://github.com/jwt27/build-gcc
 Package: djgpp
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: djgpp-binutils, djgpp-gcc
+Recommends: binutils-djgpp, gcc-djgpp
 Suggests: djgpp-doc
 Description: DJGPP C library and utilities
- Required for djgpp-gcc.
+ Required for gcc-djgpp.
 
 Package: djgpp-doc
 Architecture: all
@@ -48,7 +48,7 @@ Architecture: all
 Depends: ${misc:Depends}
 Suggests: gcc-djgpp
 Conflicts: gcc-doc
-Description: Documentation for djgpp-gcc
+Description: Documentation for gcc-djgpp
 
 Package: gcc-djgpp-extra
 Architecture: all
@@ -72,7 +72,7 @@ Architecture: all
 Depends: ${misc:Depends}
 Suggests: binutils-djgpp
 Conflicts: binutils-doc
-Description: Documentation for djgpp-binutils.
+Description: Documentation for binutils-djgpp.
 
 Package: gdb-djgpp
 Architecture: any
@@ -86,11 +86,11 @@ Architecture: all
 Depends: ${misc:Depends}
 Suggests: gdb-djgpp
 Conflicts: gdb-doc
-Description: Documentation for djgpp-gdb
+Description: Documentation for gdb-djgpp
 
 Package: gdb-djgpp-extra
 Architecture: all
 Depends: ${misc:Depends}
 Recommends: gdb-djgpp
-Description: Extra files for djgpp-gdb
+Description: Extra files for gdb-djgpp
  May conflict with host gdb.
