@@ -1,0 +1,50 @@
+name: Deploy PPA
+
+on:
+  push:
+    branches: djgpp-ppa
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install curl git debhelper devscripts dput gpg
+
+      - name: Download sources
+        run: |
+          ./build-djgpp.sh --batch --only-download --ignore-dependencies djgpp-cvs binutils gcc gdb
+
+      - name: Setup makefile
+        run: |
+          mv debian/Makefile .
+          mv debian/pgp-secret.asc ..
+
+      - name: Make source package
+        run: |
+          debuild -S -us -uc -d
+
+      - name: Import signing key
+        env:
+          DECRYPT_KEY: ${{ secrets.DECRYPT_KEY }}
+        run: |
+          gpg --batch --quiet --passphrase "$DECRYPT_KEY" -d ../pgp-secret.asc | gpg --batch --import
+          rm -f ../pgp-secret.asc
+
+      - name: Sign package
+        run: |
+          debsign -k197C3D6E652B6B1C2B7F9EDF84089D0351487AB8 ../*.changes
+
+      - name: Delete key
+        if: always()
+        run: |
+          sudo shred -fu $(gpgconf --list-dirs | grep homedir | sed 's/homedir://')/priv*/*
+
+      - name: Upload package
+        run: |
+          dput ppa:jwt27/djgpp-toolchain ../*.changes

@@ -2,6 +2,7 @@ name: Test builds
 
 on:
   push:
+    branches-ignore: djgpp-ppa
   pull_request:
   schedule:
     - cron: '0 0 */6 * *'
