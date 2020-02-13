@@ -20,6 +20,16 @@ jobs:
         run: |
           ./build-djgpp.sh --batch --only-download --ignore-dependencies djgpp-cvs binutils gcc gdb
 
+      - name: Pack git sources
+        run: |
+          find download/*/* ! -wholename '*/.git/*' -delete || true
+          cd download/
+          for DIR in */; do
+            DIR=${DIR%/}
+            tar -c -f $DIR-git.tar $DIR
+          done
+          rm -rf */
+
       - name: Setup makefile
         run: |
           mv debian/Makefile .
