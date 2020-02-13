@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ubuntu-version: [ xenial, bionic, disco, eoan, focal ]
+        ubuntu-version: [ bionic, disco, eoan, focal ]
 
     steps:
       - uses: actions/checkout@v2
