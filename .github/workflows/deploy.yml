@@ -7,6 +7,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ubuntu-version: [ xenial, bionic, disco, eoan, focal ]
 
     steps:
       - uses: actions/checkout@v2
@@ -30,10 +33,13 @@ jobs:
           done
           rm -rf */
 
-      - name: Setup makefile
+      - name: Setup package files
+        env:
+          UBUNTU_VERSION: ${{ matrix.ubuntu-version }}
         run: |
           mv debian/Makefile .
           mv debian/pgp-secret.asc ..
+          sed -i "s/UBUNTU_VERSION/$UBUNTU_VERSION/g" debian/changelog
 
       - name: Make source package
         run: |
