@@ -137,6 +137,13 @@ jobs:
           TARGET: ${{ matrix.env.TARGET }}
         run: ./script/select-script.sh --no-download --prefix=${{ github.workspace }} ${{ matrix.env.PACKAGES }}
 
-      - name: Clear git sources before caching
+      - name: Clear and pack git sources before caching
         if: matrix.build-type == 'clean'
-        run: find download/*/* ! -wholename '*/.git/*' -delete || true
+        run: |
+          find download/*/* ! -wholename '*/.git/*' -delete || true
+          cd download
+          for DIR in */; do
+            DIR=${DIR%/}
+            tar -c -f $DIR-git.tar $DIR
+          done
+          rm -rf */

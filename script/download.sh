@@ -45,13 +45,18 @@ download_git()
   local repo=$(basename $1)
   repo=${repo%.*}
   if [ ! -d $repo/ ] || [ "`cd $repo/ && git remote get-url origin`" != "$1" ]; then
-    if [ -z ${NO_DOWNLOAD} ]; then
-      echo "Downloading ${repo}..."
-      rm -rf $repo/
-      git clone $1 --depth 1 $([ "$2" != "" ] && echo "--branch $2")
-    else
-      echo "Missing: ${repo}"
-      exit 1
+    if [ -f $repo-git.tar ]; then
+      untar $repo-git.tar
+    fi
+    if [ ! -d $repo/ ] || [ "`cd $repo/ && git remote get-url origin`" != "$1" ]; then
+      if [ -z ${NO_DOWNLOAD} ]; then
+        echo "Downloading $repo..."
+        rm -rf $repo/
+        git clone $1 --depth 1 $([ "$2" != "" ] && echo "--branch $2")
+      else
+        echo "Missing: $repo"
+        exit 1
+      fi
     fi
   fi
   cd $repo/ || exit 1

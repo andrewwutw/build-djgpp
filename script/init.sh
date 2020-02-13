@@ -56,6 +56,7 @@ untar()
     xz)  param="-J" ;;
     bz2) param="-j" ;;
     gz)  param="-z" ;;
+    tar) param=""   ;;
   esac
   tar -x ${param} -f ${BASE}/download/${file} || exit 1
 }
