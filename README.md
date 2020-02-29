@@ -75,7 +75,7 @@ mingw-get install msys-unzip libz-dev msys-wget msys-bison msys-flex msys-patch
 MinGW64 (msys2) :
 
 ```sh
-pacman -Syuu base-devel mingw-w64-x86_64-toolchain mingw-w64-x86_64-curl mingw-w64-x86_64-zlib compression
+pacman -Syuu base-devel mingw-w64-x86_64-{toolchain,curl,zlib} compression
 ```
 
 ### Configuration
