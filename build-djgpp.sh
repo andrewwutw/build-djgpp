@@ -117,7 +117,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     untar ${AUTOCONF_ARCHIVE} || exit 1
     cd autoconf-${AUTOCONF_VERSION}/
       ./configure --prefix=$BUILDDIR/tmpinst || exit 1
-      ${MAKE_J} DESTDIR=/ all install || exit 1
+      ${MAKE_J} DESTDIR= all install || exit 1
     rm ${BUILDDIR}/tmpinst/autoconf-*-built
     touch ${BUILDDIR}/tmpinst/autoconf-${AUTOCONF_VERSION}-built
   else
@@ -130,7 +130,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     untar ${AUTOMAKE_ARCHIVE} || exit 1
     cd automake-${AUTOMAKE_VERSION}/
     ./configure --prefix=$BUILDDIR/tmpinst || exit 1
-      ${MAKE} DESTDIR=/ all install || exit 1
+      ${MAKE} DESTDIR= all install || exit 1
     rm ${BUILDDIR}/tmpinst/automake-*-built
     touch ${BUILDDIR}/tmpinst/automake-${AUTOMAKE_VERSION}-built
   else
