@@ -97,6 +97,7 @@ for A in "$@"; do
   --only-download) ONLY_DOWNLOAD=y ;;
   --ignore-dependencies) IGNORE_DEPENDENCIES=y ;;
   --batch) BUILD_BATCH=y ;;
+  --build-deb) BUILD_DEB=y ;;
   --destdir=*) DESTDIR=${A#*=} ;;
   --prefix=*) PREFIX=${A#*=} ;;
   --target=*) TARGET=${A#*=} ;;

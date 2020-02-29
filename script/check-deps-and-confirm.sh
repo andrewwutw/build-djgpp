@@ -43,11 +43,11 @@ case $TARGET in
 *) unset DJCROSS_GCC_ARCHIVE OLD_DJCROSS_GCC_ARCHIVE ;;
 esac
 
-if [ ! -z ${GCC_VERSION} ]; then
+if [ ! -z ${BUILD_DEB} ] && [ ! -z ${GCC_VERSION} ]; then
   GMP_VERSION=${GMP_VERSION:-6.2.0}
   MPFR_VERSION=${MPFR_VERSION:-4.0.2}
   MPC_VERSION=${MPC_VERSION:-1.1.0}
-  if ${CC} -v 2>&1 | grep "clang version" > /dev/null ;then
+  if ${CC} -v 2>&1 | grep "clang version" > /dev/null; then
     ISL_VERSION=${ISL_VERSION:-0.21}
   else
     ISL_VERSION=${ISL_VERSION:-0.22.1}

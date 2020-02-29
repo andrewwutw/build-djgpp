@@ -174,14 +174,20 @@ if [ ! -z ${GCC_VERSION} ]; then
 
     cd $BUILDDIR/
 
-    echo "Unpacking gcc dependencies"
     pushd gnu/gcc-${GCC_VERSION} || exit 1
 
-    for URL in $GMP_ARCHIVE $MPFR_ARCHIVE $MPC_ARCHIVE $ISL_ARCHIVE; do
+    if [ ! -z ${BUILD_DEB} ]; then
+      echo "Unpacking gcc dependencies"
+      for URL in $GMP_ARCHIVE $MPFR_ARCHIVE $MPC_ARCHIVE $ISL_ARCHIVE; do
         FILE=`basename $URL`
         untar ${FILE}
         mv ${FILE%.*.*} ${FILE%%-*} || exit 1
-    done
+      done
+    else
+      echo "Downloading gcc dependencies"
+      sed -i 's/ftp/http/g' contrib/download_prerequisites
+      ./contrib/download_prerequisites || exit 1
+    fi
 
     # apply extra patches if necessary
     [ -e ${BASE}/patch/patch-djgpp-gcc-${GCC_VERSION}.txt ] && patch -p 1 -u -i ${BASE}/patch/patch-djgpp-gcc-${GCC_VERSION}.txt

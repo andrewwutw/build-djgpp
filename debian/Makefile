@@ -3,7 +3,7 @@ PACKAGES=djgpp-cvs binutils gcc gdb
 all: build
 
 build:
-	./build-djgpp.sh --batch --no-download --prefix=/usr --destdir=`pwd`/install $(PACKAGES)
+	./build-djgpp.sh --batch --build-deb --no-download --prefix=/usr --destdir=`pwd`/install $(PACKAGES)
 
 install:
 	sed -i 's/\/usr\/bin\/i386/usr\/bin\/i386/' install/usr/bin/i386-pc-msdosdjgpp-link-i586

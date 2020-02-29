@@ -23,14 +23,20 @@ if [ ! -z ${GCC_VERSION} ]; then
     echo "Unpacking gcc..."
     untar ${GCC_ARCHIVE}
 
-    echo "Unpacking gcc dependencies"
     pushd gcc-${GCC_VERSION} || exit 1
 
-    for URL in $GMP_ARCHIVE $MPFR_ARCHIVE $MPC_ARCHIVE $ISL_ARCHIVE; do
+    if [ ! -z ${BUILD_DEB} ]; then
+      echo "Unpacking gcc dependencies"
+      for URL in $GMP_ARCHIVE $MPFR_ARCHIVE $MPC_ARCHIVE $ISL_ARCHIVE; do
         FILE=`basename $URL`
         untar ${FILE}
         mv ${FILE%.*.*} ${FILE%%-*} || exit 1
-    done
+      done
+    else
+      echo "Downloading gcc dependencies"
+      sed -i 's/ftp/http/g' contrib/download_prerequisites
+      ./contrib/download_prerequisites || exit 1
+    fi
 
     touch gcc-unpacked
     popd
