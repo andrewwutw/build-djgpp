@@ -38,7 +38,7 @@ Description: Documentation for djgpp
 
 Package: gcc-djgpp
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, djgpp, binutils-djgpp (>= 2.34-1ubuntu1+1.3)
+Depends: ${shlibs:Depends}, ${misc:Depends}, djgpp, binutils-djgpp (>= 2.34-3ubuntu1+1.4)
 Suggests: gcc-djgpp-doc, gcc-djgpp-extra
 Description: GNU Compiler Collection
  Cross-compiler targeting djgpp. Supports C and C++.
