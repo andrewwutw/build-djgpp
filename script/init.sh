@@ -110,5 +110,5 @@ done
 PREFIX=${PREFIX-/usr/local/cross}
 
 # enabled languages
-#ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++,f95,objc,obj-c++}
-ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
+#ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++,lto,f95,objc,obj-c++}
+ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++,lto}
