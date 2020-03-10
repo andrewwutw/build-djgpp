@@ -1,3 +1,9 @@
+djgpp-toolchain (0.20200310.0+gcc9.2.0+bnu2.34.0+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
+
+  * binutils version 2.34.
+
+ -- jwt27 <jwjagersma@gmail.com>  Tue, 10 Mar 2020 21:31:14 +0100
+
 djgpp-toolchain (0.20200229.0+gcc9.2.0+bnu2.33.1+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
 
   * make gcc-djgpp in focal depend on 2.34-3ubuntu1+1.4
