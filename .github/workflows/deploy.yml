@@ -38,7 +38,7 @@ jobs:
           UBUNTU_VERSION: ${{ matrix.ubuntu-version }}
         run: |
           mv debian/Makefile .
-          mv debian/pgp-secret.asc ..
+          mv debian/pgp-secret.asc /tmp/
           sed -i "s/UBUNTU_VERSION/$UBUNTU_VERSION/g" debian/changelog
           [ -d debian/$UBUNTU_VERSION ] && cp debian/$UBUNTU_VERSION/* debian/
 
@@ -50,8 +50,8 @@ jobs:
         env:
           DECRYPT_KEY: ${{ secrets.DECRYPT_KEY }}
         run: |
-          gpg --batch --quiet --passphrase "$DECRYPT_KEY" -d ../pgp-secret.asc | gpg --batch --import
-          rm -f ../pgp-secret.asc
+          gpg --batch --quiet --passphrase "$DECRYPT_KEY" -d /tmp/pgp-secret.asc | gpg --batch --import
+          rm -f /tmp/pgp-secret.asc
 
       - name: Sign package
         run: |
