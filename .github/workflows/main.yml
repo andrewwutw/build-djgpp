@@ -5,7 +5,7 @@ on:
     branches-ignore: djgpp-ppa
   pull_request:
   schedule:
-    - cron: '0 0 */14 * *'
+    - cron: '0 0 1 * *'
 
 jobs:
   build:
