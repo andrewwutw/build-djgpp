@@ -38,11 +38,9 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
     echo "Unpacking binutils..."
     unzip -oq ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
 
-    case ${BINUTILS_VERSION} in
-    227)  patch gnu/binutils-*/bfd/init.c ${BASE}/patch/patch-bnu27-bfd-init.txt || exit 1 ;;
-    2331) patch gnu/binutils-*/libctf/swap.h ${BASE}/patch/patch-djgpp-binutils-2.33.1-swap.txt || exit 1 ;;
-    234)  ;; #TODO
-    esac
+    pushd gnu/binutils-* || exit 1
+    cat ${BASE}/patch/djgpp-binutils-${BINUTILS_VERSION}/* | patch -p1 -u || exit 1
+    popd
 
     touch binutils-unpacked
   fi
@@ -190,7 +188,7 @@ if [ ! -z ${GCC_VERSION} ]; then
     fi
 
     # apply extra patches if necessary
-    [ -e ${BASE}/patch/patch-djgpp-gcc-${GCC_VERSION}.txt ] && patch -p 1 -u -i ${BASE}/patch/patch-djgpp-gcc-${GCC_VERSION}.txt
+    cat ${BASE}/patch/djgpp-gcc-${GCC_VERSION}/* | patch -p1 -u || exit 1
     popd
 
     touch gcc-unpacked

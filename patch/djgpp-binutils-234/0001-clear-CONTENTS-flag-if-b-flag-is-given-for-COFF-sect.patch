@@ -1,0 +1,50 @@
+Subject: [PATCH] clear CONTENTS flag if "b" flag is given for COFF section
+From: "J.W. Jagersma" <jwjagersma@gmail.com>
+Date: 2020-03-24 23:20
+
+The "b" flag for COFF sections only unsets the LOAD attribute.  It
+should also clear the CONTENTS attribute so that named bss sections
+don't take up space in an object file.  This can be achieved by
+setting the 'bss' flag in seg_info.
+
+gas/
+2020-03-24  Jan W. Jagersma  <jwjagersma@gmail.com>
+
+	* config/obj-coff.c (obj_coff_section): Set bss flag in
+	seg_info if "b" flag is given.
+---
+ gas/config/obj-coff.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/gas/config/obj-coff.c b/gas/config/obj-coff.c
+index 178ccaad6a..e97d9a22a1 100644
+--- a/gas/config/obj-coff.c
++++ b/gas/config/obj-coff.c
+@@ -1531,6 +1531,7 @@ obj_coff_section (int ignore ATTRIBUTE_UNUSED)
+   char *name;
+   unsigned int exp;
+   flagword flags, oldflags;
++  bfd_boolean is_bss = FALSE;
+   asection *sec;
+ 
+   if (flag_mri)
+@@ -1581,6 +1582,7 @@ obj_coff_section (int ignore ATTRIBUTE_UNUSED)
+ 		  /* Uninitialised data section.  */
+ 		  flags |= SEC_ALLOC;
+ 		  flags &=~ SEC_LOAD;
++		  is_bss = TRUE;
+ 		  break;
+ 
+ 		case 'n':
+@@ -1652,6 +1654,9 @@ obj_coff_section (int ignore ATTRIBUTE_UNUSED)
+ 
+   sec = subseg_new (name, (subsegT) exp);
+ 
++  if (is_bss)
++    seg_info (sec)->bss = 1;
++
+   if (alignment >= 0)
+     sec->alignment_power = alignment;
+ 
+-- 2.25.2
+
