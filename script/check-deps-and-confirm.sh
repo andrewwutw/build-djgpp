@@ -2,8 +2,13 @@ if [ -z ${IGNORE_DEPENDENCIES} ]; then
   for DEP in ${DEPS}; do
     case $DEP in
       djgpp)
-        [ -z ${DJGPP_VERSION} ] \
-          && add_pkg djgpp
+        if [ -z ${DJGPP_VERSION} ]; then
+          if [ -e ${PREFIX}/${TARGET}/etc/djgpp-cvs-installed ]; then
+            add_pkg djgpp-cvs
+          else
+            add_pkg djgpp
+          fi
+        fi
         ;;
       newlib)
         [ -z ${NEWLIB_VERSION} ] \
