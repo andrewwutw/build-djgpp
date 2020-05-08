@@ -74,10 +74,10 @@ if [ ! -z ${NEWLIB_VERSION} ]; then
   NEWLIB_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX} ${HOST_FLAG} ${BUILD_FLAG}"
   strip_whitespace NEWLIB_CONFIGURE_OPTIONS
 
-  if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${NEWLIB_CONFIGURE_OPTIONS}" ]; then
+  if [ ! -z ${GCC_VERSION} ] || [ ! "`cat configure-options 2> /dev/null`" == "${NEWLIB_CONFIGURE_OPTIONS}" ]; then
     rm -rf *
     ../configure ${NEWLIB_CONFIGURE_OPTIONS} || exit 1
-    echo ${NEWLIB_CONFIGURE_OPTIONS} > configure-prefix
+    echo ${NEWLIB_CONFIGURE_OPTIONS} > configure-options
   else
     echo "Note: newlib already configured. To force a rebuild, use: rm -rf $(pwd)"
     [ -z ${BUILD_BATCH} ] && sleep 5

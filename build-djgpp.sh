@@ -76,8 +76,9 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   unset COMSPEC
   sed -i "50cCROSS_PREFIX = ${TARGET}-" makefile.def
   sed -i "61cGCC = \$(CC) -g -O2 ${CFLAGS}" makefile.def
-  if [ -e configure-options ] && [ ! "`cat configure-options 2> /dev/null`" == "${TARGET}:${DST}:${CFLAGS_FOR_TARGET}" ]; then
+  if [ ! -z ${GCC_VERSION} ] || [ ! "`cat configure-options 2> /dev/null`" == "${TARGET}:${DST}:${CFLAGS_FOR_TARGET}" ]; then
     ${MAKE_J} clean
+    rm -f ../lib/*.{a,o}
   fi
   ${MAKE} misc.exe makemake.exe || exit 1
   mkdir -p ../hostbin

@@ -82,10 +82,10 @@ if [ ! -z ${AVRLIBC_VERSION} ]; then
   AVRLIBC_CONFIGURE_OPTIONS+=" --host=${TARGET} --prefix=${PREFIX} ${BUILD_FLAG}"
   strip_whitespace AVRLIBC_CONFIGURE_OPTIONS
 
-  if [ ! -e configure-prefix ] || [ ! "`cat configure-prefix`" == "${AVRLIBC_CONFIGURE_OPTIONS}" ]; then
+  if [ ! -z ${GCC_VERSION} ] || [ ! "`cat configure-options 2> /dev/null`" == "${AVRLIBC_CONFIGURE_OPTIONS}" ]; then
     rm -rf *
     CC=avr-gcc ../configure ${AVRLIBC_CONFIGURE_OPTIONS} || exit 1
-    echo ${AVRLIBC_CONFIGURE_OPTIONS} > configure-prefix
+    echo ${AVRLIBC_CONFIGURE_OPTIONS} > configure-options
   else
     echo "Note: avr-libc already configured. To force a rebuild, use: rm -rf $(pwd)"
     [ -z ${BUILD_BATCH} ] && sleep 5
