@@ -93,6 +93,7 @@ fi
 
 for A in "$@"; do
   case $A in
+  --no-git-reset) NO_GIT_RESET=y ;;
   --no-download) NO_DOWNLOAD=y ;;
   --only-download) ONLY_DOWNLOAD=y ;;
   --ignore-dependencies) IGNORE_DEPENDENCIES=y ;;

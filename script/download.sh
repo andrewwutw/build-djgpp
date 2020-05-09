@@ -60,10 +60,13 @@ download_git()
     fi
   fi
   cd $repo/ || exit 1
-  git reset --hard HEAD
-  git checkout $2
-  if [ -z ${NO_DOWNLOAD} ]; then
-    git pull || exit 1
+  if [ -z ${NO_GIT_RESET} ]; then
+    git reset --hard HEAD
+    git checkout $2
+    if [ -z ${NO_DOWNLOAD} ]; then
+      git fetch origin
+      git reset --hard origin/$2 || exit 1
+    fi
   fi
   mkdir -p ${BASE}/build
   rm -rf ${BASE}/build/$repo
