@@ -35,8 +35,8 @@ if [ ! -z ${SIMULAVR_VERSION} ]; then
   case `uname` in
   MINGW*) sed -i 's/CMAKE_CONFIG_OPTS=/CMAKE_CONFIG_OPTS=-G "MSYS Makefiles" /' Makefile ;;
   esac
-  sed -i "s/-DCMAKE_INSTALL_PREFIX=/-DCMAKE_INSTALL_PREFIX=${DST} #/" Makefile
-  sed -i 's/\/bin\///' cmake/GetGitInfo.cmake
+  sed -i "s@-DCMAKE_INSTALL_PREFIX=@-DCMAKE_INSTALL_PREFIX=${DST} #@" Makefile
+  sed -i 's@/bin/@@' cmake/GetGitInfo.cmake
   ${MAKE_J} build || exit 1
   ${MAKE_J} doc || exit 1
   [ ! -z $MAKE_CHECK ] && ${MAKE_J} -s check | tee ${BASE}/tests/simulavr.log
