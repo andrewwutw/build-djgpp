@@ -10,7 +10,14 @@ DJGPP_PREFIX=${DJGPP_PREFIX-/usr/local/djgpp}
 ENABLE_LANGUAGES=${ENABLE_LANGUAGES-c,c++}
 
 #DJGPP_DOWNLOAD_BASE="ftp://ftp.delorie.com/pub"
-DJGPP_DOWNLOAD_BASE="http://www.delorie.com/pub"
+#DJGPP_DOWNLOAD_BASE="http://www.delorie.com/pub"
+DJGPP_DOWNLOAD_BASE="http://www.mirrorservice.org/sites/ftp.delorie.com/pub"
+
+#FTPMIRROR_GNU_DOWNLOAD_BASE="http://ftpmirror.gnu.org"
+FTPMIRROR_GNU_DOWNLOAD_BASE="http://www.mirrorservice.org/sites/ftp.gnu.org/gnu"
+
+#FTP_GNU_DOWNLOAD_BASE="http://ftp.gnu.org/gnu"
+FTP_GNU_DOWNLOAD_BASE="http://www.mirrorservice.org/sites/ftp.gnu.org/gnu"
 
 # source tarball versions
 BINUTILS_VERSION=227
@@ -48,12 +55,12 @@ DJLSR_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djlsr${DJLSR_VERSION}.zip
 DJDEV_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djdev${DJDEV_VERSION}.zip"
 
 DJCROSS_GCC_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/deleted/rpms/djcross-gcc-${GCC_VERSION}/djcross-gcc-${GCC_VERSION}.tar.bz2"
-GCC_ARCHIVE="http://ftpmirror.gnu.org/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.bz2"
-GMP_ARCHIVE="http://ftpmirror.gnu.org/gmp/gmp-${GMP_VERSION}.tar.bz2"
-MPFR_ARCHIVE="http://ftpmirror.gnu.org/mpfr/mpfr-${MPFR_VERSION}.tar.bz2"
-MPC_ARCHIVE="http://ftpmirror.gnu.org/mpc/mpc-${MPC_VERSION}.tar.gz"
-AUTOCONF_ARCHIVE="http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.bz2"
-AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.xz"
+GCC_ARCHIVE="${FTPMIRROR_GNU_DOWNLOAD_BASE}/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.bz2"
+GMP_ARCHIVE="${FTPMIRROR_GNU_DOWNLOAD_BASE}/gmp/gmp-${GMP_VERSION}.tar.bz2"
+MPFR_ARCHIVE="${FTPMIRROR_GNU_DOWNLOAD_BASE}/mpfr/mpfr-${MPFR_VERSION}.tar.bz2"
+MPC_ARCHIVE="${FTPMIRROR_GNU_DOWNLOAD_BASE}/mpc/mpc-${MPC_VERSION}.tar.gz"
+AUTOCONF_ARCHIVE="${FTP_GNU_DOWNLOAD_BASE}/autoconf/autoconf-${AUTOCONF_VERSION}.tar.bz2"
+AUTOMAKE_ARCHIVE="${FTP_GNU_DOWNLOAD_BASE}/automake/automake-${AUTOMAKE_VERSION}.tar.xz"
 
 # check required programs
 REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch"
@@ -82,7 +89,7 @@ done
 if ! sed --version 2>/dev/null |grep "GNU sed" > /dev/null ;then
   echo GNU sed is not installed, need to download.
   SED_VERSION=4.2.2
-  SED_ARCHIVE="http://ftp.gnu.org/gnu/sed/sed-${SED_VERSION}.tar.bz2"
+  SED_ARCHIVE="${FTP_GNU_DOWNLOAD_BASE}/sed/sed-${SED_VERSION}.tar.bz2"
 else
   SED_ARCHIVE=""
 fi
