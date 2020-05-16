@@ -54,7 +54,6 @@ DJCRX_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djcrx${DJCRX_VERSION}.zip
 DJLSR_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djlsr${DJLSR_VERSION}.zip"
 DJDEV_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/current/v2/djdev${DJDEV_VERSION}.zip"
 
-DJCROSS_GCC_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/rpms/djcross-gcc-${GCC_VERSION}/djcross-gcc-${GCC_VERSION}.tar.bz2"
 GCC_ARCHIVE="${FTPMIRROR_GNU_DOWNLOAD_BASE}/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz"
 GMP_ARCHIVE="${FTPMIRROR_GNU_DOWNLOAD_BASE}/gmp/gmp-${GMP_VERSION}.tar.xz"
 MPFR_ARCHIVE="${FTPMIRROR_GNU_DOWNLOAD_BASE}/mpfr/mpfr-${MPFR_VERSION}.tar.xz"
@@ -102,18 +101,18 @@ fi
 rm test-zlib 2>/dev/null
 rm test-zlib.exe 2>/dev/null
 
-# djcross-gcc-X.XX-tar.* maybe moved from /djgpp/rpms/ to /djgpp/deleted/rpms/ directory.
-OLD_DJCROSS_GCC_ARCHIVE=${DJCROSS_GCC_ARCHIVE/rpms\//deleted\/rpms\/}
-
 # download source files
 ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $DJLSR_ARCHIVE $DJDEV_ARCHIVE
-              $SED_ARCHIVE $DJCROSS_GCC_ARCHIVE $OLD_DJCROSS_GCC_ARCHIVE $GCC_ARCHIVE
+              $SED_ARCHIVE $GCC_ARCHIVE
               $GMP_ARCHIVE $MPFR_ARCHIVE $MPC_ARCHIVE
               $AUTOCONF_ARCHIVE $AUTOMAKE_ARCHIVE"
 
 echo "Download source files..."
 mkdir -p download || exit 1
 cd download
+
+# copy local djgpp-gcc-X.XX.tar.bz2 to download/ directory
+cp "../missing-files/djcross-gcc-${GCC_VERSION}.tar.bz2" .
 
 for ARCHIVE in $ARCHIVE_LIST; do
   FILE=`basename $ARCHIVE`
@@ -126,13 +125,9 @@ for ARCHIVE in $ARCHIVE_LIST; do
     fi
     echo "Command : $DL_CMD"
     if ! eval $DL_CMD; then
-      if [ "$ARCHIVE" == "$DJCROSS_GCC_ARCHIVE" ]; then
-        echo "$FILE maybe moved to deleted/ directory."
-      else
-        rm $FILE
-        echo "Download $ARCHIVE failed."
-        exit 1
-      fi
+      rm $FILE
+      echo "Download $ARCHIVE failed."
+      exit 1
     fi
   fi
 done
