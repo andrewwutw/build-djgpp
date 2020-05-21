@@ -329,7 +329,7 @@ PATH="$BUILDDIR//tmpinst/bin:$PATH" \
                                  --enable-languages=${ENABLE_LANGUAGES} \
                                  || exit 1
 
-${MAKE} j=4 "PATH=$BUILDDIR/tmpinst/bin:$PATH" || exit 1
+${MAKE} j=4 "PATH=$BUILDDIR/tmpinst/bin:$PATH" "CXXFLAGS=-g -O2 -fpermissive" || exit 1
 
 ${MAKE} install-strip || exit 1
 
