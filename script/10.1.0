@@ -336,6 +336,17 @@ PATH="$BUILDDIR//tmpinst/bin:$PATH" \
 
 ${MAKE} j=4 "PATH=$BUILDDIR/tmpinst/bin:$PATH" || exit 1
 
+# Workaround for MinGW. Need to fix some .deps/*.Plo files.
+# Fix from
+#  e\:/build-djgpp\...
+# to
+#  /e/build-djgpp\...
+
+if uname|grep "^MINGW32" > /dev/null; then
+  for i in i586-pc-msdosdjgpp/libssp/.deps/*.Plo; do sed -e 's/^ \([a-zA-Z]\)\\\:/ \/\1/' $i -i; done
+  for i in i586-pc-msdosdjgpp/libquadmath/*/.deps/*.Plo; do sed -e 's/^ \([a-zA-Z]\)\\\:/ \/\1/' $i -i; done
+fi
+
 ${MAKE} install-strip || exit 1
 
 echo "Copy long name executables to short name."
