@@ -1,155 +1,184 @@
-## Building DJGPP cross compiler on Windows, Mac OSX, Linux and FreeBSD.
+## Build gcc cross compiler on Windows, Mac OSX, Linux and FreeBSD. [![Build Status](https://github.com/jwt27/build-gcc/workflows/Test%20builds/badge.svg?branch=master)](https://github.com/jwt27/build-gcc/actions?query=workflow%3A"Test+builds"+branch%3Amaster)
 
-build-djgpp : Build DJGPP cross compiler and binutils on Windows (MinGW/Cygwin), Mac OSX, Linux and FreeBSD.
+### Upgrade notes:
 
-### Prebuilt binary files
+* 2020-02-13: default target for djgpp has changed to `i386-pc-msdosdjgpp`.  
+If you require compatibility with distributions that use `i586`, you can either:
+    - run `sudo i386-pc-msdosdjgpp-link-i586` after installing, or
+    - build with `./build-djgpp.sh --prefix=i586-pc-msdosdjgpp`.
+* 2020-02-07: setenv script is now installed to `$PREFIX/bin/$TARGET-setenv`.
+* 2019-06-06: `master` is now the default branch again.
 
-If you don't want build DJGPP by yourself, you can download prebuilt DJGPP binary files for MinGW, OSX and Linux from GitHub Release page.
+### Current package versions, as of 2020-05-09:
 
-### Requirement
+* gcc 10.1.0
+* binutils 2.34
+* gdb 9.1
+* djgpp 2.05 / cvs
+* newlib 3.3.0
+* avr-libc 2.0.0
+* avrdude 6.3
+* avarice 2.13
+* simulavr git
 
-Before running this script, you need to install these programs first :
+### Tested targets:
+
+* i386-pc-msdosdjgpp
+* ia16
+* arm-eabi
+* avr
+
+See the [Actions tab](https://github.com/jwt27/build-gcc/actions?query=workflow%3A"Test+builds"+branch%3Amaster) on Github for a detailed status of individual targets.
+
+### Requirements
+
+Before running this script, you need to install these programs first:
 
 * g++
 * gcc
 * unzip
+* tar
+* bzip2
+* gzip
+* xz
 * bison
 * flex
 * make (or gmake for FreeBSD)
 * makeinfo
 * patch
 * zlib header/library
-* curl (for Cygwin/OSX/Linux/FreeBSD)
-* wget (for MinGW)
+* curl or wget
 * bash (for FreeBSD)
 
 Depending on your system, installation procedure maybe different.
 
 On Debian/Ubuntu, you can install these programs by :
 
-```
+```sh
 sudo apt-get update
-sudo apt-get install bison flex curl gcc g++ make texinfo zlib1g-dev g++ unzip
+sudo apt-get install bison flex curl gcc g++ make texinfo zlib1g-dev tar bzip2 gzip xz-utils unzip
 ```
 
 Fedora :
 
-```
-sudo yum install gcc-c++ bison flex texinfo patch zlib-devel
+```sh
+sudo yum install gcc-c++ bison flex texinfo patch zlib-devel tar bzip2 gzip xz unzip
 ```
 
 MinGW :
 
-```
+```sh
 mingw-get update
 mingw-get install msys-unzip libz-dev msys-wget msys-bison msys-flex msys-patch
 ```
 
+MinGW64 (msys2) :
+
+```sh
+pacman -Syuu base-devel mingw-w64-x86_64-{toolchain,curl,zlib} compression
+```
+
 ### Configuration
 
-Default install location is /usr/local/djgpp. You can change install location by setting environment variable *DJGPP_PREFIX* :
-
-```
-DJGPP_PREFIX=/usr/local/my-djgpp
-```
-
-Default support language is C and C++. You can change supported languages by setting environment variable *ENABLE_LANGUAGES* :
-
-```
-ENABLE_LANGUAGES=c,c++,f95,objc,obj-c++
-```
-
-### Building DJGPP compiler
-
-To build DJGPP, just run :
-
-./build-djgpp.sh *djgpp-version*
-
-Currently supported djgpp-version :
-
-* 4.7.3
-* 4.8.4
-* 4.8.5
-* 4.9.2
-* 4.9.3
-* 4.9.4
-* 5.1.0
-* 5.2.0
-* 5.3.0
-* 5.4.0
-* 5.5.0
-* 6.1.0
-* 6.2.0
-* 6.3.0
-* 6.4.0
-* 7.1.0
-* 7.2.0
-
-For example, to build DJGPP for gcc 7.2.0 :
-
-```
-./build-djgpp.sh 7.2.0
+The following command line options are recognized:
+```sh
+  --prefix=...              # Install location (default: /usr/local/cross)
+  --target=...              # Target name
+  --enable-languages=...    # Comma-separated list of languages to build compilers for (default: c,c++)
+  --no-download             # Do not download any files
+  --only-download           # Download source files, then exit
+  --ignore-dependencies     # Do not check package dependencies
+  --batch                   # Run in batch mode (will not prompt or delay to confirm settings)
 ```
 
-It will download all necessary files, build DJGPP compiler and binutils, and install it.
-
-### Using DJGPP compiler
-
-There are 2 methods to run the compiler (*BASE_DIR* is your DJGPP install location).
-
-* Use compiler full name :
-
+Several environment variables also control the build process:
+```sh
+MAKE_JOBS=                  # Number of parallel build threads (auto-detected)
+GCC_CONFIGURE_OPTIONS=      # Extra options to pass to gcc's ./configure
+BINUTILS_CONFIGURE_OPTIONS= # Same, for binutils
+GDB_CONFIGURE_OPTIONS=      # Same, for gdb
+NEWLIB_CONFIGURE_OPTIONS=   # Same, for newlib
+AVRLIBC_CONFIGURE_OPTIONS=  # Same, for avr-libc
+CFLAGS_FOR_TARGET=          # CFLAGS used to build target libraries
+HOST=                       # The platform you are building for, when building a cross-cross compiler
+BUILD=                      # The platform you are building on (auto-detected)
+MAKE_CHECK=                 # Run test suites on built programs.
+MAKE_CHECK_GCC=             # Run gcc test suites.
 ```
-BASE_DIR/bin/i586-pc-msdosdjgpp-g++ hello.cpp
+
+### Building
+
+Pick the script you want to use:
+```sh
+build-djgpp.sh      # builds a toolchain targeting djgpp (default TARGET: i386-pc-msdosdjgpp)
+build-newlib.sh     # builds a toolchain with the newlib C library
+build-ia16.sh       # builds a toolchain targeting 8086 processors, with the newlib C library (fixed TARGET: ia16-elf)
+build-avr.sh        # builds a toolchain targeting AVR microcontrollers (fixed TARGET: avr)
 ```
 
-* Or, use compiler short name, you have to change environment variables.
+To build DJGPP, just run:
+```sh
+./build-djgpp.sh [options...] [packages...]
+```
+Run with no arguments to see a list of supported packages and versions.
 
-If you are using Linux :
+For example, to build gcc 9.2.0 with the latest djgpp C library from CVS and latest binutils:
+```sh
+./build-djgpp.sh --prefix=/usr/local djgpp-cvs binutils gcc-9.2.0
 ```
-export PATH=BASE_DIR/i586-pc-msdosdjgpp/bin/:$PATH
-export GCC_EXEC_PREFIX=BASE_DIR/lib/gcc/
-g++ hello.cpp
-```
-Or, run :
 
+To install or upgrade all packages:
+```sh
+./build-djgpp.sh --prefix=/usr/local all
 ```
-source BASE_DIR/setenv
+
+It will download all necessary files, build DJGPP compiler, binutils, and gdb, and install it.
+
+### Using
+
+In order to use your new compiler, you must add its `bin/` directory to your `PATH`.  
+You can then access the compiler through its target-prefixed name: (`$PREFIX` and `$TARGET` in these examples are the variables you used to build)
+
+```sh
+$ PATH=$PREFIX/bin/:$PATH
+$ $TARGET-g++ hello.cpp
+```
+
+To use the short name variant, and access documentation with `man` and `info`, use the installed setenv script:
+
+```sh
+$ source $TARGET-setenv
+$ g++ hello.cpp
 ```
 
 If you are using Windows command prompt :
 
-```
-PATH=BASE_DIR/i586-pc-msdosdjgpp/bin;%PATH%
-set GCC_EXEC_PREFIX=BASE_DIR/lib/gcc/
-g++ hello.cpp
-```
-
-Or, run :
-
-```
-BASE_DIR/setenv.bat
+```bat
+> PATH=$PREFIX/bin;%PATH%
+> $TARGET-g++ hello.cpp
+> $TARGET-setenv
+> g++ hello.cpp
 ```
 
-### Supported DJGPP Utilities
+### Supported DJGPP utilities
+
 * dxe3gen
 * dxe3res
 * dxegen
 * exe2coff
 * stubedit
 * stubify
+* djasm
 
-### Successful build
+### Supported AVR utilities
 
-* OSX 10.12.5
-* Debian 7 (32bit)
-* Ubuntu 12 (64bit)
-* FreeBSD-10.2 (64bit)
-* Cygwin (32bit Windows XP)
-* MinGW (32bit Windows XP)
+* avrdude
+* avarice
+* simulavr
 
 ### Thanks
 
-This script is based on spec file from DJGPP source rpm files by Andris Pavenis :
-
+These scripts are based on Andrew Wu's build-djgpp script:  
+<https://github.com/andrewwutw/build-djgpp>  
+Which in turn is based on spec file from DJGPP source rpm files by Andris Pavenis:  
 <http://ap1.pp.fi/djgpp/index.html>

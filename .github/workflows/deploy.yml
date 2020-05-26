@@ -1,0 +1,67 @@
+name: Deploy PPA
+
+on:
+  push:
+    branches: djgpp-ppa
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ubuntu-version: [ bionic, eoan, focal, groovy ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install curl git debhelper devscripts dput gpg
+
+      - name: Download sources
+        run: |
+          ./build-djgpp.sh --batch --build-deb --only-download --ignore-dependencies djgpp-cvs binutils gcc gdb
+
+      - name: Pack git sources
+        run: |
+          find download/*/* ! -wholename '*/.git/*' -delete || true
+          cd download/
+          for DIR in */; do
+            DIR=${DIR%/}
+            tar -c -f $DIR-git.tar $DIR
+          done
+          rm -rf */
+
+      - name: Setup package files
+        env:
+          UBUNTU_VERSION: ${{ matrix.ubuntu-version }}
+        run: |
+          mv debian/Makefile .
+          mv debian/pgp-secret.asc /tmp/
+          sed -i "s/UBUNTU_VERSION/$UBUNTU_VERSION/g" debian/changelog
+          if [ -d debian/$UBUNTU_VERSION ]; then cp debian/$UBUNTU_VERSION/* debian/; fi
+
+      - name: Make source package
+        run: |
+          debuild -S -us -uc -d
+
+      - name: Import signing key
+        env:
+          DECRYPT_KEY: ${{ secrets.DECRYPT_KEY }}
+        run: |
+          gpg --batch --quiet --passphrase "$DECRYPT_KEY" -d /tmp/pgp-secret.asc | gpg --batch --import
+          rm -f /tmp/pgp-secret.asc
+
+      - name: Sign package
+        run: |
+          debsign -k197C3D6E652B6B1C2B7F9EDF84089D0351487AB8 ../*.changes
+
+      - name: Delete key
+        if: always()
+        run: |
+          sudo shred -fu $(gpgconf --list-dirs | grep homedir | sed 's/homedir://')/priv*/*
+
+      - name: Upload package
+        run: |
+          dput ppa:jwt27/djgpp-toolchain ../*.changes

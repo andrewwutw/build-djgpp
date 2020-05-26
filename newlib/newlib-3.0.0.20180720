@@ -1,0 +1,2 @@
+NEWLIB_VERSION=3.0.0.20180720
+NEWLIB_ARCHIVE="http://sourceware.org/pub/newlib/newlib-${NEWLIB_VERSION}.tar.gz"

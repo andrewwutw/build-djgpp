@@ -1,0 +1,13 @@
+GCC_VERSION=7.3.0
+GCC_VERSION_SHORT=7.30
+AUTOCONF_VERSION=2.64
+AUTOMAKE_VERSION=1.11.6
+
+GCC_ARCHIVE="http://ftpmirror.gnu.org/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz"
+AUTOCONF_ARCHIVE="http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.xz"
+AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.xz"
+
+GCC_CONFIGURE_OPTIONS="--disable-plugin \
+                       --enable-lto \
+                       --enable-libstdcxx-filesystem-ts \
+                       ${GCC_CONFIGURE_OPTIONS}"

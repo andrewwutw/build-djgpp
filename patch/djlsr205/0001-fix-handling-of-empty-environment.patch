@@ -1,0 +1,118 @@
+From 65d7caeb32f21597938f49364737789727516fdb Mon Sep 17 00:00:00 2001
+From: Stas Sergeev <stsp@users.sourceforge.net>
+Date: Sun, 4 Aug 2019 01:25:38 +0300
+Subject: [PATCH] fix handling of empty environment
+
+Currently if the DOS environment is empty (can happen
+when starting command.com), djgpp startup produces the
+corrupted environment. This patch fixes it by checking
+the loop end condition before loop action.
+
+Another problematic case is the missing environment segment.
+In this case there is no work-around, so the error msg
+is printed and the program terminates.
+---
+ src/libc/crt0/crt1.c | 12 +++++++-----
+ src/stub/stub.asm    | 16 +++++++++++++---
+ 2 files changed, 20 insertions(+), 8 deletions(-)
+
+diff --git a/src/libc/crt0/crt1.c b/src/libc/crt0/crt1.c
+index f0ba9919..37c7dedb 100644
+--- a/src/libc/crt0/crt1.c
++++ b/src/libc/crt0/crt1.c
+@@ -128,31 +128,33 @@ char *__dos_argv0;
+ static void
+ setup_environment(void)
+ {
+-  char *dos_environ = alloca(_stubinfo->env_size), *cp;
++  char *dos_environ, *cp;
+   short env_selector;
+   int env_count=0;
++
++  dos_environ = alloca(_stubinfo->env_size);
+   movedata(_stubinfo->psp_selector, 0x2c, ds, (int)&env_selector, 2);
+   movedata(env_selector, 0, ds, (int)dos_environ, _stubinfo->env_size);
+   cp = dos_environ;
+-  do {
++  while (*cp) { /* repeat until two NULs */
+     env_count++;
+     while (*cp) cp++; /* skip to NUL */
+     cp++; /* skip to next character */
+-  } while (*cp); /* repeat until two NULs */
++  }
+   _environ = (char **)malloc((env_count+1) * sizeof(char *));
+   if (_environ == 0)
+     return;
+ 
+   cp = dos_environ;
+   env_count = 0;
+-  do {
++  while (*cp) { /* repeat until two NULs */
+     /* putenv assumes each string is malloc'd */
+     _environ[env_count] = (char *)malloc(strlen(cp)+1);
+     strcpy(_environ[env_count], cp);
+     env_count++;
+     while (*cp) cp++; /* skip to NUL */
+     cp++; /* skip to next character */
+-  } while (*cp); /* repeat until two NULs */
++  }
+   _environ[env_count] = 0;
+ 
+   /*
+diff --git a/src/stub/stub.asm b/src/stub/stub.asm
+index 62dee9e9..76b2edd6 100644
+--- a/src/stub/stub.asm
++++ b/src/stub/stub.asm
+@@ -160,13 +160,21 @@ resize_again:
+ ;  Scan environment for "PATH=" and the stub's full name after environment
+ 
+ 	mov	es, es:[0x2c]		; get environment segment
++	mov	di, es
++	or	di, di			; check if no env
++	jnz	@f1
++	mov	al, 111
++	mov	dx, msg_no_env
++	jmpl	error
++@f1:
+ 	xor	di, di			; begin search for NUL/NUL (di = 0)
+ ;	mov	cx, 0xff04		; effectively `infinite' loop
+ 	xor 	al, al
+-	.db	0xa9			; "test ax,...." -- skip 2 bytes
++	jmp	@f1
+ scan_environment:
+ 	repne
+ 	scasb				; search for NUL
++@f1:
+ 	cmpw	es:[di], 0x4150		; "PA"
+ 	jne	not_path
+ 	scasw
+@@ -182,6 +190,8 @@ not_path:
+ 	scasb
+ 	jne	scan_environment	; no, still environment
+ 	scasw				; adjust pointer to point to prog name
++	push	es
++	push	di
+ 
+ ;; When we are spawned from a program which has more than 20 handles in use,
+ ;; all the handles passed to us by DOS are taken (since only the first 20
+@@ -199,8 +209,6 @@ not_path:
+ ;-----------------------------------------------------------------------------
+ ;  Get DPMI information before doing anything 386-specific
+ 
+-	push	es
+-	push	di
+ 	xor	cx, cx			; flag for load attempt set cx = 0
+ 	jz	@f2			; We always jump, shorter than jmp
+ @b1:
+@@ -828,6 +836,8 @@ msg_not_exe:
+ 	.db	": not EXE$"
+ msg_not_coff:
+ 	.db	": not COFF (Check for viruses)$"
++msg_no_env:
++	.db	"no envseg$"
+ msg_no_dpmi:
+ 	.db	"no DPMI - Get csdpmi*b.zip$"
+ msg_no_dos_memory:
+-- 
+2.20.1
+

@@ -1,0 +1,47 @@
+--- a/libctf/swap.h	2020-02-04 02:01:06.703925300 +0100
++++ b/libctf/swap.h	2020-02-04 02:01:35.474802100 +0100
+@@ -23,19 +23,15 @@
+ #include "config.h"
+ #include <stdint.h>
+ 
+-#ifdef HAVE_BYTESWAP_H
+-#include <byteswap.h>
+-#else
+-
+ #ifndef __DJGPP__
+ /* Provide our own versions of the byteswap functions.  */
+-inline uint16_t
++static inline uint16_t
+ bswap_16 (uint16_t v)
+ {
+   return ((v >> 8) & 0xff) | ((v & 0xff) << 8);
+ }
+ 
+-inline uint32_t
++static inline uint32_t
+ bswap_32 (uint32_t v)
+ {
+   return (  ((v & 0xff000000) >> 24)
+@@ -44,13 +40,13 @@
+ 	  | ((v & 0x000000ff) << 24));
+ }
+ 
+-inline uint64_t
++static inline uint64_t
+ bswap_identity_64 (uint64_t v)
+ {
+   return v;
+ }
+ 
+-inline uint64_t
++static inline uint64_t
+ bswap_64 (uint64_t v)
+ {
+   return (  ((v & 0xff00000000000000ULL) >> 56)
+@@ -118,6 +114,4 @@
+   )
+ #endif /* __DJGPP__ */
+ 
+-#endif /* !defined(HAVE_BYTESWAP_H) */
+-
+ #endif /* !defined(_CTF_SWAP_H) */

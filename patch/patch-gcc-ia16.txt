@@ -1,0 +1,15 @@
+diff --git a/gcc/opts.c b/gcc/opts.c
+index 0f9431a0b..91af66f98 100644
+--- a/gcc/opts.c
++++ b/gcc/opts.c
+@@ -2340,8 +2340,8 @@ set_debug_level (enum debug_info_type type, int extended, const char *arg,
+ #endif
+ 	    }
+ 
+-	  if (opts->x_write_symbols == NO_DEBUG)
+-	    warning_at (loc, 0, "target system does not support debug output");
++//	  if (opts->x_write_symbols == NO_DEBUG)
++//	    warning_at (loc, 0, "target system does not support debug output");
+ 	}
+     }
+   else

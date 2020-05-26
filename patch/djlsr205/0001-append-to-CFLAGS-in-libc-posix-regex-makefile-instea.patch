@@ -1,0 +1,26 @@
+From 9e29f38d2ce073bc209cafbb9341dd5756b743da Mon Sep 17 00:00:00 2001
+From: "J.W. Jagersma" <jwjagersma@gmail.com>
+Date: Mon, 10 Feb 2020 18:31:38 +0100
+Subject: [PATCH] append to CFLAGS in libc/posix/regex/makefile, instead of
+ overriding it.
+
+---
+ src/libc/posix/regex/makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/libc/posix/regex/makefile b/src/libc/posix/regex/makefile
+index ef3ca5c1..b8fc260f 100644
+--- a/src/libc/posix/regex/makefile
++++ b/src/libc/posix/regex/makefile
+@@ -4,7 +4,7 @@
+ TOP=../..
+ 
+ # supress all warnings here
+-CFLAGS = -w
++CFLAGS += -w
+ 
+ SRC += regcomp.c
+ SRC += regerror.c
+-- 
+2.25.0
+

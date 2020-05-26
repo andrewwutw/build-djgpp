@@ -1,0 +1,46 @@
+From 9fcd924b8eec562eeacf53c92a18e06aacb48fa9 Mon Sep 17 00:00:00 2001
+From: "J.W. Jagersma" <jwjagersma@gmail.com>
+Date: Sat, 9 May 2020 16:55:26 +0200
+Subject: [PATCH] fix multiple definition errors with gcc 10
+
+GCC 10 now defaults to -fno-common, which causes multiple definition
+errors during linking.  In libc, __stdio_cleanup_hook is defined twice,
+and in fsdb, several variables are defined in a header, which is
+included in multiple source files.
+
+To solve this, __stdio_cleanup_hook is declared extern and fsdb can be
+compiled with -fcommon.
+---
+ src/debug/fsdb/makefile     | 2 ++
+ src/libc/ansi/stdlib/exit.c | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/src/debug/fsdb/makefile b/src/debug/fsdb/makefile
+index da796d41..41f145fb 100644
+--- a/src/debug/fsdb/makefile
++++ b/src/debug/fsdb/makefile
+@@ -12,6 +12,8 @@ EOBJS += unassmbl.o
+ 
+ include $(TOP)/../makefile.inc
+ 
++CFLAGS += -fcommon
++
+ #relax error checking:
+ XGCC = $(XLGCC)
+ 
+diff --git a/src/libc/ansi/stdlib/exit.c b/src/libc/ansi/stdlib/exit.c
+index 94634b11..79b40ae9 100644
+--- a/src/libc/ansi/stdlib/exit.c
++++ b/src/libc/ansi/stdlib/exit.c
+@@ -15,7 +15,7 @@
+ 
+ struct __atexit *__atexit_ptr = 0;
+ 
+-void (*__stdio_cleanup_hook)(void);
++extern void (*__stdio_cleanup_hook)(void);
+ 
+ /* A hook to close down the file system extensions if any where opened.
+    This does not force them to be linked in. */
+-- 
+2.26.2
+

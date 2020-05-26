@@ -1,0 +1,150 @@
+name: Test builds
+
+on:
+  push:
+    branches-ignore: djgpp-ppa
+  pull_request:
+  schedule:
+    - cron: '0 0 1 * *'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+        build-type: [ clean ]
+        env:
+          -
+            TARGET: i386-pc-msdosdjgpp
+            PACKAGES: binutils gcc djgpp-2.05
+          -
+            TARGET: i386-pc-msdosdjgpp
+            PACKAGES: binutils gcc djgpp-cvs
+          -
+            TARGET: i386-pc-msdosdjgpp
+            PACKAGES: gdb
+          -
+            TARGET: arm-eabi
+            PACKAGES: binutils gcc newlib
+          -
+            TARGET: arm-eabi
+            PACKAGES: gdb
+          -
+            TARGET: avr
+            PACKAGES: binutils gcc avr-libc
+          -
+            TARGET: avr
+            PACKAGES: gdb avarice simulavr avrdude
+          -
+            TARGET: ia16-elf
+            PACKAGES: binutils gcc newlib
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Clear apt package cache
+        if: contains(matrix.os, 'ubuntu')
+        run: |
+          sudo apt-get clean
+
+      - name: Clear brew package cache
+        if: contains(matrix.os, 'macos')
+        run: |
+          rm -rf $(brew --cache)
+
+      - name: Cache apt package lists
+        uses: jwt27/cache@dist
+        if: contains(matrix.os, 'ubuntu')
+        with:
+          path: /var/lib/apt/lists
+          key: testbuild-apt-lists-${{ github.sha }}
+          restore-keys: |
+            testbuild-apt-lists-
+
+      - name: Cache apt package cache
+        uses: jwt27/cache@dist
+        if: contains(matrix.os, 'ubuntu')
+        with:
+          path: /var/cache/apt
+          key: testbuild-apt-cache-${{ github.sha }}
+          restore-keys: |
+            testbuild-apt-cache-
+
+      - name: Cache brew package cache
+        uses: jwt27/cache@dist
+        if: contains(matrix.os, 'macos')
+        with:
+          path: ~/Library/Caches/Homebrew
+          key: testbuild-brew-cache-${{ github.sha }}
+          restore-keys: |
+            testbuild-brew-cache-
+
+      - name: Install dependencies (ubuntu)
+        if: contains(matrix.os, 'ubuntu')
+        run: |
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install bison flex curl make texinfo zlib1g-dev tar bzip2 gzip xz-utils unzip dos2unix libtool-bin gcc-9 g++-9 cmake
+          echo "::set-env name=CC::gcc-9"
+          echo "::set-env name=CXX::g++-9"
+
+      - name: Install dependencies (macos)
+        if: contains(matrix.os, 'macos')
+        run: |
+          brew update
+          brew install bash bison flex curl make texinfo zlib bzip2 gzip xz unzip dos2unix libtool cmake
+
+      - name: Cache sources
+        uses: jwt27/cache@dist
+        with:
+          path: download
+          key: testbuild-sources-${{ matrix.os }}-${{ matrix.env.TARGET }}-${{ matrix.env.PACKAGES }}-${{ github.sha }}
+          restore-keys: |
+            testbuild-sources-${{ matrix.os }}-${{ matrix.env.TARGET }}-${{ matrix.env.PACKAGES }}-
+
+      - name: Download sources
+        env:
+          TARGET: ${{ matrix.env.TARGET }}
+          PACKAGES: ${{ matrix.env.PACKAGES }}
+        run: ./script/select-script.sh --only-download
+
+      - name: Cache build output
+        uses: jwt27/cache@dist
+        if: matrix.build-type == 'rebuild'
+        id: cache-build
+        with:
+          path: build
+          key: testbuild-build-${{ matrix.os }}-${{ matrix.env.TARGET }}-${{ matrix.env.PACKAGES }}-${{ github.sha }}
+          restore-keys: |
+            testbuild-build-${{ matrix.os }}-${{ matrix.env.TARGET }}-${{ matrix.env.PACKAGES }}-
+
+      - name: Clean build
+        if: matrix.build-type == 'clean'
+        env:
+          TARGET: ${{ matrix.env.TARGET }}
+        run: ./script/select-script.sh --no-download --prefix=${{ github.workspace }}-${{ github.sha }} ${{ matrix.env.PACKAGES }}
+
+      - name: Rebuild
+        if: matrix.build-type == 'rebuild'
+        env:
+          TARGET: ${{ matrix.env.TARGET }}
+        run: ./script/select-script.sh --no-download --prefix=${{ github.workspace }} ${{ matrix.env.PACKAGES }}
+
+      - name: Rebuild if uncached
+        if: matrix.build-type == 'rebuild' && steps.cache-build.outputs.cache-hit != 'true'
+        env:
+          TARGET: ${{ matrix.env.TARGET }}
+        run: ./script/select-script.sh --no-download --prefix=${{ github.workspace }} ${{ matrix.env.PACKAGES }}
+
+      - name: Clear and pack git sources before caching
+        if: matrix.build-type == 'clean'
+        run: |
+          find download/*/* ! -wholename '*/.git/*' -delete || true
+          cd download
+          for DIR in */; do
+            DIR=${DIR%/}
+            tar -c -f $DIR-git.tar $DIR
+          done
+          rm -rf */

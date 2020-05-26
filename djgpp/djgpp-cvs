@@ -1,0 +1,2 @@
+DJGPP_VERSION=cvs
+DJGPP_GIT="https://github.com/jwt27/djgpp-cvs.git::jwt27"

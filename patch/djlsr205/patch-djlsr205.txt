@@ -1,0 +1,313 @@
+diff -ur djlsr205-orig/src/dxe/dxe3gen.c djlsr205/src/dxe/dxe3gen.c
+--- djlsr205-orig/src/dxe/dxe3gen.c	2017-04-29 14:32:47.000000000 +0800
++++ djlsr205/src/dxe/dxe3gen.c	2017-04-29 14:33:27.000000000 +0800
+@@ -193,7 +193,7 @@
+ #include "../../include/sys/dxe.h"
+ #include "../../include/coff.h"
+ 
+-#define VERSION  "1.0.3"
++#define VERSION  "1.0.4"
+ 
+ #define TEMP_BASE    "dxe_tmp"       /* 7 chars, 1 char suffix */
+ #define TEMP_O_FILE  TEMP_BASE".o"
+@@ -937,6 +937,7 @@
+   char *strings;
+   RELOC *relocs;
+   unsigned int i, j, errcount;
++  ULONG32 real_nrelocs;
+   size_t hdrsize;
+ 
+   /* Exported symbols table */
+@@ -985,9 +986,18 @@
+   strings[0] = 0;
+ 
+   /* Read the relocation table */
+-  relocs = (RELOC *)malloc(sc.s_nreloc * sizeof(RELOC));
+   fseek(inf, sc.s_relptr, SEEK_SET);
+-  fread(relocs, RELSZ, sc.s_nreloc, inf);
++  if (sc.s_flags & STYP_NRELOC_OVFL) {
++    fread(&real_nrelocs, 4, 1, inf); /* read r_vaddr */
++    fseek(inf, RELSZ - 4, SEEK_CUR); /* skip the rest */
++    dh.nrelocs = --real_nrelocs; /* lose the '+1' */
++    if (opt.verbose)
++      printf("%s: real nrelocs: %lu\n", progname, (unsigned long)real_nrelocs);
++  } else {
++    real_nrelocs = dh.nrelocs;
++  }
++  relocs = (RELOC *)malloc(real_nrelocs * sizeof(RELOC));
++  fread(relocs, RELSZ, real_nrelocs, inf);
+ 
+   /* Close input file */
+   fclose(inf);
+@@ -1042,7 +1052,7 @@
+       int n_abs_relocs = 0, n_rel_relocs = 0;
+ 
+       /* count the amount of relocations pointing to this symbol */
+-      for (j = 0; j < sc.s_nreloc; j++)
++      for (j = 0; j < real_nrelocs; j++)
+       {
+         if (relocs[j].r_symndx == i)
+         {
+@@ -1101,7 +1111,7 @@
+ 
+       unres_size = newsize;
+ 
+-      for (j = 0; j < sc.s_nreloc; j++)
++      for (j = 0; j < real_nrelocs; j++)
+       {
+         if (relocs[j].r_symndx == i)
+         {
+@@ -1145,7 +1155,7 @@
+         BOOL ok = FALSE;
+         for (j = 0; j < opt.num_excl; j++)
+         {
+-          if (memcmp(opt.excl_prefix[j], name, strlen(opt.excl_prefix[j])) == 0)
++          if (strncmp(opt.excl_prefix[j], name, strlen(opt.excl_prefix[j])) == 0)
+           {
+             ok = TRUE;
+             break;
+@@ -1160,7 +1170,7 @@
+         BOOL ok = FALSE;
+         for (j = 0; j < opt.num_prefix; j++)
+         {
+-          if (memcmp(opt.export_prefix[j], name, strlen(opt.export_prefix[j])) == 0)
++          if (strncmp(opt.export_prefix[j], name, strlen(opt.export_prefix[j])) == 0)
+           {
+             ok = TRUE;
+             break;
+@@ -1202,7 +1212,7 @@
+ 
+   /* Compute the amount of valid relocations */
+   DEBUG_PRINT_RELOCATION_DIRECTIVE_PROLOG();
+-  for (i = 0; i < sc.s_nreloc; i++)
++  for (i = 0; i < real_nrelocs; i++)
+   {
+     DEBUG_PRINT_RELOCATION_DIRECTIVE(i, relocs);
+     if (!VALID_RELOC(relocs[i]))
+@@ -1278,7 +1288,7 @@
+   free(data);
+ 
+   /* Output the relocations */
+-  for (i = 0; i < sc.s_nreloc; i++)
++  for (i = 0; i < real_nrelocs; i++)
+   {
+     if (VALID_RELOC(relocs[i]))
+       fwrite(&relocs[i].r_vaddr, 1, sizeof(relocs[0].r_vaddr), outf);
+
+diff -ur djlsr205-orig/src/misc.c djlsr205/src/misc.c
+--- djlsr205-orig/src/misc.c	2017-04-29 14:32:47.000000000 +0800
++++ djlsr205/src/misc.c	2017-04-29 14:32:57.000000000 +0800
+@@ -14,7 +14,11 @@
+ {
+   /* MS-DOS uses \, unix uses / */
+   if (argc > 2 && strcmp(argv[1], "mkdir") == 0)
++#if defined(__MINGW32__) || defined(__MINGW64__)
++    mkdir(argv[2]);
++#else
+     mkdir(argv[2], 0777);
++#endif
+ 
+   /* redirection and long command lines don't always
+      mix well under MS-DOS */
+diff -ur djlsr205-orig/src/stub/exe2coff.c djlsr205/src/stub/exe2coff.c
+--- djlsr205-orig/src/stub/exe2coff.c	2017-04-29 14:32:47.000000000 +0800
++++ djlsr205/src/stub/exe2coff.c	2017-04-29 14:32:57.000000000 +0800
+@@ -5,10 +5,12 @@
+ #include <fcntl.h>
+ #include <sys/stat.h>
+ #include <string.h>
+-#include <io.h>
+ #include <unistd.h>
+ #include <ctype.h>
+ 
++#if !defined(O_BINARY)
++#define O_BINARY 0
++#endif
+ 
+ static void
+ exe2aout(char *fname)
+
+--- a/src/makefile.def
++++ b/src/makefile.def
+@@ -47,11 +47,12 @@
+
+ # For building distributed (djgpp) libraries and programs
+
+-CROSS_GCC = i586-pc-msdosdjgpp-gcc -pipe
+-CROSS_AR = i586-pc-msdosdjgpp-ar
+-CROSS_AS = i586-pc-msdosdjgpp-as
+-CROSS_LD = i586-pc-msdosdjgpp-ld
+-CROSS_STRIP = i586-pc-msdosdjgpp-strip
++CROSS_PREFIX = i586-pc-msdosdjgpp-
++CROSS_GCC = $(CROSS_PREFIX)gcc -pipe
++CROSS_AR = $(CROSS_PREFIX)ar
++CROSS_AS = $(CROSS_PREFIX)as
++CROSS_LD = $(CROSS_PREFIX)ld
++CROSS_STRIP = $(CROSS_PREFIX)strip
+ CROSS_BISON = bison
+
+ # For building programs that *run* during the build (hostbin/*);
+diff --git a/src/debug/common/dbgcom.c b/src/debug/common/dbgcom.c
+index 77ca122b..1480f27c 100644
+--- a/src/debug/common/dbgcom.c
++++ b/src/debug/common/dbgcom.c
+@@ -1338,13 +1338,13 @@ int invalid_sel_addr(short sel, unsigned a, unsigned len, char for_write)
+     ("										\n\
+       movw  %2,%%ax								\n\
+       verr  %%ax								\n\
+-      jnz   .Ldoes_not_has_read_right						\n\
++      jnz   .Ldoes_not_has_read_right%=					\n\
+       movb  $1,%0								\n\
+-.Ldoes_not_has_read_right:							\n\
++.Ldoes_not_has_read_right%=:							\n\
+       verw  %%ax								\n\
+-      jnz   .Ldoes_not_has_write_right						\n\
++      jnz   .Ldoes_not_has_write_right%=					\n\
+       movb  $1,%1								\n\
+-.Ldoes_not_has_write_right: "
++.Ldoes_not_has_write_right%=: "
+      : "=qm" (read_allowed), "=qm" (write_allowed)
+      : "g" (sel)
+      );
+diff --git a/src/dxe/makefile b/src/dxe/makefile
+index cf715867..b856b9ed 100644
+--- a/src/dxe/makefile
++++ b/src/dxe/makefile
+@@ -13,7 +13,8 @@ all :: native \
+ 	$(BIN)/dxe3res.exe \
+ 	$E
+ 
+-native :: $(HOSTBIN)/dxegen.exe
++native :: $(HOSTBIN)/dxegen.exe \
++	$(HOSTBIN)/dxe3res.exe
+ 	$(NOP)
+ 
+ .o.h:
+@@ -36,5 +37,8 @@ CROSS_CC = $(word 1,$(CROSS_GCC))
+ $(HOSTBIN)/dxegen.exe : dxe3gen.c init1.h init2.h init3.h init4.h init5.h fini1.h fini2.h fini3.h fini4.h fini5.h
+ 	$(GCC) -DDXE_LD=\"$(CROSS_LD)\" -DDXE_CC=\"$(CROSS_CC)\" -DDXE_AR=\"$(CROSS_AR)\" -DDXE_AS=\"$(CROSS_AS)\" dxe3gen.c -o $@
+ 
++$(HOSTBIN)/dxe3res.exe: dxe3res.c
++	$(GCC) -O2 -Wall dxe3res.c -o $@
++
+ clean ::
+ 	@-$(MISC) rm *.o *.h $(HOSTBIN)/dxegen.exe
+diff --git a/src/makefile b/src/makefile
+index f62b70e4..e6f397fd 100644
+--- a/src/makefile
++++ b/src/makefile
+@@ -21,7 +21,7 @@ DIRS = \
+ 	../info		\
+ 	../lib
+ 
+-all : misc.exe config $(DIRS) makemake.exe subs ../lib/libg.a ../lib/libpc.a
++all : misc.exe config $(DIRS) makemake.exe subs
+ 
+ misc.exe : misc.c
+ 	gcc -O2 -Wall misc.c -o misc.exe
+diff --git a/src/makefile.inc b/src/makefile.inc
+index 664fdf9f..09c6f997 100644
+--- a/src/makefile.inc
++++ b/src/makefile.inc
+@@ -165,7 +165,7 @@ ifneq ($(MAKEFILE_LIB),1)
+ all :: makefile.oh
+ makefile.oh : makefile
+ 	@$(MISC) echo - building new response file
+-	@$(MISC) echo makefile.oh $(addprefix \&/,$(OBJS))
++	@echo "$(addprefix &/,$(OBJS))" > makefile.oh
+ endif
+ 
+ clean ::
+diff --git a/src/makefile.lib b/src/makefile.lib
+index 3a72a464..a3b5bd1e 100644
+--- a/src/makefile.lib
++++ b/src/makefile.lib
+@@ -23,6 +23,7 @@ $(LIB)/lib$(LIBNAME).a : $(OBJS) makefile.rf $(TOP)/../ident.c
+ ifeq ($(CROSS_BUILD),0)
+ 	$(CROSS_AR) q $(LIB)/lib$(LIBNAME).a @makefile.rf id_$(LIBNAME).o
+ else
++	dos2unix makefile.rf
+ 	$(CROSS_AR) q $(LIB)/lib$(LIBNAME).a `cat makefile.rf` id_$(LIBNAME).o
+ endif
+ 	$(CROSS_AR) s $(LIB)/lib$(LIBNAME).a
+diff --git a/src/stub/makefile b/src/stub/makefile
+index 83de0f1d..fef8ac8f 100644
+--- a/src/stub/makefile
++++ b/src/stub/makefile
+@@ -22,6 +22,7 @@ all :: native \
+ native :: \
+ 	$(HOSTBIN)/stubedit.exe \
+ 	$(HOSTBIN)/stubify.exe \
++	$(HOSTBIN)/exe2coff.exe \
+ 	$(INC)/stubinfo.h \
+ 	$E
+ 	$(NOP)
+@@ -63,10 +64,13 @@ $(BIN)/stubedit.exe : $(C) stubedit.o $(L)
+ 
+ 
+ $(HOSTBIN)/stubify.exe : stubify.c stub.h
+-	$(GCC) stubify.c -o $@
++	$(GCC) -O2 stubify.c -o $@
+ 
+ $(HOSTBIN)/stubedit.exe : stubedit.c $(INC)/stubinfo.h
+-	$(GCC) stubedit.c -o $@
++	$(GCC) -O2 stubedit.c -o $@
++
++$(HOSTBIN)/exe2coff.exe : exe2coff.c
++	$(GCC) -O2 $< -o $@
+ 
+ ./stub2inc.exe : stub2inc.c
+ 	$(GCC) stub2inc.c -o $@
+diff --git a/src/libc/crt0/crt1.c b/src/libc/crt0/crt1.c
+index 1bb6aa55..f0ba9919 100644
+--- a/src/libc/crt0/crt1.c
++++ b/src/libc/crt0/crt1.c
+@@ -208,7 +208,7 @@ setup_os_version(void)
+   _osminor = v & 0xff;
+ }
+
+-
++__attribute__((force_align_arg_pointer))
+ void
+ __crt1_startup(void)
+ {
+--- a/src/makefile.cfg
++++ b/src/makefile.cfg
+@@ -48,6 +48,7 @@
+ 	@./misc.exe echo - "-Wsign-compare" >>gcc.opt
+ 	@./misc.exe echo - "-nostdinc" >>gcc.opt
+ 	@./misc.exe echo - "$(IQUOTE)" >>gcc.opt
++	@./misc.exe echo - "-mpreferred-stack-boundary=4" >>gcc.opt
+ 
+ 
+ gcc-l.opt: makefile.cfg
+@@ -58,6 +59,7 @@
+ 	@./misc.exe echo - "-Wall" >>gcc-l.opt
+ 	@./misc.exe echo - "-nostdinc" >>gcc-l.opt
+ 	@./misc.exe echo - "$(IQUOTE)" >>gcc-l.opt
++	@./misc.exe echo - "-mpreferred-stack-boundary=4" >>gcc.opt
+ 
+ gpp.opt: gcc.opt
+ 	sed -f gpp.sed $< > $@
+--- a/src/libc/ansi/stdlib/nmalloc.c
++++ b/src/libc/ansi/stdlib/nmalloc.c
+@@ -1145,6 +1145,7 @@
+          return nmalloc(szneed);                      /* EXIT */
+       }
+       else if ((minit = nmalloc(szneed + XTRA))) {
++         m = MEMBLKp(minit);
+          /* alignment >= 2*ALIGN and power of 2 if here */
+          misalign = (ulong)minit % alignment;
+          DBGPRTM("  misalignment = %d", misalign);
+@@ -1154,9 +1155,10 @@
+          }
+          else {
+             /* two or more chunks to release */
+-            /* for now, just return NULL and have a leak */
+             DBGPRTM("  Complex case, release multiple chunks");
+             DBGEOLN;
++            nfree(PTR(split(&m, alignment - misalign)));
++            return nrealloc(PTR(m), size);
+          }
+       } /* alignment > ALIGN */
+    } /* valid parameters */

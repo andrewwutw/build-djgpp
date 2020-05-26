@@ -1,0 +1,42 @@
+djgpp-toolchain (0.20200509.0+gcc10.1.0+bnu2.34.0+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
+
+  * gcc version 10.1.0.
+
+ -- jwt27 <jwjagersma@gmail.com>  Sat, 09 May 2020 17:36:20 +0200
+
+djgpp-toolchain (0.20200505.0+gcc9.3.0+bnu2.34.0+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
+
+  * gcc version 9.3.0.
+  * patch binutils and gcc to use "b" flag for bss sections.
+
+ -- jwt27 <jwjagersma@gmail.com>  Tue, 05 May 2020 16:35:24 +0200
+
+djgpp-toolchain (0.20200310.0+gcc9.2.0+bnu2.34.0+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
+
+  * binutils version 2.34.
+
+ -- jwt27 <jwjagersma@gmail.com>  Tue, 10 Mar 2020 21:31:14 +0100
+
+djgpp-toolchain (0.20200229.0+gcc9.2.0+bnu2.33.1+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
+
+  * make gcc-djgpp in focal depend on 2.34-3ubuntu1+1.4
+
+ -- jwt27 <jwjagersma@gmail.com>  Sat, 29 Feb 2020 16:37:17 +0100
+
+djgpp-toolchain (0.20200213.2+gcc9.2.0+bnu2.33.1+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
+
+  * remove binutils-djgpp and binutils-djgpp-doc for focal and require upstream binutils-djgpp.
+
+ -- jwt27 <jwjagersma@gmail.com>  Thu, 13 Feb 2020 21:51:35 +0100
+
+djgpp-toolchain (0.20200213.1+gcc9.2.0+bnu2.33.1+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
+
+  * fix package names in control file.
+
+ -- jwt27 <jwjagersma@gmail.com>  Thu, 13 Feb 2020 16:27:55 +0100
+
+djgpp-toolchain (0.20200213.0+gcc9.2.0+bnu2.33.1+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=medium
+
+  * Initial Release.
+
+ -- jwt27 <jwjagersma@gmail.com>  Thu, 13 Feb 2020 02:40:22 +0100

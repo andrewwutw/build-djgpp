@@ -1,0 +1,4 @@
+source newlib/newlib
+source binutils/binutils
+source common/gcc
+source common/gdb
