@@ -82,9 +82,14 @@ Currently supported djgpp-version :
 * 6.2.0
 * 6.3.0
 * 6.4.0
+* 6.5.0
 * 7.1.0
 * 7.2.0
 * 7.3.0
+* 7.5.0
+* 8.3.0
+* 9.3.0
+* 10.1.0
 
 For example, to build DJGPP for gcc 7.3.0 :
 
