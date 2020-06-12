@@ -1,3 +1,13 @@
-export PATH="$(cd "$(dirname "$0")"; pwd)"/i586-pc-msdosdjgpp/bin/:"$(cd "$(dirname "$0")"; pwd)"/bin/:$PATH
-export GCC_EXEC_PREFIX="$(cd "$(dirname "$0")"; pwd)"/lib/gcc/
-export DJDIR="$(cd "$(dirname "$0")"; pwd)"/i586-pc-msdosdjgpp
+SCRIPT_NAME="$0"
+if [ -n "$BASH" ]; then
+  SCRIPT_NAME="$BASH_SOURCE"
+fi
+echo $SCRIPT_NAME
+SCRIPT_DIR=$(dirname "$SCRIPT_NAME")
+
+export PATH="$(cd "$SCRIPT_DIR"; pwd)"/i586-pc-msdosdjgpp/bin/:"$(cd "$SCRIPT_DIR"; pwd)"/bin/:$PATH
+export GCC_EXEC_PREFIX="$(cd "$SCRIPT_DIR"; pwd)"/lib/gcc/
+export DJDIR="$(cd "$SCRIPT_DIR"; pwd)"/i586-pc-msdosdjgpp
+
+unset SCRIPT_NAME
+unset SCRIPT_DIR
