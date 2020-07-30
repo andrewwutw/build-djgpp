@@ -1,3 +1,9 @@
+djgpp-toolchain (0.20200730.0+gcc10.2.0+bnu2.34.0+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
+
+  * gcc version 10.2.0.
+
+ -- jwt27 <jwjagersma@gmail.com>  Thu, 30 Jul 2020 12:36:44 +0200
+
 djgpp-toolchain (0.20200509.0+gcc10.1.0+bnu2.34.0+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
 
   * gcc version 10.1.0.
