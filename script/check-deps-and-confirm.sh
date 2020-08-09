@@ -95,6 +95,22 @@ fi
 DST="${DESTDIR}${PREFIX}"
 export DESTDIR
 
+# check python version for gdb
+if [ ! -z ${GDB_VERSION} ]; then
+  let GDB_VERSION_MAJOR=${GDB_VERSION%%.*}
+  if (( ${GDB_VERSION_MAJOR} >= 9 )); then
+    PYTHON=python3
+  else
+    PYTHON=python2
+  fi
+  if ! which ${PYTHON} > /dev/null; then
+    echo "WARNING: ${PYTHON} not installed"
+    prepend GDB_CONFIGURE_OPTIONS "--with-python=no"
+  else
+    prepend GDB_CONFIGURE_OPTIONS "--with-python=`which ${PYTHON}`"
+  fi
+fi
+
 # check required programs
 REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch tar xz bunzip2 gunzip"
 
