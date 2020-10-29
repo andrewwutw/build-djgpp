@@ -159,4 +159,4 @@ BASE_DIR/setenv.bat
 
 This script is based on spec file from DJGPP source rpm files by Andris Pavenis :
 
-<http://ap1.pp.fi/djgpp/index.html>
+[http://ap1.pp.fi/djgpp/index.html](https://web.archive.org/web/20190811054505/http://ap1.pp.fi/djgpp/index.html)
