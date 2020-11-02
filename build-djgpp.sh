@@ -32,27 +32,31 @@ source ${BASE}/script/build-tools.sh
 cd ${BASE}/build/ || exit 1
 
 if [ ! -z ${BINUTILS_VERSION} ]; then
-  mkdir -p bnu${BINUTILS_VERSION}s
-  cd bnu${BINUTILS_VERSION}s
-  if [ ! -e binutils-unpacked ]; then
-    echo "Unpacking binutils..."
-    unzip -oq ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
+  if echo ${BINUTILS_VERSION} | grep -q '\.'; then
+    source ${BASE}/script/unpack-build-binutils.sh
+  else
+    mkdir -p bnu${BINUTILS_VERSION}s
+    cd bnu${BINUTILS_VERSION}s
+    if [ ! -e binutils-unpacked ]; then
+      echo "Unpacking binutils..."
+      unzip -oq ../../download/bnu${BINUTILS_VERSION}s.zip || exit 1
 
-    pushd gnu/binutils-* || exit 1
-    cat ${BASE}/patch/djgpp-binutils-${BINUTILS_VERSION}/* | patch -p1 -u || exit 1
-    popd
+      pushd gnu/binutils-* || exit 1
+      cat ${BASE}/patch/djgpp-binutils-${BINUTILS_VERSION}/* | patch -p1 -u || exit 1
+      popd
 
-    touch binutils-unpacked
+      touch binutils-unpacked
+    fi
+    cd gnu/binutils-* || exit 1
+
+    # exec permission of some files are not set, fix it.
+    for EXEC_FILE in install-sh missing configure; do
+      echo "chmod a+x $EXEC_FILE"
+      chmod a+x $EXEC_FILE || exit 1
+    done
+
+    source ${BASE}/script/build-binutils.sh
   fi
-  cd gnu/binutils-* || exit 1
-
-  # exec permission of some files are not set, fix it.
-  for EXEC_FILE in install-sh missing configure; do
-    echo "chmod a+x $EXEC_FILE"
-    chmod a+x $EXEC_FILE || exit 1
-  done
-
-  source ${BASE}/script/build-binutils.sh
 fi
 
 cd ${BASE}/build/ || exit 1

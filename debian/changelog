@@ -1,3 +1,9 @@
+djgpp-toolchain (0.20201102.0+gcc10.2.0+bnu2.35.1+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
+
+  * binutils version 2.35.1.
+
+ -- jwt27 <jwjagersma@gmail.com>  Mon, 02 Nov 2020 21:11:19 +0100
+
 djgpp-toolchain (0.20200730.0+gcc10.2.0+bnu2.34.0+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
 
   * gcc version 10.2.0.
