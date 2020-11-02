@@ -50,6 +50,7 @@ jobs:
         env:
           DECRYPT_KEY: ${{ secrets.DECRYPT_KEY }}
         run: |
+          gpg --batch -k > /dev/null
           gpg --batch --quiet --passphrase "$DECRYPT_KEY" -d /tmp/pgp-secret.asc | gpg --batch --import
           rm -f /tmp/pgp-secret.asc
 
