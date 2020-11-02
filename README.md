@@ -1,4 +1,4 @@
-## Build gcc cross compiler on Windows, Mac OSX, Linux and FreeBSD. [![Build Status](https://github.com/jwt27/build-gcc/workflows/Test%20builds/badge.svg?branch=master)](https://github.com/jwt27/build-gcc/actions?query=workflow%3A"Test+builds"+branch%3Amaster)
+## Build gcc cross compiler on Windows, Mac OSX, Linux and FreeBSD.
 
 ### Upgrade notes:
 
