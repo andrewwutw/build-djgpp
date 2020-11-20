@@ -38,7 +38,7 @@ Description: Documentation for djgpp
 
 Package: gcc-djgpp
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, djgpp, binutils-djgpp
+Depends: ${shlibs:Depends}, ${misc:Depends}, djgpp, binutils-djgpp (>= 2.34-3ubuntu1+1.4)
 Suggests: gcc-djgpp-doc, gcc-djgpp-extra
 Description: GNU Compiler Collection
  Cross-compiler targeting djgpp. Supports C and C++.
@@ -58,21 +58,6 @@ Suggests: gdb-djgpp
 Description: Extra files for gcc
  Python pretty-printer script files for use with gdb.
  May conflict with host gcc.
-
-Package: binutils-djgpp
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: djgpp
-Suggests: binutils-djgpp-doc
-Description: GNU Binutils
- Linker, assembler and other binary utilities targeting djgpp.
-
-Package: binutils-djgpp-doc
-Architecture: all
-Depends: ${misc:Depends}
-Suggests: binutils-djgpp
-Conflicts: binutils-doc
-Description: Documentation for binutils-djgpp.
 
 Package: gdb-djgpp
 Architecture: any
