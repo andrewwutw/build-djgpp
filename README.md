@@ -49,6 +49,8 @@ Before running this script, you need to install these programs first:
 * zlib header/library
 * curl or wget
 * bash (for FreeBSD)
+* python2 headers (for gdb)
+* python3 headers (for gdb >= 9.0)
 
 Depending on your system, installation procedure maybe different.
 
@@ -56,19 +58,19 @@ On Debian/Ubuntu, you can install these programs by :
 
 ```sh
 sudo apt-get update
-sudo apt-get install bison flex curl gcc g++ make texinfo zlib1g-dev tar bzip2 gzip xz-utils unzip
+sudo apt-get install bison flex curl gcc g++ make texinfo zlib1g-dev tar bzip2 gzip xz-utils unzip python{2,3}-dev
 ```
 
 Fedora :
 
 ```sh
-sudo yum install gcc-c++ bison flex texinfo patch zlib-devel tar bzip2 gzip xz unzip
+sudo yum install gcc-c++ bison flex texinfo patch zlib-devel tar bzip2 gzip xz unzip python-devel
 ```
 
 mingw-w64 (msys2) :
 
 ```sh
-pacman -Syuu base-devel mingw-w64-x86_64-{toolchain,curl,zlib} compression
+pacman -Syuu base-devel mingw-w64-x86_64-{toolchain,curl,zlib,python{2,3}} compression
 ```
 
 ### Configuration
