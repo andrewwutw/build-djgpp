@@ -65,14 +65,7 @@ Fedora :
 sudo yum install gcc-c++ bison flex texinfo patch zlib-devel tar bzip2 gzip xz unzip
 ```
 
-MinGW :
-
-```sh
-mingw-get update
-mingw-get install msys-unzip libz-dev msys-wget msys-bison msys-flex msys-patch
-```
-
-MinGW64 (msys2) :
+mingw-w64 (msys2) :
 
 ```sh
 pacman -Syuu base-devel mingw-w64-x86_64-{toolchain,curl,zlib} compression
