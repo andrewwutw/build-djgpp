@@ -1,0 +1,2 @@
+BINUTILS_VERSION=2.37
+BINUTILS_ARCHIVE="http://ftpmirror.gnu.org/binutils/binutils-${BINUTILS_VERSION}.tar.xz"
