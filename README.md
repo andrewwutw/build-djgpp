@@ -9,9 +9,9 @@ If you require compatibility with distributions that use `i586`, you can either:
 * 2020-02-07: setenv script is now installed to `$PREFIX/bin/$TARGET-setenv`.
 * 2019-06-06: `master` is now the default branch again.
 
-### Current package versions, as of 2021-08-29:
+### Current package versions, as of 2021-11-10:
 
-* gcc 10.2.0
+* gcc 10.3.0
 * binutils 2.37
 * gdb 10.1
 * djgpp 2.05 / cvs
