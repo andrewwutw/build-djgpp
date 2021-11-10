@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ubuntu-version: [ bionic, focal, groovy, hirsute, impish ]
+        ubuntu-version: [ bionic, focal, hirsute, impish ]
 
     steps:
       - uses: actions/checkout@v2
