@@ -13,7 +13,7 @@ If you require compatibility with distributions that use `i586`, you can either:
 
 * gcc 10.3.0
 * binutils 2.37
-* gdb 10.1
+* gdb 11.1
 * djgpp 2.05 / cvs
 * newlib 4.1.0
 * avr-libc 2.0.0
