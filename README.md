@@ -91,11 +91,12 @@ Currently supported djgpp-version :
 * 9.3.0
 * 10.1.0
 * 10.2.0
+* 10.3.0
 
-For example, to build DJGPP for gcc 10.2.0 :
+For example, to build DJGPP for gcc 10.3.0 :
 
 ```
-./build-djgpp.sh 10.2.0
+./build-djgpp.sh 10.3.0
 ```
 
 It will download all necessary files, build DJGPP compiler and binutils, and install it.
