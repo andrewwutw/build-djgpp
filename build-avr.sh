@@ -32,6 +32,8 @@ cd ${BASE}/build/
 if [ ! -z ${SIMULAVR_VERSION} ]; then
   echo "Building simulavr"
   cd simulavr/ || exit 1
+  [ -e .git/shallow ] && git fetch --prune --unshallow
+  git fetch --tags
   case `uname` in
   MINGW*) sed -i 's/CMAKE_CONFIG_OPTS=/CMAKE_CONFIG_OPTS=-G "MSYS Makefiles" /' Makefile ;;
   esac
