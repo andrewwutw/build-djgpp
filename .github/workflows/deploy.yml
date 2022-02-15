@@ -53,6 +53,7 @@ jobs:
           gpg --batch -k > /dev/null
           gpg --batch --quiet --passphrase "$DECRYPT_KEY" -d /tmp/pgp-secret.asc | gpg --batch --import
           rm -f /tmp/pgp-secret.asc
+          gpg --batch --keyserver keyserver.ubuntu.com --recv-keys 197C3D6E652B6B1C2B7F9EDF84089D0351487AB8
 
       - name: Sign package
         run: |
