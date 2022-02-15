@@ -1,2 +1,2 @@
-AVARICE_VERSION=2.13
+AVARICE_VERSION=2.14
 AVARICE_ARCHIVE=https://downloads.sourceforge.net/project/avarice/avarice/avarice-$AVARICE_VERSION/avarice-$AVARICE_VERSION.tar.bz2

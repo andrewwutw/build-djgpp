@@ -16,9 +16,9 @@ If you require compatibility with distributions that use `i586`, you can either:
 * gdb 11.1
 * djgpp 2.05 / cvs
 * newlib 4.1.0
-* avr-libc 2.0.0
-* avrdude 6.3
-* avarice 2.13
+* avr-libc 2.1.0
+* avrdude 6.4
+* avarice 2.14
 * simulavr git
 
 ### Tested targets:

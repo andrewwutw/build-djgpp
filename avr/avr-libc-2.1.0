@@ -1,0 +1,3 @@
+AVRLIBC_VERSION=2.1.0
+AVRLIBC_ARCHIVE=http://download.savannah.gnu.org/releases/avr-libc/avr-libc-$AVRLIBC_VERSION.tar.bz2
+AVRLIBC_DOC_ARCHIVE=http://download.savannah.gnu.org/releases/avr-libc/avr-libc-manpages-$AVRLIBC_VERSION.tar.bz2
