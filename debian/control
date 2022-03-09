@@ -18,6 +18,9 @@ Build-Depends:
     gzip,
     dos2unix,
     zlib1g-dev,
+    nasm,
+    libslang2-dev,
+    pkg-config,
     debhelper (>= 11)
 Standards-Version: 4.1.2
 Homepage: https://github.com/jwt27/build-gcc
@@ -57,7 +60,7 @@ Recommends: gcc-djgpp
 Suggests: gdb-djgpp
 Description: Extra files for gcc
  Python pretty-printer script files for use with gdb.
- May conflict with host gcc.
+ May conflict with system gcc.
 
 Package: gdb-djgpp
 Architecture: any
@@ -78,4 +81,10 @@ Architecture: all
 Depends: ${misc:Depends}
 Recommends: gdb-djgpp
 Description: Extra files for gdb-djgpp
- May conflict with host gdb.
+ May conflict with system gdb.
+
+Package: libwatt-djgpp-dev
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: djgpp, gcc-djgpp
+Description: Watt-32 TCP socket library for DJGPP

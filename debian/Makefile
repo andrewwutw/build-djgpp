@@ -1,4 +1,4 @@
-PACKAGES=djgpp-cvs binutils gcc gdb
+PACKAGES=djgpp-cvs binutils gcc gdb watt32
 
 all: build
 

@@ -24,4 +24,4 @@ usr/bin/i*86-pc-msdosdjgpp-gcc-ar
 usr/bin/i*86-pc-msdosdjgpp-g++-*.*.*
 usr/bin/i*86-pc-msdosdjgpp-gcov-dump
 usr/bin/i*86-pc-msdosdjgpp-gcov
-usr/i*86-pc-msdosdjgpp/etc/gcc-*-installed
+usr/i*86-pc-msdosdjgpp/etc/build-gcc/gcc-version

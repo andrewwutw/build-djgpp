@@ -1,3 +1,9 @@
+djgpp-toolchain (0.20220316.2+gcc10.3.0+bnu2.38.0+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
+
+  * new package: libwatt-djgpp-dev
+
+ -- jwt27 <jwjagersma@gmail.com>  Wed, 16 Mar 2022 19:08:24 +0100
+
 djgpp-toolchain (0.20220215.0+gcc10.3.0+bnu2.38.0+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
 
   * binutils version 2.38.

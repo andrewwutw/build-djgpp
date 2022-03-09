@@ -25,4 +25,4 @@ usr/bin/i*86-pc-msdosdjgpp-dxegen
 usr/bin/i*86-pc-msdosdjgpp-stubedit
 usr/bin/i*86-pc-msdosdjgpp-dxe3res
 usr/bin/i*86-pc-msdosdjgpp-setenv
-usr/i*86-pc-msdosdjgpp/etc/djgpp-*-installed
+usr/i*86-pc-msdosdjgpp/etc/build-gcc/djgpp-version

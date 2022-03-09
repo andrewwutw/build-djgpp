@@ -21,7 +21,7 @@ jobs:
 
       - name: Download sources
         run: |
-          ./build-djgpp.sh --batch --build-deb --only-download --ignore-dependencies djgpp-cvs binutils gcc gdb
+          ./build-djgpp.sh --batch --build-deb --only-download --ignore-dependencies djgpp-cvs binutils gcc gdb watt32
 
       - name: Pack git sources
         run: |

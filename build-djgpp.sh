@@ -69,15 +69,21 @@ if [ ! -z ${WATT32_VERSION} ]; then
   export WATT_ROOT=${BASE}/build/Watt-32
   cd ${WATT_ROOT} || exit 1
   patch -p1 -u < ../../patch/watt32.patch || exit 1
-  cd src/ || exit 1
   case $(uname) in
-  Linux) ;;
-  MINGW*|MSYS*) ;;
-  *) echo "Building Watt-32 on $(uname) is currently not supported."
-     sleep 5
-     unset WATT32_VERSION
-     ;;
+  MINGW*|MSYS*) WATT_UTILS=win32 ;;
+  *)            WATT_UTILS=linux ;;
   esac
+  cd util/ || exit 1
+  ${MAKE_J} ${WATT_UTILS}
+  for i in mkmake mkdep bin2c; do
+    if ! [ -x ${WATT_UTILS}/$i ]; then
+      echo "Missing Watt-32 tool $i.  Make sure you have S-Lang installed."
+      sleep 10
+      unset WATT32_VERSION
+      break
+    fi
+  done
+  cd ../src/ || exit 1
   if [ ! "`cat configure-options 2> /dev/null`" == "${CFLAGS_FOR_TARGET}" ]; then
     ${MAKE_J} -f djgpp.mak clean
   fi

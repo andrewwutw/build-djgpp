@@ -1,4 +1,4 @@
 usr/i*86-pc-msdosdjgpp/bin/gdb
 usr/bin/i*86-pc-msdosdjgpp-gdb
 usr/bin/i*86-pc-msdosdjgpp-gdb-add-index
-usr/i*86-pc-msdosdjgpp/etc/gdb-*-installed
+usr/i*86-pc-msdosdjgpp/etc/build-gcc/gdb-version

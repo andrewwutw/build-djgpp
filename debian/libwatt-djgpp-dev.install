@@ -1,0 +1,4 @@
+usr/i*86-pc-msdosdjgpp/watt/*
+usr/i*86-pc-msdosdjgpp/lib/libwatt.a
+usr/i*86-pc-msdosdjgpp/lib/libsocket.a
+usr/i*86-pc-msdosdjgpp/etc/build-gcc/watt32-version

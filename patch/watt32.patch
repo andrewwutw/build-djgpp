@@ -11,3 +11,39 @@ index d158664..f840962 100644
  
  STAT_LIB = ../lib/libwatt.a
  OBJDIR   = build/djgpp
+diff --git a/util/makefile b/util/makefile
+index 55bc368..cd53fd8 100644
+--- a/util/makefile
++++ b/util/makefile
+@@ -20,11 +20,10 @@ SLANG_ROOT_DOS   ?= $(DJDIR)/contrib/slang.210
+ SLANG_LIB_DOS    ?= $(SLANG_ROOT_DOS)/src/djgobjs/libslang.a
+ 
+ SLANG_ROOT_WIN   ?= $(realpath $(MINGW32))/src/TUI/Slang
+-SLANG_LIB_WIN    ?= $(SLANG_ROOT_WIN)/src/gw32objs/libslang.a
+ SLANG_LIB_WIN_CL ?= $(SLANG_ROOT_WIN)/src/mw32objs/wslang32.lib
+ 
+-SLANG_ROOT_LINUX ?=
+-SLANG_LIB_LINUX  ?= $(SLANG_ROOT_LINUX)/src/objs/libslang.a
++SLANG_CFLAGS = $(shell pkg-config --cflags slang)
++SLANG_LIBS   = $(shell pkg-config --libs slang)
+ 
+ CC     = gcc
+ CFLAGS = -Wall -g -save-temps # -s
+@@ -60,7 +59,7 @@ mkimp.c: mkimp.l
+ # Win32 binaries:
+ #
+ win32/mkmake.exe: mkmake.c
+-	$(CC) -m32 $(CFLAGS) -I$(SLANG_ROOT_WIN)/src -o $*.exe $^ $(SLANG_LIB_WIN)
++	$(CC) -m32 $(CFLAGS) $(SLANG_CFLAGS) -o $*.exe $^ $(SLANG_LIBS)
+ 
+ win32/mkdep.exe: mkdep.c
+ 	$(CC) -m32 $(CFLAGS) -o $*.exe $^
+@@ -81,7 +80,7 @@ msvc/mkmake.exe: mkmake.c
+ # Linux binaries:
+ #
+ linux/mkmake: mkmake.c
+-	$(CC) $(CFLAGS) -I$(SLANG_ROOT_LINUX)/src -o $@ $^ $(SLANG_LIB_LINUX)
++	$(CC) $(CFLAGS) $(SLANG_CFLAGS) -o $@ $^ $(SLANG_LIBS)
+ 
+ linux/mkdep: mkdep.c
+ 	$(CC) $(CFLAGS) -o $@ $^
