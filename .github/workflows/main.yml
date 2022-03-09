@@ -16,10 +16,10 @@ jobs:
         env:
           -
             TARGET: i386-pc-msdosdjgpp
-            PACKAGES: binutils gcc djgpp-2.05
+            PACKAGES: binutils gcc djgpp-2.05 watt32
           -
             TARGET: i386-pc-msdosdjgpp
-            PACKAGES: binutils gcc djgpp-cvs
+            PACKAGES: binutils gcc djgpp-cvs watt32
           -
             TARGET: i386-pc-msdosdjgpp
             PACKAGES: gdb
