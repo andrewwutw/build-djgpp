@@ -64,7 +64,9 @@ cd ${BASE}/build/ || exit 1
 
 if [ ! -z ${WATT32_VERSION} ]; then
   export WATT_ROOT=${BASE}/build/Watt-32
-  cd ${WATT_ROOT}/src || exit 1
+  cd ${WATT_ROOT} || exit 1
+  patch -p1 -u < ../../patch/watt32.patch || exit 1
+  cd src/ || exit 1
   case $(uname) in
   Linux) ;;
   MINGW*|MSYS*) sed -i 's#/linux/#/win32/#g' configur.sh || exit 1 ;;
@@ -279,8 +281,6 @@ if [ ! -z ${WATT32_VERSION} ]; then
   ./configur.sh djgpp || exit 1
   cp ${BASE}/patch/watt32-djgpp-$(installed_version djgpp)/djgpp.err ../inc/sys/djgpp.err || exit 1
   cp ${BASE}/patch/watt32-djgpp-$(installed_version djgpp)/syserr.c build/djgpp/syserr.c || exit 1
-  sed -i "s/BIN_PREFIX =\$/BIN_PREFIX = ${TARGET}-/g" djgpp.mak || exit 1
-  sed -i "s/-mtune=i586$/-mtune=i586 ${CFLAGS_FOR_TARGET}/g" djgpp.mak || exit 1
 
   echo "${CFLAGS_FOR_TARGET}" > configure-options
 
@@ -289,6 +289,7 @@ if [ ! -z ${WATT32_VERSION} ]; then
   MINGW*|MSYS*) BIN2C=${WATT_ROOT}/util/win32/bin2c ;;
   esac
 
+  export TARGET CFLAGS_FOR_TARGET
   PKT_STUB=pkt_stub.h W32_NASM_=nasm W32_BIN2C_="${BIN2C}" ${MAKE_J} -f djgpp.mak || exit 1
 
   echo "Installing Watt-32"

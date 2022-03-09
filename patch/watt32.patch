@@ -1,0 +1,41 @@
+diff --git a/src/makefile.all b/src/makefile.all
+index d347d56..9f1ee10 100644
+--- a/src/makefile.all
++++ b/src/makefile.all
+@@ -251,34 +251,10 @@ PKT_STUB = pkt_stub.h
+ #
+ prefix = /dev/env/DJDIR/net/watt
+ 
+-ifeq ($(OS),Windows_NT)
+-  ifneq ($(DJ_PREFIX),)
+-    #
+-    # Windows hosted djgpp cross compiler. Get it from:
+-    #   https://github.com/andrewwutw/build-djgpp/releases  - djgpp-mingw-gcc*.zip
+-    #
+-    # and install to e.g. 'c:/djgpp/contrib'.
+-    # And then define an env-var:
+-    #   DJ_PREFIX=c:/djgpp/contrib/win-cross/bin/i586-pc-msdosdjgpp-
+-    #
+-    # Thus the full path to 'gcc' becomes:
+-    #   $(DJ_PREFIX)gcc.exe
+-    #
+-    # If not building on Windows, the '$(BIN_PREFIX)gcc' should simply become
+-    # 'gcc' and GNU-make should find that on %PATH.
+-    #
+-    BIN_PREFIX = $(DJ_PREFIX)
+-
+-    ifeq ($(wildcard $(BIN_PREFIX)gcc.exe),)
+-      $(error Failed to find 'i586-pc-msdosdjgpp-gcc.exe'.)
+-    endif
+-  endif
+-else
+-  BIN_PREFIX =
+-endif
++BIN_PREFIX = $(TARGET)-
+ 
+ CFLAGS = -O3 -g -I. -I../inc -DWATT32_BUILD -W -Wall -Wno-strict-aliasing \
+-         -march=i386 -mtune=i586
++         -march=i386 -mtune=i586 $(CFLAGS_FOR_TARGET)
+ 
+ ifeq ($(filter 2 3 4,$(word 3, $(shell true | $(CC) -E -dD -x c - | grep 'define\ *__GNUC__'))),)
+   #
