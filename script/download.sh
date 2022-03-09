@@ -76,7 +76,7 @@ download_git()
 
 # these variables are of the form "git://url/repo.git::branch"
 # if 'branch' is empty then the default branch is checked out.
-GIT_LIST="$DJGPP_GIT $GCC_GIT $BINUTILS_GIT $NEWLIB_GIT $SIMULAVR_GIT"
+GIT_LIST="$DJGPP_GIT $GCC_GIT $BINUTILS_GIT $NEWLIB_GIT $SIMULAVR_GIT $WATT32_GIT"
 
 for REPO in $GIT_LIST; do
   download_git ${REPO%::*} ${REPO##*::}

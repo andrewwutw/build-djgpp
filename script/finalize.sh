@@ -43,6 +43,26 @@ case $TARGET in
   ;;
 esac
 
+if [ ! -z ${WATT32_VERSION} ]; then
+  WATT_ROOT="${PREFIX}/${TARGET}/watt"
+  WATT_INCLUDE="${WATT_ROOT}/inc"
+  echo "export WATT_ROOT=\"${WATT_ROOT}\"" >> ${BASE}/build/${TARGET}-setenv
+  case $(uname) in
+  MSYS*|MINGW*)
+    WATT_ROOT="$(cygpath -w "$WATT_ROOT")"
+    WATT_INCLUDE="$(cygpath -w "$WATT_INCLUDE")"
+    ;;
+  esac
+  echo "set WATT_ROOT=\"${WATT_ROOT}\"" >> ${BASE}/build/${TARGET}-setenv.cmd
+
+  ${TARGET}-gcc -dumpspecs > ${BASE}/build/specs
+  sed -i "/\*cpp:/{n;s#\(.*\)#-isystem ${WATT_INCLUDE} \1#}" ${BASE}/build/specs
+  sed -i "/\*cc1plus:/{n;s#\(.*\)#-isystem ${WATT_INCLUDE} \1#}" ${BASE}/build/specs
+
+  echo "Installing specs file"
+  ${SUDO} cp ${BASE}/build/specs ${DST}/lib/gcc/${TARGET}/$(installed_version gcc)/ || exit 1
+fi
+
 case $TARGET in
 i586-pc-msdosdjgpp) ;;
 *-pc-msdosdjgpp) cat << STOP > ${BASE}/build/${TARGET}-link-i586

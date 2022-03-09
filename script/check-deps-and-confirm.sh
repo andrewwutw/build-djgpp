@@ -110,6 +110,8 @@ fi
 # check required programs
 REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch tar xz bunzip2 gunzip"
 
+[ ! -z "${WATT32_VERSION}" ] && REQ_PROG_LIST+=" nasm"
+
 for REQ_PROG in $REQ_PROG_LIST; do
   if ! which $REQ_PROG > /dev/null; then
     echo "$REQ_PROG not installed"
@@ -136,6 +138,7 @@ echo "You are about to build and install:"
 [ -z ${AVRDUDE_VERSION} ]  || echo "    - AVRDUDE ${AVRDUDE_VERSION}"
 [ -z ${AVARICE_VERSION} ]  || echo "    - AVaRICE ${AVARICE_VERSION}"
 [ -z ${SIMULAVR_VERSION} ] || echo "    - SimulAVR ${SIMULAVR_VERSION}"
+[ -z ${WATT32_VERSION} ]   || echo "    - Watt-32 ${WATT32_VERSION}"
 
 echo ""
 echo "With the following options:"

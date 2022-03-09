@@ -66,6 +66,18 @@ strip_whitespace() { eval "$1=\"`echo ${!1}`\""; }
 
 prepend() { eval "$1=\"$2 ${!1}\""; }
 
+installed_version()
+{
+  local var=$(echo "$1" | tr '[:lower:]' '[:upper:]')_VERSION
+  if [ ! -z "${!var}" ]; then
+    echo ${!var}
+    return
+  fi
+  local name=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+  local version_file=$(ls ${PREFIX}/${TARGET}/etc/${name}-*-installed 2> /dev/null)
+  echo $version_file | sed -n "s/^.*\/$name-\(.*\)-installed$/\1/p"
+}
+
 add_pkg()
 {
   for DIR in ${PACKAGE_SOURCES}; do
