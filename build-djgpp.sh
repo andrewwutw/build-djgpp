@@ -62,6 +62,9 @@ fi
 
 cd ${BASE}/build/ || exit 1
 
+echo "Removing old specs file"
+${SUDO} rm -f ${PREFIX}/lib/gcc/${TARGET}/$(get_version gcc)/specs
+
 if [ ! -z ${WATT32_VERSION} ]; then
   export WATT_ROOT=${BASE}/build/Watt-32
   cd ${WATT_ROOT} || exit 1
