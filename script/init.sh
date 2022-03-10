@@ -66,16 +66,36 @@ strip_whitespace() { eval "$1=\"`echo ${!1}`\""; }
 
 prepend() { eval "$1=\"$2 ${!1}\""; }
 
-installed_version()
+uppercase() { echo "$@" | tr '[:lower:]' '[:upper:]'; }
+lowercase() { echo "$@" | tr '[:upper:]' '[:lower:]'; }
+
+get_version()
 {
-  local var=$(echo "$1" | tr '[:lower:]' '[:upper:]')_VERSION
+  local var=$(uppercase $1 | tr -d '_-')_VERSION
   if [ ! -z "${!var}" ]; then
+    # Currently being installed
     echo ${!var}
     return
   fi
-  local name=$(echo "$1" | tr '[:upper:]' '[:lower:]')
-  local version_file=$(ls ${PREFIX}/${TARGET}/etc/${name}-*-installed 2> /dev/null)
-  echo $version_file | sed -n "s/^.*\/$name-\(.*\)-installed$/\1/p"
+  local name=$(lowercase $1)
+  local version=$(cat ${PREFIX}/${TARGET}/etc/build-gcc/${name}-version 2> /dev/null)
+  if [ ! -z "${version}" ]; then
+    # Already installed
+    echo ${version}
+    return
+  fi
+  local old_version_file=$(ls ${PREFIX}/${TARGET}/etc/${name}-*-installed 2> /dev/null)
+  # Already installed, using old-style version file
+  echo $old_version_file | sed -n "s/^.*\/$name-\(.*\)-installed$/\1/p"
+}
+
+set_version()
+{
+  local name=$(lowercase $1)
+  local var=$(uppercase $1 | tr -d '_-')_VERSION
+  ${SUDO} rm -f ${PREFIX}/${TARGET}/etc/${name}-*-installed
+  ${SUDO} mkdir -p ${DST}/${TARGET}/etc/build-gcc
+  ${SUDO} sh -c "echo ${!var} > ${DST}/${TARGET}/etc/build-gcc/${name}-version"
 }
 
 add_pkg()

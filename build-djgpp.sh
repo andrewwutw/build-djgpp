@@ -279,8 +279,8 @@ if [ ! -z ${WATT32_VERSION} ]; then
   echo "Building Watt-32"
   cd ${WATT_ROOT}/src || exit 1
   ./configur.sh djgpp || exit 1
-  cp ${BASE}/patch/watt32-djgpp-$(installed_version djgpp)/djgpp.err ../inc/sys/djgpp.err || exit 1
-  cp ${BASE}/patch/watt32-djgpp-$(installed_version djgpp)/syserr.c build/djgpp/syserr.c || exit 1
+  cp ${BASE}/patch/watt32-djgpp-$(get_version djgpp)/djgpp.err ../inc/sys/djgpp.err || exit 1
+  cp ${BASE}/patch/watt32-djgpp-$(get_version djgpp)/syserr.c build/djgpp/syserr.c || exit 1
 
   echo "${CFLAGS_FOR_TARGET}" > configure-options
 
@@ -299,6 +299,8 @@ if [ ! -z ${WATT32_VERSION} ]; then
   ${SUDO} ln -fs ../watt/lib/libwatt.a ${DST}/${TARGET}/lib/libwatt.a || exit 1
   ${SUDO} ln -fs libwatt.a ${DST}/${TARGET}/lib/libsocket.a || exit 1
   ${SUDO} cp -r ../inc/* ${DST}/${TARGET}/watt/inc/ || exit 1
+
+  set_version watt32
 fi
 
 if [ ! -z ${GCC_VERSION} ]; then
@@ -316,8 +318,7 @@ if [ ! -z ${GCC_VERSION} ]; then
   ${SUDO} ${MAKE_J} -C mpfr install DESTDIR=${BASE}/build/tmpinst
   CFLAGS="$TEMP_CFLAGS"
 
-  ${SUDO} rm -f ${DST}/${TARGET}/etc/gcc-*-installed
-  ${SUDO} touch ${DST}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
+  set_version gcc
 fi
 
 if [ ! -z ${DJGPP_VERSION} ]; then
@@ -349,8 +350,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   ${SUDO} cp -p hostbin/dxegen.exe   ${DST}/bin/${TARGET}-dxe3gen${EXE}  || exit 1
   ${SUDO} cp -p hostbin/dxe3res.exe  ${DST}/bin/${TARGET}-dxe3res${EXE}  || exit 1
 
-  ${SUDO} rm -f ${DST}/${TARGET}/etc/djgpp-*-installed
-  ${SUDO} touch ${DST}/${TARGET}/etc/djgpp-${DJGPP_VERSION}-installed
+  set_version djgpp
 fi
 
 cd ${BASE}/build

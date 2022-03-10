@@ -28,6 +28,5 @@ if [ ! -z ${GDB_VERSION} ]; then
   echo "Installing gdb"
   ${SUDO} ${MAKE_J} install || exit 1
 
-  ${SUDO} rm -f ${DST}/${TARGET}/etc/gdb-*-installed
-  ${SUDO} touch ${DST}/${TARGET}/etc/gdb-${GDB_VERSION}-installed
+  set_version gdb
 fi

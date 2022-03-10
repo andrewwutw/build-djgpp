@@ -43,7 +43,7 @@ case $TARGET in
   ;;
 esac
 
-if [ ! -z ${WATT32_VERSION} ]; then
+if [ ! -z "$(get_version watt32)" ]; then
   WATT_ROOT="${PREFIX}/${TARGET}/watt"
   WATT_INCLUDE="${WATT_ROOT}/inc"
   echo "export WATT_ROOT=\"${WATT_ROOT}\"" >> ${BASE}/build/${TARGET}-setenv
@@ -60,7 +60,7 @@ if [ ! -z ${WATT32_VERSION} ]; then
   sed -i "/\*cc1plus:/{n;s#\(.*\)#-isystem ${WATT_INCLUDE} \1#}" ${BASE}/build/specs
 
   echo "Installing specs file"
-  ${SUDO} cp ${BASE}/build/specs ${DST}/lib/gcc/${TARGET}/$(installed_version gcc)/ || exit 1
+  ${SUDO} cp ${BASE}/build/specs ${DST}/lib/gcc/${TARGET}/$(get_version gcc)/ || exit 1
 fi
 
 case $TARGET in
@@ -87,7 +87,7 @@ MINGW*) ;&
 MSYS*) cp -p ${BASE}/build/setenv-${TARGET}.cmd ${DST}/bin/ 2> /dev/null ;;
 esac
 
-if [ ! -z "`ls ${DST}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ]; then
+if [ ! -z "$(get_version gcc)" ]; then
   for x in $(echo $ENABLE_LANGUAGES | tr "," " ")
   do
     case $x in

@@ -28,5 +28,4 @@ ${MAKE_J} || exit 1
 echo "Installing binutils"
 ${SUDO} ${MAKE_J} install || exit 1
 
-${SUDO} rm -f ${DST}/${TARGET}/etc/binutils-*-installed
-${SUDO} touch ${DST}/${TARGET}/etc/binutils-${BINUTILS_VERSION}-installed
+set_version binutils

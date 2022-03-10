@@ -104,6 +104,5 @@ if [ ! -z ${GCC_VERSION} ]; then
   ${SUDO} ${MAKE_J} install-strip || exit 1
   ${SUDO} ${MAKE_J} -C mpfr install DESTDIR=${BASE}/build/tmpinst
 
-  ${SUDO} rm -f ${DST}/${TARGET}/etc/gcc-*-installed
-  ${SUDO} touch ${DST}/${TARGET}/etc/gcc-${GCC_VERSION}-installed
+  set_version gcc
 fi

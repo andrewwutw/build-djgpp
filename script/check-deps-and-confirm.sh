@@ -3,36 +3,18 @@ if [ -z ${IGNORE_DEPENDENCIES} ]; then
     case $DEP in
       djgpp)
         if [ -z ${DJGPP_VERSION} ]; then
-          if [ -e ${PREFIX}/${TARGET}/etc/djgpp-cvs-installed ]; then
+          if [ "$(get_version djgpp)" == "cvs" ]; then
             add_pkg djgpp-cvs
           else
             add_pkg djgpp
           fi
         fi
         ;;
-      newlib)
-        [ -z ${NEWLIB_VERSION} ] \
-          && add_pkg newlib
-        ;;
-      avr-libc)
-        [ -z ${AVRLIBC_VERSION} ] \
-          && add_pkg avr-libc
-        ;;
-      binutils)
-        [ -z "`ls ${PREFIX}/${TARGET}/etc/binutils-*-installed 2> /dev/null`" ] \
-          && [ -z ${BINUTILS_VERSION} ] \
-          && add_pkg binutils
-        ;;
-      gcc)
-        [ -z "`ls ${PREFIX}/${TARGET}/etc/gcc-*-installed 2> /dev/null`" ] \
-          && [ -z ${GCC_VERSION} ] \
-          && add_pkg gcc
-        ;;
-      gdb)
-        [ -z "`ls ${PREFIX}/${TARGET}/etc/gdb-*-installed 2> /dev/null`" ] \
-          && [ -z ${GDB_VERSION} ] \
-          && add_pkg gdb
-        ;;
+      newlib)   [ -z "${NEWLIB_VERSION}" ]       && add_pkg newlib ;;
+      avr-libc) [ -z "${AVRLIBC_VERSION}" ]      && add_pkg avr-libc ;;
+      binutils) [ -z "$(get_version binutils)" ] && add_pkg binutils ;;
+      gcc)      [ -z "$(get_version gcc)" ]      && add_pkg gcc ;;
+      gdb)      [ -z "$(get_version gdb)" ]      && add_pkg gdb ;;
     esac
   done
 fi
