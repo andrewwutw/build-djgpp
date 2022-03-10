@@ -50,7 +50,7 @@ if [ ! -z "$(get_version watt32)" ]; then
   case $(uname) in
   MSYS*|MINGW*)
     WATT_ROOT="$(cygpath -w "$WATT_ROOT")"
-    WATT_INCLUDE="$(cygpath -w "$WATT_INCLUDE")"
+    WATT_INCLUDE="$(cygpath -m "$WATT_INCLUDE")"
     ;;
   esac
   echo "set WATT_ROOT=\"${WATT_ROOT}\"" >> ${BASE}/build/${TARGET}-setenv.cmd
