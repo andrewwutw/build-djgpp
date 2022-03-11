@@ -6,14 +6,14 @@ SHORT_NAME_LIST="dxegen dxe3gen dxe3res exe2coff stubify stubedit djasm gdb
                  strings ld readelf ld.bfd size addr2line setenv strip objcopy c++filt ar gprof ranlib as nm elfedit objdump"
 for SHORT_NAME in $SHORT_NAME_LIST; do
   if [ -f bin/${TARGET}-$SHORT_NAME ]; then
-    ${SUDO} cp -p bin/${TARGET}-$SHORT_NAME ${TARGET}/bin/$SHORT_NAME
+    install_files -p bin/${TARGET}-$SHORT_NAME ${TARGET}/bin/$SHORT_NAME
   fi
 done
 if [ ! -z ${GCC_VERSION} ]; then
-  ${SUDO} cp -p bin/${TARGET}-gcc bin/${TARGET}-gcc-${GCC_VERSION} 2> /dev/null
-  ${SUDO} cp -p bin/${TARGET}-g++ bin/${TARGET}-g++-${GCC_VERSION} 2> /dev/null
-  ${SUDO} cp -p ${TARGET}/bin/gcc ${TARGET}/bin/gcc-${GCC_VERSION} 2> /dev/null
-  ${SUDO} cp -p ${TARGET}/bin/g++ ${TARGET}/bin/g++-${GCC_VERSION} 2> /dev/null
+  install_files bin/${TARGET}-gcc bin/${TARGET}-gcc-${GCC_VERSION} 2> /dev/null
+  install_files bin/${TARGET}-g++ bin/${TARGET}-g++-${GCC_VERSION} 2> /dev/null
+  install_files ${TARGET}/bin/gcc ${TARGET}/bin/gcc-${GCC_VERSION} 2> /dev/null
+  install_files ${TARGET}/bin/g++ ${TARGET}/bin/g++-${GCC_VERSION} 2> /dev/null
 fi
 popd
 
@@ -60,7 +60,7 @@ if [ ! -z "$(get_version watt32)" ]; then
   sed -i "/\*cc1plus:/{n;s#\(.*\)#-isystem ${WATT_INCLUDE} \1#}" ${BASE}/build/specs
 
   echo "Installing specs file"
-  ${SUDO} cp ${BASE}/build/specs ${DST}/lib/gcc/${TARGET}/$(get_version gcc)/ || exit 1
+  install_files ${BASE}/build/specs ${DST}/lib/gcc/${TARGET}/$(get_version gcc)/ || exit 1
 fi
 
 case $TARGET in
@@ -74,17 +74,16 @@ done
 STOP
   echo "Installing ${TARGET}-link-i586"
   chmod +x ${BASE}/build/${TARGET}-link-i586
-  ${SUDO} cp -p ${BASE}/build/${TARGET}-link-i586 ${DST}/bin/
+  install_files ${BASE}/build/${TARGET}-link-i586 ${DST}/bin/
   ;;
 *) ;;
 esac
 
 echo "Installing ${TARGET}-setenv"
 chmod +x ${BASE}/build/${TARGET}-setenv
-${SUDO} cp -p ${BASE}/build/${TARGET}-setenv ${DST}/bin/
+install_files ${BASE}/build/${TARGET}-setenv ${DST}/bin/
 case `uname` in
-MINGW*) ;&
-MSYS*) cp -p ${BASE}/build/setenv-${TARGET}.cmd ${DST}/bin/ 2> /dev/null ;;
+MINGW*|MSYS*) install_files ${BASE}/build/setenv-${TARGET}.cmd ${DST}/bin/ 2> /dev/null ;;
 esac
 
 if [ ! -z "$(get_version gcc)" ]; then

@@ -3,6 +3,8 @@ unset SUDO
 unset MAKEFLAGS
 unset INSTALL
 
+umask u=rwx,g=rx,o=rx
+
 BASE=`pwd`
 
 # number of parallel build threads
@@ -46,6 +48,19 @@ fi
 
 CFLAGS_FOR_TARGET=${CFLAGS_FOR_TARGET-"-O2 -g"}
 CXXFLAGS_FOR_TARGET=${CXXFLAGS_FOR_TARGET-"-O2 -g"}
+
+# check if cp understands --preserve (for MacOS)
+if cp --preserve=mode,timestamps script/hello.c ./hello.c 2>&1 > /dev/null; then
+  CP='cp --preserve=mode,timestamps'
+else
+  CP='cp'
+fi
+rm -f hello.c 2> /dev/null
+
+install_files()
+{
+  ${SUDO} ${CP} -R -f "$@"
+}
 
 untar()
 {

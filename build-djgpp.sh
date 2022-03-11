@@ -123,10 +123,10 @@ if [ ! -z ${DJGPP_VERSION} ]; then
 
   echo "Installing djgpp headers and utilities"
   ${SUDO} mkdir -p ${DST}/${TARGET}/sys-include || exit 1
-  ${SUDO} cp -rp include/* ${DST}/${TARGET}/sys-include/ || exit 1
+  install_files include/* ${DST}/${TARGET}/sys-include/ || exit 1
   ${SUDO} mkdir -p ${DST}/bin || exit 1
-  ${SUDO} cp -p hostbin/stubify.exe  ${DST}/bin/${TARGET}-stubify${EXE}  || exit 1
-  ${SUDO} cp -p hostbin/stubedit.exe ${DST}/bin/${TARGET}-stubedit${EXE} || exit 1
+  install_files hostbin/stubify.exe  ${DST}/bin/${TARGET}-stubify${EXE}  || exit 1
+  install_files hostbin/stubedit.exe ${DST}/bin/${TARGET}-stubedit${EXE} || exit 1
 fi
 
 cd ${BASE}/build/
@@ -271,7 +271,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
 
   echo "Installing djgpp libc"
   ${SUDO} mkdir -p ${DST}/${TARGET}/lib
-  ${SUDO} cp -rp ../lib/* ${DST}/${TARGET}/lib || exit 1
+  install_files ../lib/* ${DST}/${TARGET}/lib || exit 1
   LDFLAGS="$TEMP_LDFLAGS"
   CFLAGS="$TEMP_CFLAGS"
 fi
@@ -298,10 +298,10 @@ if [ ! -z ${WATT32_VERSION} ]; then
   echo "Installing Watt-32"
   ${SUDO} mkdir -p ${DST}/${TARGET}/watt/inc || exit 1
   ${SUDO} mkdir -p ${DST}/${TARGET}/watt/lib || exit 1
-  ${SUDO} cp ../lib/libwatt.a ${DST}/${TARGET}/watt/lib/ || exit 1
+  install_files ../lib/libwatt.a ${DST}/${TARGET}/watt/lib/ || exit 1
   ${SUDO} ln -fs ../watt/lib/libwatt.a ${DST}/${TARGET}/lib/libwatt.a || exit 1
   ${SUDO} ln -fs libwatt.a ${DST}/${TARGET}/lib/libsocket.a || exit 1
-  ${SUDO} cp -r ../inc/* ${DST}/${TARGET}/watt/inc/ || exit 1
+  install_files ../inc/* ${DST}/${TARGET}/watt/inc/ || exit 1
 
   set_version watt32
 fi
@@ -344,14 +344,14 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   cd ..
 
   echo "Installing djgpp libraries and utilities"
-  ${SUDO} cp -rp lib/* ${DST}/${TARGET}/lib || exit 1
+  install_files lib/* ${DST}/${TARGET}/lib || exit 1
   ${SUDO} mkdir -p ${DST}/${TARGET}/share/info
-  ${SUDO} cp -rp info/* ${DST}/${TARGET}/share/info
-  ${SUDO} cp -p hostbin/exe2coff.exe ${DST}/bin/${TARGET}-exe2coff${EXE} || exit 1
-  ${SUDO} cp -p hostbin/djasm.exe    ${DST}/bin/${TARGET}-djasm${EXE}    || exit 1
-  ${SUDO} cp -p hostbin/dxegen.exe   ${DST}/bin/${TARGET}-dxegen${EXE}   || exit 1
-  ${SUDO} cp -p hostbin/dxegen.exe   ${DST}/bin/${TARGET}-dxe3gen${EXE}  || exit 1
-  ${SUDO} cp -p hostbin/dxe3res.exe  ${DST}/bin/${TARGET}-dxe3res${EXE}  || exit 1
+  install_files info/* ${DST}/${TARGET}/share/info
+  install_files hostbin/exe2coff.exe ${DST}/bin/${TARGET}-exe2coff${EXE} || exit 1
+  install_files hostbin/djasm.exe    ${DST}/bin/${TARGET}-djasm${EXE}    || exit 1
+  install_files hostbin/dxegen.exe   ${DST}/bin/${TARGET}-dxegen${EXE}   || exit 1
+  install_files hostbin/dxegen.exe   ${DST}/bin/${TARGET}-dxe3gen${EXE}  || exit 1
+  install_files hostbin/dxe3res.exe  ${DST}/bin/${TARGET}-dxe3res${EXE}  || exit 1
 
   set_version djgpp
 fi

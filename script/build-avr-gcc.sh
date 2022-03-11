@@ -11,10 +11,10 @@ if [ ! -z ${AVRLIBC_VERSION} ]; then
   fi
   cd avr-libc-${AVRLIBC_VERSION}/
   ${SUDO} mkdir -p ${DST}/${TARGET}/include/
-  ${SUDO} cp -rv include/* ${DST}/${TARGET}/include/ | exit 1
+  install_files include/* ${DST}/${TARGET}/include/ | exit 1
   echo "Installing avr-libc documentation"
   ${SUDO} mkdir -p ${DST}/${TARGET}/share/man/
-  ${SUDO} cp -rv man/* ${DST}/${TARGET}/share/man/ | exit 1
+  install_files man/* ${DST}/${TARGET}/share/man/ | exit 1
   cd ..
 fi
 

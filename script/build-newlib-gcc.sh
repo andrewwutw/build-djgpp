@@ -4,7 +4,7 @@ if [ ! -z ${NEWLIB_VERSION} ] && [ ! -e newlib-${NEWLIB_VERSION}/newlib-unpacked
   echo "Unpacking newlib..."
   untar ${NEWLIB_ARCHIVE}
   ${SUDO} mkdir -p ${DST}/${TARGET}/include/
-  ${SUDO} cp -rv newlib-${NEWLIB_VERSION}/newlib/libc/include/* ${DST}/${TARGET}/include/ | exit 1
+  install_files newlib-${NEWLIB_VERSION}/newlib/libc/include/* ${DST}/${TARGET}/include/ | exit 1
   touch newlib-${NEWLIB_VERSION}/newlib-unpacked
 fi
 
