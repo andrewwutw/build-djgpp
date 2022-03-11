@@ -1,2 +1,1 @@
-WATT32_VERSION=git
-WATT32_GIT='https://github.com/gvanem/Watt-32.git::master'
+source djgpp/watt32-git

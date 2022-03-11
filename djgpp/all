@@ -1,2 +1,3 @@
 source djgpp/default
 source djgpp/gdb
+source djgpp/watt32
