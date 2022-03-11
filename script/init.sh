@@ -3,7 +3,7 @@ unset SUDO
 unset MAKEFLAGS
 unset INSTALL
 
-umask u=rwx,g=rx,o=rx
+umask 022
 
 BASE=`pwd`
 
