@@ -1,17 +1,9 @@
 if [ -z ${IGNORE_DEPENDENCIES} ]; then
   for DEP in ${DEPS}; do
     case $DEP in
-      djgpp)
-        if [ -z ${DJGPP_VERSION} ]; then
-          if [ "$(get_version djgpp)" == "cvs" ]; then
-            add_pkg djgpp-cvs
-          else
-            add_pkg djgpp
-          fi
-        fi
-        ;;
-      newlib)   [ -z "${NEWLIB_VERSION}" ]       && add_pkg newlib ;;
-      avr-libc) [ -z "${AVRLIBC_VERSION}" ]      && add_pkg avr-libc ;;
+      djgpp)    [ -z "$(get_version djgpp)" ]    && add_pkg djgpp ;;
+      newlib)   [ -z "$(get_version newlib)" ]   && add_pkg newlib ;;
+      avr-libc) [ -z "$(get_version avr-libc)" ] && add_pkg avr-libc ;;
       binutils) [ -z "$(get_version binutils)" ] && add_pkg binutils ;;
       gcc)      [ -z "$(get_version gcc)" ]      && add_pkg gcc ;;
       gdb)      [ -z "$(get_version gdb)" ]      && add_pkg gdb ;;
