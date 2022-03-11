@@ -22,7 +22,7 @@ prepend GDB_CONFIGURE_OPTIONS "--disable-werror
                                --disable-nls"
 
 DEPS=""
-[ ! -z ${WATT32_VERSION} ] && DEPS+=" gcc djgpp"
+[ ! -z ${WATT32_VERSION} ] && DEPS+=" gcc djgpp binutils"
 [ ! -z ${GCC_VERSION} ] && DEPS+=" djgpp binutils"
 [ ! -z ${DJGPP_VERSION} ] && DEPS+=" binutils gcc"
 
