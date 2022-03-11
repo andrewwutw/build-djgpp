@@ -3,10 +3,10 @@ pushd ${DST} || exit 1
 ${SUDO} mkdir -p ${TARGET}/bin
 SHORT_NAME_LIST="dxegen dxe3gen dxe3res exe2coff stubify stubedit djasm gdb
                  g++ c++ cpp gcc gprof gcc-nm gcov-tool gcc-ranlib gcc-ar gcov-dump gcov
-                 strings ld readelf ld.bfd size addr2line setenv strip objcopy c++filt ar gprof ranlib as nm elfedit objdump"
+                 strings ld readelf ld.bfd size addr2line strip objcopy c++filt ar gprof ranlib as nm elfedit objdump"
 for SHORT_NAME in $SHORT_NAME_LIST; do
   if [ -f bin/${TARGET}-$SHORT_NAME ]; then
-    install_files -p bin/${TARGET}-$SHORT_NAME ${TARGET}/bin/$SHORT_NAME
+    install_files -p bin/${TARGET}-$SHORT_NAME ${TARGET}/bin/$SHORT_NAME 2> /dev/null
   fi
 done
 if [ ! -z ${GCC_VERSION} ]; then
