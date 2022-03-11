@@ -72,14 +72,14 @@ if [ ! -z ${WATT32_VERSION} ]; then
   cd src/ || exit 1
   case $(uname) in
   Linux) ;;
-  MINGW*|MSYS*) sed -i 's#/linux/#/win32/#g' configur.sh || exit 1 ;;
+  MINGW*|MSYS*) ;;
   *) echo "Building Watt-32 on $(uname) is currently not supported."
      sleep 5
      unset WATT32_VERSION
      ;;
   esac
   if [ ! "`cat configure-options 2> /dev/null`" == "${CFLAGS_FOR_TARGET}" ]; then
-    W32_BIN2C_=false ${MAKE_J} -f djgpp.mak clean
+    ${MAKE_J} -f djgpp.mak clean
   fi
   ./configur.sh clean || exit 1
 fi
@@ -281,19 +281,14 @@ cd ${BASE}/build/ || exit 1
 if [ ! -z ${WATT32_VERSION} ]; then
   echo "Building Watt-32"
   cd ${WATT_ROOT}/src || exit 1
-  ./configur.sh djgpp || exit 1
+  DJGPP_PREFIX=${TARGET} ./configur.sh djgpp || exit 1
   cp ${BASE}/patch/watt32-djgpp-$(get_version djgpp)/djgpp.err ../inc/sys/djgpp.err || exit 1
   cp ${BASE}/patch/watt32-djgpp-$(get_version djgpp)/syserr.c build/djgpp/syserr.c || exit 1
 
   echo "${CFLAGS_FOR_TARGET}" > configure-options
 
-  case $(uname) in
-  Linux) BIN2C=${WATT_ROOT}/util/linux/bin2c ;;
-  MINGW*|MSYS*) BIN2C=${WATT_ROOT}/util/win32/bin2c ;;
-  esac
-
   export TARGET CFLAGS_FOR_TARGET
-  PKT_STUB=pkt_stub.h W32_NASM_=nasm W32_BIN2C_="${BIN2C}" ${MAKE_J} -f djgpp.mak || exit 1
+  ${MAKE_J} -f djgpp.mak || exit 1
 
   echo "Installing Watt-32"
   ${SUDO} mkdir -p ${DST}/${TARGET}/watt/inc || exit 1
