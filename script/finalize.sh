@@ -56,8 +56,8 @@ if [ ! -z "$(get_version watt32)" ]; then
   echo "set WATT_ROOT=\"${WATT_ROOT}\"" >> ${BASE}/build/${TARGET}-setenv.cmd
 
   ${TARGET}-gcc -dumpspecs > ${BASE}/build/specs
-  sed -i "/\*cpp:/{n;s#\(.*\)#-isystem ${WATT_INCLUDE} \1#}" ${BASE}/build/specs
-  sed -i "/\*cc1plus:/{n;s#\(.*\)#-isystem ${WATT_INCLUDE} \1#}" ${BASE}/build/specs
+  sed -i "/\*cpp:/{n;s#\(.*\)#%{!mno-watt:-isystem ${WATT_INCLUDE}} \1#}" ${BASE}/build/specs
+  sed -i "/\*cc1plus:/{n;s#\(.*\)#{!mno-watt:-isystem ${WATT_INCLUDE}} \1#}" ${BASE}/build/specs
 
   echo "Installing specs file"
   install_files ${BASE}/build/specs ${DST}/lib/gcc/${TARGET}/$(get_version gcc)/ || exit 1
