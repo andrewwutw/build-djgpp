@@ -49,11 +49,11 @@ if [ ! -z "$(get_version watt32)" ]; then
   echo "export WATT_ROOT=\"${WATT_ROOT}\"" >> ${BASE}/build/${TARGET}-setenv
   case $(uname) in
   MSYS*|MINGW*)
-    WATT_ROOT="$(cygpath -w "$WATT_ROOT")"
+    WATT_ROOT="$(cygpath -m "$WATT_ROOT")"
     WATT_INCLUDE="$(cygpath -m "$WATT_INCLUDE")"
     ;;
   esac
-  echo "set WATT_ROOT=\"${WATT_ROOT}\"" >> ${BASE}/build/${TARGET}-setenv.cmd
+  echo "set WATT_ROOT=${WATT_ROOT}" >> ${BASE}/build/${TARGET}-setenv.cmd
 
   ${TARGET}-gcc -dumpspecs > ${BASE}/build/specs
   sed -i "/\*cpp:/{n;s#\(.*\)#%{!mno-watt:-isystem ${WATT_INCLUDE}} \1#}" ${BASE}/build/specs
