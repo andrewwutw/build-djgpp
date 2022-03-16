@@ -57,7 +57,7 @@ if [ ! -z "$(get_version watt32)" ]; then
 
   ${TARGET}-gcc -dumpspecs > ${BASE}/build/specs
   spec_option="%{!mno-watt:-isystem ${WATT_INCLUDE}}"
-  sed -i "/\*cpp:/{n;s#\(.*\)#%${spec_option} \1#}" ${BASE}/build/specs
+  sed -i "/\*cpp:/{n;s#\(.*\)#${spec_option} \1#}" ${BASE}/build/specs
   sed -i "/\*cc1plus:/{n;s#\(.*\)#${spec_option} \1#}" ${BASE}/build/specs
 
   echo "Installing specs file"
