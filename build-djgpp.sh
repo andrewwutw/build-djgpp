@@ -69,18 +69,22 @@ if [ ! -z ${WATT32_VERSION} ]; then
   export WATT_ROOT=${BASE}/build/Watt-32
   cd ${WATT_ROOT} || exit 1
   patch -p1 -u < ../../patch/watt32.patch || exit 1
+  cd util/ || exit 1
   case $(uname) in
   MINGW*|MSYS*) WATT_UTILS=win32 ;;
-  *)            WATT_UTILS=linux ;;
+  Linux)        WATT_UTILS=linux ;;
+  *)            WATT_UTILS=linux
+                rm -f linux/*    ;;
   esac
-  cd util/ || exit 1
-  ${MAKE_J} ${WATT_UTILS}
+  case $(uname -m) in
+  x86_64) ;;
+  *)      rm -f linux/* ;;
+  esac
+  ${MAKE_J} --always-make ${WATT_UTILS}
   for i in mkmake mkdep bin2c; do
     if ! [ -x ${WATT_UTILS}/$i ]; then
-      echo "Missing Watt-32 tool $i.  Make sure you have S-Lang installed."
-      sleep 10
-      unset WATT32_VERSION
-      break
+      echo "Unable to build Watt-32 tool '$i'.  Make sure you have S-Lang installed."
+      exit 1
     fi
   done
   cd ../src/ || exit 1

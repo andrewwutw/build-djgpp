@@ -1,3 +1,9 @@
+djgpp-toolchain (0.20220317.0+gcc10.3.0+bnu2.38.0+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
+
+  * fix build on i386.
+
+ -- jwt27 <jwjagersma@gmail.com>  Thu, 17 Mar 2022 00:53:38 +0100
+
 djgpp-toolchain (0.20220316.2+gcc10.3.0+bnu2.38.0+gdb8.2.1+djcvs~UBUNTU_VERSION) UBUNTU_VERSION; urgency=low
 
   * new package: libwatt-djgpp-dev
