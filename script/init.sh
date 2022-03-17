@@ -50,7 +50,7 @@ CFLAGS_FOR_TARGET=${CFLAGS_FOR_TARGET-"-O2 -g -ffunction-sections -fdata-section
 CXXFLAGS_FOR_TARGET=${CXXFLAGS_FOR_TARGET-"-O2 -g -ffunction-sections -fdata-sections"}
 
 # check if cp understands --preserve (for MacOS)
-if cp --preserve=mode,timestamps script/hello.c ./hello.c 2>&1 > /dev/null; then
+if cp --preserve=mode,timestamps script/hello.c ./hello.c > /dev/null 2>&1; then
   CP='cp --preserve=mode,timestamps'
 else
   CP='cp'
