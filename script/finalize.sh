@@ -28,6 +28,8 @@ export PATH="${PREFIX}/${TARGET}/bin/:${PREFIX}/bin/:\$PATH"
 export GCC_EXEC_PREFIX="${PREFIX}/lib/gcc/"
 export MANPATH="${PREFIX}/${TARGET}/share/man:${PREFIX}/share/man:\$MANPATH"
 export INFOPATH="${PREFIX}/${TARGET}/share/info:${PREFIX}/share/info:\$INFOPATH"
+export PKG_CONFIG_LIBDIR="${PREFIX}/${TARGET}/lib/pkgconfig:${PREFIX}/${TARGET}/share/pkgconfig"
+unset PKG_CONFIG_PATH
 STOP
 
 cat << STOP > ${BASE}/build/${TARGET}-setenv.cmd
