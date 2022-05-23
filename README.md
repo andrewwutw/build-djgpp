@@ -63,9 +63,9 @@ ENABLE_LANGUAGES=c,c++,f95,objc,obj-c++
 
 To build DJGPP, just run :
 
-./build-djgpp.sh *djgpp-version*
+./build-djgpp.sh *gcc-version*
 
-Currently supported djgpp-version :
+Currently supported gcc-version :
 
 * 4.7.3
 * 4.8.4
