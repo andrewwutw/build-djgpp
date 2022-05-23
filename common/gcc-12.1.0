@@ -1,0 +1,12 @@
+GCC_VERSION=12.1.0
+GCC_VERSION_SHORT=12.10
+AUTOCONF_VERSION=2.69
+AUTOMAKE_VERSION=1.15.1
+
+GCC_ARCHIVE="http://ftpmirror.gnu.org/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz"
+AUTOCONF_ARCHIVE="http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.xz"
+AUTOMAKE_ARCHIVE="http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.xz"
+
+GCC_CONFIGURE_OPTIONS="--disable-plugin \
+                       --enable-lto \
+                       ${GCC_CONFIGURE_OPTIONS}"
