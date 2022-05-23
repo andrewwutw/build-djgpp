@@ -80,7 +80,7 @@ if [ ! -z ${WATT32_VERSION} ]; then
   x86_64) ;;
   *)      rm -f linux/* ;;
   esac
-  ${MAKE_J} --always-make ${WATT_UTILS}
+  ${MAKE_J} ${WATT_UTILS}
   for i in mkmake mkdep bin2c; do
     if ! [ -x ${WATT_UTILS}/$i ]; then
       echo "Unable to build Watt-32 tool '$i'.  Make sure you have S-Lang installed."
