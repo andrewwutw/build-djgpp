@@ -67,13 +67,13 @@ sudo apt-get install bison flex curl gcc g++ make texinfo zlib1g-dev tar bzip2 g
 Fedora :
 
 ```sh
-sudo yum install gcc-c++ bison flex texinfo patch zlib-devel tar bzip2 gzip xz unzip python-devel m4
+sudo yum install gcc-c++ bison flex texinfo patch zlib-devel tar bzip2 gzip xz unzip python-devel m4 dos2unix
 ```
 
 mingw-w64 (msys2) :
 
 ```sh
-pacman -Syuu base-devel mingw-w64-x86_64-{toolchain,curl,zlib,python{2,3}} compression m4
+pacman -Syuu base-devel mingw-w64-x86_64-{toolchain,curl,zlib,python{2,3}} compression m4 dos2unix
 ```
 
 ### Configuration
