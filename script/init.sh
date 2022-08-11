@@ -57,6 +57,11 @@ else
 fi
 rm -f hello.c 2> /dev/null
 
+# Make sure MSYS2 Perl is used on mingw-w64 (see issue #27)
+case $(uname) in
+MINGW*) export PERL=/usr/bin/perl ;;
+esac
+
 install_files()
 {
   ${SUDO} ${CP} -R -f "$@"
