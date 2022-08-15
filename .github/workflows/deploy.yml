@@ -39,8 +39,7 @@ jobs:
         run: |
           mv debian/Makefile .
           mv debian/pgp-secret.asc /tmp/
-          sed -i "s/UBUNTU_VERSION/$UBUNTU_VERSION/g" debian/changelog
-          if [ -d debian/$UBUNTU_VERSION ]; then cp debian/$UBUNTU_VERSION/* debian/; fi
+          sed -i "s/unstable/$UBUNTU_VERSION/g" debian/changelog
 
       - name: Make source package
         run: |

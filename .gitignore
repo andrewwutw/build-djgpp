@@ -2,3 +2,12 @@ build/
 download/
 install/
 /Makefile
+debian/*/*
+debian/*.log
+debian/*.substvars
+debian/files
+debian/debhelper-build-stamp
+debian/*copyright
+!debian/source/
+!debian/djgpp-dev.copyright
+!debian/gcc-djgpp.copyright

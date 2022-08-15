@@ -1,7 +1,39 @@
 #!/usr/bin/make -f
 
+include /usr/share/dpkg/pkg-info.mk
+
+SHELL := /usr/bin/bash
+
+SRC_VERSION := $(shell echo $(DEB_VERSION) | cut -d~ -f 1)
+
+git_date = $(shell date --date='$(shell cd $(1) && git log -1 --format=%cI)' -u +%4Y%m%d.%H%M)
+
+GCC_VERSION      := $(shell source ./djgpp/gcc      && echo $$GCC_VERSION)
+BINUTILS_VERSION := $(shell source ./djgpp/binutils && echo $$BINUTILS_VERSION)
+GDB_VERSION      := $(shell source ./djgpp/gdb      && echo $$GDB_VERSION)
+DJGPP_VERSION    := 2.05.cvs-$(call git_date, download/djgpp-cvs)
+WATT32_VERSION   := 2.2.11.git-$(call git_date, download/Watt-32)
+
 %:
 	dh $@
+
+override_dh_gencontrol:
+	dh_gencontrol
+	dh_gencontrol -pdjgpp-dev          -- -v$(DJGPP_VERSION)+$(SRC_VERSION)
+	dh_gencontrol -pdjgpp-utils        -- -v$(DJGPP_VERSION)+$(SRC_VERSION)
+	dh_gencontrol -pdjgpp-doc          -- -v$(DJGPP_VERSION)+$(SRC_VERSION)
+	dh_gencontrol -pgcc-djgpp          -- -v$(GCC_VERSION)+$(SRC_VERSION)
+	dh_gencontrol -pgcc-djgpp-doc      -- -v$(GCC_VERSION)+$(SRC_VERSION)
+	dh_gencontrol -pgcc-djgpp-extra    -- -v$(GCC_VERSION)+$(SRC_VERSION)
+	dh_gencontrol -pbinutils-djgpp     -- -v$(BINUTILS_VERSION)+$(SRC_VERSION)
+	dh_gencontrol -pbinutils-djgpp-doc -- -v$(BINUTILS_VERSION)+$(SRC_VERSION)
+	dh_gencontrol -pgdb-djgpp          -- -v$(GDB_VERSION)+$(SRC_VERSION)
+	dh_gencontrol -pgdb-djgpp-doc      -- -v$(GDB_VERSION)+$(SRC_VERSION)
+	dh_gencontrol -pgdb-djgpp-extra    -- -v$(GDB_VERSION)+$(SRC_VERSION)
+	dh_gencontrol -plibwatt-djgpp-dev  -- -v$(WATT32_VERSION)+$(SRC_VERSION)
+
+override_dh_strip:
+	dh_strip --exclude=.a
 
 override_dh_auto_build:
 	CFLAGS=-O2 CXXFLAGS=-O2 CPPFLAGS= CFLAGS_FOR_TARGET="-O2 -g" CXXFLAGS_FOR_TARGET="-O2 -g" dh_auto_build $@

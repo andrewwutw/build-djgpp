@@ -25,26 +25,44 @@ Build-Depends:
 Standards-Version: 4.1.2
 Homepage: https://github.com/jwt27/build-gcc
 
-Package: djgpp
+Package: djgpp-dev
+Architecture: any
+Depends: ${misc:Depends}
+Recommends: binutils-djgpp, gcc-djgpp, djgpp-utils
+Suggests: djgpp-doc
+Breaks: djgpp
+Replaces: djgpp
+Description: DJGPP development kit -- libraries
+
+Package: djgpp-utils
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: binutils-djgpp, gcc-djgpp
-Suggests: djgpp-doc
-Description: DJGPP C library and utilities
- Required for gcc-djgpp.
+Recommends: binutils-djgpp, gcc-djgpp, djgpp-dev
+Breaks: djgpp
+Replaces: djgpp
+Description: DJGPP development kit -- utilities
+ Various utilities used to develop djgpp applications:
+ * djasm
+ * dxegen
+ * dxe3gen
+ * dxe3res
+ * exe2coff
+ * stubedit
+ * stubify
 
 Package: djgpp-doc
 Architecture: all
 Depends: ${misc:Depends}
-Suggests: djgpp
-Description: Documentation for djgpp
+Suggests: djgpp-dev
+Description: DJGPP development kit -- documentation
 
 Package: gcc-djgpp
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, djgpp, binutils-djgpp (>= 2.34-3ubuntu1+1.4)
+Depends: ${shlibs:Depends}, ${misc:Depends}, djgpp-utils, binutils-djgpp (>= 2.35.2)
+Recommends: djgpp-dev
 Suggests: gcc-djgpp-doc, gcc-djgpp-extra
 Description: GNU Compiler Collection
- Cross-compiler targeting djgpp. Supports C and C++.
+ Cross-compiler targeting djgpp.  Supports C and C++.
 
 Package: gcc-djgpp-doc
 Architecture: all
@@ -61,6 +79,21 @@ Suggests: gdb-djgpp
 Description: Extra files for gcc
  Python pretty-printer script files for use with gdb.
  May conflict with system gcc.
+
+Package: binutils-djgpp
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: djgpp-utils
+Suggests: binutils-djgpp-doc
+Description: GNU Binutils
+ Linker, assembler and other binary utilities targeting djgpp.
+
+Package: binutils-djgpp-doc
+Architecture: all
+Depends: ${misc:Depends}
+Suggests: binutils-djgpp
+Conflicts: binutils-doc
+Description: Documentation for binutils-djgpp.
 
 Package: gdb-djgpp
 Architecture: any
@@ -85,6 +118,6 @@ Description: Extra files for gdb-djgpp
 
 Package: libwatt-djgpp-dev
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: djgpp, gcc-djgpp
+Depends: ${misc:Depends}
+Recommends: djgpp-dev, gcc-djgpp
 Description: Watt-32 TCP socket library for DJGPP

@@ -1,0 +1,11 @@
+usr/i*86-pc-msdosdjgpp/lib/libg.a
+usr/i*86-pc-msdosdjgpp/lib/libm.a
+usr/i*86-pc-msdosdjgpp/lib/libemu.a
+usr/i*86-pc-msdosdjgpp/lib/libpc.a
+usr/i*86-pc-msdosdjgpp/lib/crt0.o
+usr/i*86-pc-msdosdjgpp/lib/djgpp.djl
+usr/i*86-pc-msdosdjgpp/lib/gcrt0.o
+usr/i*86-pc-msdosdjgpp/lib/libc.a
+usr/i*86-pc-msdosdjgpp/lib/libdbg.a
+usr/i*86-pc-msdosdjgpp/lib/libtz.a
+usr/i*86-pc-msdosdjgpp/sys-include/*

@@ -1,15 +1,4 @@
-usr/i*86-pc-msdosdjgpp/lib/libg.a
 usr/i*86-pc-msdosdjgpp/lib/dxe.ld
-usr/i*86-pc-msdosdjgpp/lib/libm.a
-usr/i*86-pc-msdosdjgpp/lib/libemu.a
-usr/i*86-pc-msdosdjgpp/lib/libpc.a
-usr/i*86-pc-msdosdjgpp/lib/crt0.o
-usr/i*86-pc-msdosdjgpp/lib/djgpp.djl
-usr/i*86-pc-msdosdjgpp/lib/gcrt0.o
-usr/i*86-pc-msdosdjgpp/lib/libc.a
-usr/i*86-pc-msdosdjgpp/lib/libdbg.a
-usr/i*86-pc-msdosdjgpp/lib/libtz.a
-usr/i*86-pc-msdosdjgpp/sys-include/*
 usr/i*86-pc-msdosdjgpp/bin/stubedit
 usr/i*86-pc-msdosdjgpp/bin/dxe3gen
 usr/i*86-pc-msdosdjgpp/bin/dxe3res
@@ -25,4 +14,3 @@ usr/bin/i*86-pc-msdosdjgpp-dxegen
 usr/bin/i*86-pc-msdosdjgpp-stubedit
 usr/bin/i*86-pc-msdosdjgpp-dxe3res
 usr/bin/i*86-pc-msdosdjgpp-setenv
-usr/i*86-pc-msdosdjgpp/etc/build-gcc/djgpp-version

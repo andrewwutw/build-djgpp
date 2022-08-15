@@ -31,4 +31,3 @@ usr/bin/i*86-pc-msdosdjgpp-as
 usr/bin/i*86-pc-msdosdjgpp-nm
 usr/bin/i*86-pc-msdosdjgpp-elfedit
 usr/bin/i*86-pc-msdosdjgpp-objdump
-usr/i*86-pc-msdosdjgpp/etc/build-gcc/binutils-version
