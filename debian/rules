@@ -2,7 +2,7 @@
 
 include /usr/share/dpkg/pkg-info.mk
 
-SHELL := /usr/bin/bash
+SHELL := /bin/bash
 
 SRC_VERSION := $(shell echo $(DEB_VERSION) | cut -d~ -f 1)
 

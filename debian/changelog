@@ -1,3 +1,9 @@
+djgpp-toolchain (2~unstable) unstable; urgency=low
+
+  * Correct bash path in rules script.
+
+ -- jwt27 <jwjagersma@gmail.com>  Mon, 15 Aug 2022 16:41:32 +0200
+
 djgpp-toolchain (1~unstable) unstable; urgency=low
 
   * Binary packages for each component now have correct version numbers, and
