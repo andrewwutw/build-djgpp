@@ -1,10 +1,16 @@
-djgpp-toolchain (2~unstable) unstable; urgency=low
+djgpp-toolchain (3) unstable; urgency=low
+
+  * Keep ubuntu release name in binary package version numbers.
+
+ -- jwt27 <jwjagersma@gmail.com>  Mon, 15 Aug 2022 17:21:34 +0200
+
+djgpp-toolchain (2) unstable; urgency=low
 
   * Correct bash path in rules script.
 
  -- jwt27 <jwjagersma@gmail.com>  Mon, 15 Aug 2022 16:41:32 +0200
 
-djgpp-toolchain (1~unstable) unstable; urgency=low
+djgpp-toolchain (1) unstable; urgency=low
 
   * Binary packages for each component now have correct version numbers, and
     the source package version is changed to just a single number.
@@ -15,99 +21,99 @@ djgpp-toolchain (1~unstable) unstable; urgency=low
 
  -- jwt27 <jwjagersma@gmail.com>  Mon, 15 Aug 2022 16:24:08 +0200
 
-djgpp-toolchain (0.20220523.0+gcc12.1.0+bnu2.38.0+gdb8.2.1+djcvs~unstable) unstable; urgency=low
+djgpp-toolchain (0.20220523.0+gcc12.1.0+bnu2.38.0+gdb8.2.1+djcvs) unstable; urgency=low
 
   * gcc version 12.1.0
 
  -- jwt27 <jwjagersma@gmail.com>  Mon, 23 May 2022 16:43:08 +0200
 
-djgpp-toolchain (0.20220317.0+gcc10.3.0+bnu2.38.0+gdb8.2.1+djcvs~unstable) unstable; urgency=low
+djgpp-toolchain (0.20220317.0+gcc10.3.0+bnu2.38.0+gdb8.2.1+djcvs) unstable; urgency=low
 
   * fix build on i386.
 
  -- jwt27 <jwjagersma@gmail.com>  Thu, 17 Mar 2022 00:53:38 +0100
 
-djgpp-toolchain (0.20220316.2+gcc10.3.0+bnu2.38.0+gdb8.2.1+djcvs~unstable) unstable; urgency=low
+djgpp-toolchain (0.20220316.2+gcc10.3.0+bnu2.38.0+gdb8.2.1+djcvs) unstable; urgency=low
 
   * new package: libwatt-djgpp-dev
 
  -- jwt27 <jwjagersma@gmail.com>  Wed, 16 Mar 2022 19:08:24 +0100
 
-djgpp-toolchain (0.20220215.0+gcc10.3.0+bnu2.38.0+gdb8.2.1+djcvs~unstable) unstable; urgency=low
+djgpp-toolchain (0.20220215.0+gcc10.3.0+bnu2.38.0+gdb8.2.1+djcvs) unstable; urgency=low
 
   * binutils version 2.38.
 
  -- jwt27 <jwjagersma@gmail.com>  Tue, 15 Feb 2022 17:49:47 +0100
 
-djgpp-toolchain (0.20211110.0+gcc10.3.0+bnu2.37.0+gdb8.2.1+djcvs~unstable) unstable; urgency=low
+djgpp-toolchain (0.20211110.0+gcc10.3.0+bnu2.37.0+gdb8.2.1+djcvs) unstable; urgency=low
 
   * gcc version 10.3.0.
   * binutils version 2.37.
 
  -- jwt27 <jwjagersma@gmail.com>  Wed, 10 Nov 2021 11:35:08 +0100
 
-djgpp-toolchain (0.20210430.0+gcc10.2.0+bnu2.36.1+gdb8.2.1+djcvs~unstable) unstable; urgency=low
+djgpp-toolchain (0.20210430.0+gcc10.2.0+bnu2.36.1+gdb8.2.1+djcvs) unstable; urgency=low
 
   * binutils version 2.36.1.
 
  -- jwt27 <jwjagersma@gmail.com>  Fri, 30 Apr 2021 20:55:58 +0200
 
-djgpp-toolchain (0.20210203.0+gcc10.2.0+bnu2.36.0+gdb8.2.1+djcvs~unstable) unstable; urgency=low
+djgpp-toolchain (0.20210203.0+gcc10.2.0+bnu2.36.0+gdb8.2.1+djcvs) unstable; urgency=low
 
   * binutils version 2.36.
 
  -- jwt27 <jwjagersma@gmail.com>  Wed, 03 Feb 2021 00:14:56 +0100
 
-djgpp-toolchain (0.20201102.0+gcc10.2.0+bnu2.35.1+gdb8.2.1+djcvs~unstable) unstable; urgency=low
+djgpp-toolchain (0.20201102.0+gcc10.2.0+bnu2.35.1+gdb8.2.1+djcvs) unstable; urgency=low
 
   * binutils version 2.35.1.
 
  -- jwt27 <jwjagersma@gmail.com>  Mon, 02 Nov 2020 21:11:19 +0100
 
-djgpp-toolchain (0.20200730.0+gcc10.2.0+bnu2.34.0+gdb8.2.1+djcvs~unstable) unstable; urgency=low
+djgpp-toolchain (0.20200730.0+gcc10.2.0+bnu2.34.0+gdb8.2.1+djcvs) unstable; urgency=low
 
   * gcc version 10.2.0.
 
  -- jwt27 <jwjagersma@gmail.com>  Thu, 30 Jul 2020 12:36:44 +0200
 
-djgpp-toolchain (0.20200509.0+gcc10.1.0+bnu2.34.0+gdb8.2.1+djcvs~unstable) unstable; urgency=low
+djgpp-toolchain (0.20200509.0+gcc10.1.0+bnu2.34.0+gdb8.2.1+djcvs) unstable; urgency=low
 
   * gcc version 10.1.0.
 
  -- jwt27 <jwjagersma@gmail.com>  Sat, 09 May 2020 17:36:20 +0200
 
-djgpp-toolchain (0.20200505.0+gcc9.3.0+bnu2.34.0+gdb8.2.1+djcvs~unstable) unstable; urgency=low
+djgpp-toolchain (0.20200505.0+gcc9.3.0+bnu2.34.0+gdb8.2.1+djcvs) unstable; urgency=low
 
   * gcc version 9.3.0.
   * patch binutils and gcc to use "b" flag for bss sections.
 
  -- jwt27 <jwjagersma@gmail.com>  Tue, 05 May 2020 16:35:24 +0200
 
-djgpp-toolchain (0.20200310.0+gcc9.2.0+bnu2.34.0+gdb8.2.1+djcvs~unstable) unstable; urgency=low
+djgpp-toolchain (0.20200310.0+gcc9.2.0+bnu2.34.0+gdb8.2.1+djcvs) unstable; urgency=low
 
   * binutils version 2.34.
 
  -- jwt27 <jwjagersma@gmail.com>  Tue, 10 Mar 2020 21:31:14 +0100
 
-djgpp-toolchain (0.20200229.0+gcc9.2.0+bnu2.33.1+gdb8.2.1+djcvs~unstable) unstable; urgency=low
+djgpp-toolchain (0.20200229.0+gcc9.2.0+bnu2.33.1+gdb8.2.1+djcvs) unstable; urgency=low
 
   * make gcc-djgpp in focal depend on 2.34-3ubuntu1+1.4
 
  -- jwt27 <jwjagersma@gmail.com>  Sat, 29 Feb 2020 16:37:17 +0100
 
-djgpp-toolchain (0.20200213.2+gcc9.2.0+bnu2.33.1+gdb8.2.1+djcvs~unstable) unstable; urgency=low
+djgpp-toolchain (0.20200213.2+gcc9.2.0+bnu2.33.1+gdb8.2.1+djcvs) unstable; urgency=low
 
   * remove binutils-djgpp and binutils-djgpp-doc for focal and require upstream binutils-djgpp.
 
  -- jwt27 <jwjagersma@gmail.com>  Thu, 13 Feb 2020 21:51:35 +0100
 
-djgpp-toolchain (0.20200213.1+gcc9.2.0+bnu2.33.1+gdb8.2.1+djcvs~unstable) unstable; urgency=low
+djgpp-toolchain (0.20200213.1+gcc9.2.0+bnu2.33.1+gdb8.2.1+djcvs) unstable; urgency=low
 
   * fix package names in control file.
 
  -- jwt27 <jwjagersma@gmail.com>  Thu, 13 Feb 2020 16:27:55 +0100
 
-djgpp-toolchain (0.20200213.0+gcc9.2.0+bnu2.33.1+gdb8.2.1+djcvs~unstable) unstable; urgency=medium
+djgpp-toolchain (0.20200213.0+gcc9.2.0+bnu2.33.1+gdb8.2.1+djcvs) unstable; urgency=medium
 
   * Initial Release.
 
