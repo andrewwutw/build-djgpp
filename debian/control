@@ -47,6 +47,7 @@ Description: DJGPP development kit -- utilities
  * dxe3gen
  * dxe3res
  * exe2coff
+ * setenv
  * stubedit
  * stubify
 

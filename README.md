@@ -59,21 +59,21 @@ Depending on your system, installation procedure maybe different.
 
 On Debian/Ubuntu, you can install these programs by :
 
-```sh
-sudo apt-get update
-sudo apt-get install bison flex curl gcc g++ make texinfo zlib1g-dev tar bzip2 gzip xz-utils unzip python{2,3}-dev m4 dos2unix
+```console
+$ sudo apt-get update
+$ sudo apt-get install bison flex curl gcc g++ make texinfo zlib1g-dev tar bzip2 gzip xz-utils unzip python{2,3}-dev m4 dos2unix
 ```
 
 Fedora :
 
-```sh
-sudo yum install gcc-c++ bison flex texinfo patch zlib-devel tar bzip2 gzip xz unzip python-devel m4 dos2unix
+```console
+$ sudo yum install gcc-c++ bison flex texinfo patch zlib-devel tar bzip2 gzip xz unzip python-devel m4 dos2unix
 ```
 
 mingw-w64 (msys2) :
 
-```sh
-pacman -Syuu base-devel mingw-w64-x86_64-{toolchain,curl,zlib,python{2,3}} compression m4 dos2unix
+```console
+$ pacman -Syuu base-devel mingw-w64-x86_64-{toolchain,curl,zlib,python{2,3}} compression m4 dos2unix
 ```
 
 ### Configuration
@@ -115,47 +115,70 @@ build-avr.sh        # builds a toolchain targeting AVR microcontrollers (fixed T
 ```
 
 To build DJGPP, just run:
-```sh
-./build-djgpp.sh [options...] [packages...]
+```console
+$ ./build-djgpp.sh [options...] [packages...]
 ```
 Run with no arguments to see a list of supported packages and versions.
 
 For example, to build gcc 9.2.0 with the latest djgpp C library from CVS and latest binutils:
-```sh
-./build-djgpp.sh --prefix=/usr/local djgpp-cvs binutils gcc-9.2.0
+```console
+$ ./build-djgpp.sh --prefix=/usr/local djgpp-cvs binutils gcc-9.2.0
 ```
 
 To install or upgrade all packages:
-```sh
-./build-djgpp.sh --prefix=/usr/local all
+```console
+$ ./build-djgpp.sh --prefix=/usr/local all
 ```
 
 It will download all necessary files, build DJGPP compiler, binutils, and gdb, and install it.
 
 ### Using
 
-In order to use your new compiler, you must add its `bin/` directory to your `PATH`.  
-You can then access the compiler through its target-prefixed name: (`$PREFIX` and `$TARGET` in these examples are the variables you used to build)
+(In the following examples, it is assumed that you built the toolchain with
+options `--prefix=/home/me/.local` and `--target=i386-pc-msdosdjgpp`.
+Substitute as necessary for your configuration.)
 
-```sh
-$ PATH=$PREFIX/bin/:$PATH
-$ $TARGET-g++ hello.cpp
+To use your new compiler, you must add its `bin` directory to your `PATH`.
+You can then access the toolchain through its target-prefixed name:
+
+```console
+$ PATH="/home/me/.local/bin:$PATH"
+$ i386-pc-msdosdjgpp-g++ hello.cpp
 ```
 
-To use the short name variant, and access documentation with `man` and `info`, use the installed setenv script:
+A `setenv` script will also be installed.  This sets up environment variables
+so that you can use the toolchain as if you were working on the target machine.
+The toolchain utilities are then accessible through their short names (`gcc`,
+`ld`, etc), and you can access target-specific documentation and locate target
+libraries (via `man`/`info` and `pkg-config`, respectively).
 
-```sh
-$ source $TARGET-setenv
-$ g++ hello.cpp
+This script can be used either with no arguments, to start a new shell:
+
+```console
+$ i386-pc-msdosdjgpp-setenv
+Entering new shell for target environment: i386-pc-msdosdjgpp
+$ which gcc
+/home/me/.local/i386-pc-msdosdjgpp/bin//gcc
+$ gcc -v 2>&1 | grep 'Target'
+Target: i386-pc-msdosdjgpp
 ```
 
-If you are using Windows command prompt :
+With a single command:
 
-```bat
-> PATH=$PREFIX/bin;%PATH%
-> $TARGET-g++ hello.cpp
-> $TARGET-setenv
-> g++ hello.cpp
+```console
+$ i386-pc-msdosdjgpp-setenv info libc
+  # (shows documentation for djgpp's C library)
+```
+
+Or `source`d into the current shell: (Bash only)
+
+```console
+$ which gcc
+/usr/bin/gcc
+$ source i386-pc-msdosdjgpp-setenv
+Environment variables set up for target: i386-pc-msdosdjgpp
+$ which gcc
+/home/me/.local/i386-pc-msdosdjgpp/bin/gcc
 ```
 
 ### Supported DJGPP utilities

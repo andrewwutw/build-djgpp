@@ -19,12 +19,26 @@ popd
 
 cat << STOP > ${BASE}/build/${TARGET}-setenv
 #!/usr/bin/env bash
-if ! (return 2> /dev/null); then
-  echo "This script must be executed with 'source' to set environment variables:"
-  echo "source \$0"
-  exit 1
-fi
-export PATH="${PREFIX}/${TARGET}/bin/:${PREFIX}/bin/:\$PATH"
+case "\$1" in
+-*) cat << EOF >&2
+Usage: [source] \$(basename \$0) [command [arguments ...]]
+
+Set up environment variables for convenient access to the cross-compiling
+toolchain targeting ${TARGET}.
+This allows you to invoke the toolchain utilities via their short names (eg.
+'gcc'), access target-specific documentation via 'man' and 'info', and locate
+target libraries via 'pkg-config'.
+
+This script may be invoked in one of three ways:
+ * With no arguments: starts a new shell.
+ * With a command   : executes the specified command.
+ * Via 'source'     : exports variables into the current shell (Bash only).
+EOF
+exit 1
+;;
+esac
+
+export PATH="${PREFIX}/${TARGET}/bin:${PREFIX}/bin:\$PATH"
 export GCC_EXEC_PREFIX="${PREFIX}/lib/gcc/"
 export MANPATH="${PREFIX}/${TARGET}/share/man:${PREFIX}/share/man:\$MANPATH"
 export INFOPATH="${PREFIX}/${TARGET}/share/info:${PREFIX}/share/info:\$INFOPATH"
@@ -67,6 +81,18 @@ if [ ! -z "$(get_version watt32)" ]; then
   install_files ${BASE}/build/specs ${DST}/lib/gcc/${TARGET}/$(get_version gcc)/ || exit 1
 fi
 
+cat << STOP >> ${BASE}/build/${TARGET}-setenv
+if [ -z "\$BASH_VERSION" ] || [ "\${BASH_SOURCE[0]}" = "\$0" ]; then
+  if [ ! -z "\$1" ]; then
+    exec "\$@"
+  else
+    echo 'Entering new shell for target environment: ${TARGET}' >&2
+    exec \$SHELL
+  fi
+fi
+echo 'Environment variables set up for target: ${TARGET}' >&2
+STOP
+
 case $TARGET in
 i586-pc-msdosdjgpp) ;;
 *-pc-msdosdjgpp) cat << STOP > ${BASE}/build/${TARGET}-link-i586
@@ -80,7 +106,6 @@ STOP
   chmod +x ${BASE}/build/${TARGET}-link-i586
   install_files ${BASE}/build/${TARGET}-link-i586 ${DST}/bin/
   ;;
-*) ;;
 esac
 
 echo "Installing ${TARGET}-setenv"
