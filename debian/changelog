@@ -1,6 +1,7 @@
 djgpp-toolchain (5) unstable; urgency=low
 
   * gcc version 12.2.0
+  * binutils version 2.39
 
  -- jwt27 <jwjagersma@gmail.com>  Tue, 23 Aug 2022 22:48:50 +0200
 
