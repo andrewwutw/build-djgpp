@@ -19,25 +19,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install curl git debhelper devscripts dput gpg
 
-      - name: Download sources
-        run: |
-          ./build-djgpp.sh --batch --build-deb --only-download --ignore-dependencies djgpp-cvs binutils gcc gdb watt32
-
-      - name: Pack git sources
-        run: |
-          find download/*/* ! -wholename '*/.git/*' -delete || true
-          cd download/
-          for DIR in */; do
-            DIR=${DIR%/}
-            tar -c -f $DIR-git.tar $DIR
-          done
-          rm -rf */
-
       - name: Setup package files
         env:
           UBUNTU_VERSION: ${{ matrix.ubuntu-version }}
         run: |
-          mv debian/Makefile .
           mv debian/pgp-secret.asc /tmp/
           sed -i "s/) unstable/~$UBUNTU_VERSION) $UBUNTU_VERSION/g" debian/changelog
 

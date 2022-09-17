@@ -5,10 +5,30 @@ ARCHIVE_LIST="$BINUTILS_ARCHIVE $DJCRX_ARCHIVE $DJLSR_ARCHIVE $DJDEV_ARCHIVE
               $AVRLIBC_ARCHIVE $AVRLIBC_DOC_ARCHIVE $AVRDUDE_ARCHIVE $AVARICE_ARCHIVE
               $GMP_ARCHIVE $MPFR_ARCHIVE $MPC_ARCHIVE $ISL_ARCHIVE"
 
+# these variables are of the form "git://url/repo.git::branch"
+# if 'branch' is empty then the default branch is checked out.
+GIT_LIST="$DJGPP_GIT $GCC_GIT $BINUTILS_GIT $NEWLIB_GIT $SIMULAVR_GIT $WATT32_GIT"
+
+mkdir -p download
+cd download/ || exit 1
+
+# Remove files that don't belong in the Debian package.
+if [ ! -z "$BUILD_DEB" ]; then
+  for FILE in $(find * -maxdepth 0 -type f); do
+    for ARCHIVE in $ARCHIVE_LIST; do
+      [ "$FILE" == "$(basename $ARCHIVE)" ] && continue 2
+    done
+    for REPO in $GIT_LIST; do
+      REPO=${REPO%::*}
+      REPO=${REPO%.*}
+      [ "$FILE" == "$(basename $REPO)-git.tar" ] && continue 2
+    done
+    rm -f $FILE
+  done
+fi
+
 if [ -z ${NO_DOWNLOAD} ]; then
   echo "Download source files..."
-  mkdir -p download
-  cd download || exit 1
 
   for ARCHIVE in $ARCHIVE_LIST; do
     FILE=`basename $ARCHIVE`
@@ -35,13 +55,10 @@ if [ -z ${NO_DOWNLOAD} ]; then
       done
     fi
   done
-  cd ..
 fi
 
 download_git()
 {
-  mkdir -p ${BASE}/download
-  pushd ${BASE}/download || exit 1
   local repo=$(basename $1)
   repo=${repo%.*}
   if [ ! -d $repo/ ] || [ "`cd $repo/ && git remote get-url origin`" != "$1" ]; then
@@ -68,15 +85,17 @@ download_git()
       git reset --hard origin/$2 || exit 1
     fi
   fi
+  cd ${BASE}/download/ || exit 1
+  if [ ! -z ${ONLY_DOWNLOAD} ] && [ ! -z ${BUILD_DEB} ]; then
+    # Pack git sources for Debian package.
+    find $repo/* ! -wholename '*/.git/*' -delete 2>&1 > /dev/null
+    tar -c -f $repo-git.tar $repo
+    return
+  fi
   mkdir -p ${BASE}/build
   rm -rf ${BASE}/build/$repo
-  ln -fs ../download/$repo ${BASE}/build/$repo
-  popd
+  ln -fs ../download/$repo ${BASE}/build/$repo || exit 1
 }
-
-# these variables are of the form "git://url/repo.git::branch"
-# if 'branch' is empty then the default branch is checked out.
-GIT_LIST="$DJGPP_GIT $GCC_GIT $BINUTILS_GIT $NEWLIB_GIT $SIMULAVR_GIT $WATT32_GIT"
 
 for REPO in $GIT_LIST; do
   download_git ${REPO%::*} ${REPO##*::}
@@ -84,13 +103,21 @@ done
 
 for ARCHIVE in $ARCHIVE_LIST; do
   FILE=`basename $ARCHIVE`
-  if ! [ -f download/$FILE ]; then
+  if ! [ -f $FILE ]; then
     echo "Missing: $FILE"
     exit 1
   fi
 done
 
-[ ! -z ${ONLY_DOWNLOAD} ] && exit 0
+if [ ! -z ${ONLY_DOWNLOAD} ]; then
+  if [ ! -z ${BUILD_DEB} ]; then
+    # Remove git sources that don't belong in the Debian package.
+    rm -rf ${BASE}/download/*/
+  fi
+  exit 0
+fi
+
+cd ${BASE}/ || exit 1
 
 echo "Creating install directory: ${DST}"
 [ -d ${DST} ] || ${SUDO} mkdir -p ${DST} || exit 1

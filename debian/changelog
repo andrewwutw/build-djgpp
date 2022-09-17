@@ -1,3 +1,10 @@
+djgpp-toolchain (6) unstable; urgency=low
+
+  * Improve Debian package system.
+  * Compile target libraries with '-ffunction-sections -fdata-sections'.
+
+ -- jwt27 <jwjagersma@gmail.com>  Sun, 18 Sep 2022 17:29:03 +0200
+
 djgpp-toolchain (5) unstable; urgency=low
 
   * gcc version 12.2.0
