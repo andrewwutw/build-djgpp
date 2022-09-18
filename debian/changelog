@@ -4,8 +4,9 @@ djgpp-toolchain (6) unstable; urgency=low
   * Compile target libraries with '-ffunction-sections -fdata-sections'.
   * Configure gcc with '--libexecdir=/usr/lib'.
   * Add convenience package 'djgpp'.
+  * Install documentation in exec-prefix (/usr/i386-pc-msdosdjgpp/).
 
- -- jwt27 <jwjagersma@gmail.com>  Sun, 18 Sep 2022 23:46:06 +0200
+ -- jwt27 <jwjagersma@gmail.com>  Mon, 19 Sep 2022 02:04:59 +0200
 
 djgpp-toolchain (5) unstable; urgency=low
 

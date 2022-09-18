@@ -33,12 +33,15 @@ Depends:
  djgpp-utils,
  djgpp-doc,
  gcc-djgpp,
+ gcc-djgpp-doc,
  binutils-djgpp,
+ binutils-djgpp-doc,
  gdb-djgpp,
+ gdb-djgpp-doc,
  libwatt-djgpp-dev
 Description: DJGPP toolchain
- This convenience package installs all available components of the djgpp
- toolchain, including documentation and additional libraries.
+ This meta-package installs all available components of the djgpp toolchain,
+ including documentation and additional libraries.
 
 Package: djgpp-dev
 Architecture: any
@@ -80,7 +83,6 @@ Package: gcc-djgpp-doc
 Architecture: all
 Depends: ${misc:Depends}
 Suggests: gcc-djgpp
-Conflicts: gcc-doc
 Description: Documentation for gcc-djgpp
 
 Package: gcc-djgpp-extra
@@ -104,7 +106,6 @@ Package: binutils-djgpp-doc
 Architecture: all
 Depends: ${misc:Depends}
 Suggests: binutils-djgpp
-Conflicts: binutils-doc
 Description: Documentation for binutils-djgpp.
 
 Package: gdb-djgpp
@@ -118,7 +119,6 @@ Package: gdb-djgpp-doc
 Architecture: all
 Depends: ${misc:Depends}
 Suggests: gdb-djgpp
-Conflicts: gdb-doc
 Description: Documentation for gdb-djgpp
 
 Package: gdb-djgpp-extra
