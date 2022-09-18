@@ -19,6 +19,7 @@ WATT32_VERSION   = 2.2.11.git-$(call git_date, download/Watt-32)
 
 override_dh_gencontrol:
 	dh_gencontrol
+	dh_gencontrol -pdjgpp              -- -v0+$(DEB_VERSION)
 	dh_gencontrol -pdjgpp-dev          -- -v$(DJGPP_VERSION)+$(DEB_VERSION)
 	dh_gencontrol -pdjgpp-utils        -- -v$(DJGPP_VERSION)+$(DEB_VERSION)
 	dh_gencontrol -pdjgpp-doc          -- -v$(DJGPP_VERSION)+$(DEB_VERSION)

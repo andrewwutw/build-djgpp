@@ -3,8 +3,9 @@ djgpp-toolchain (6) unstable; urgency=low
   * Improve Debian package system.
   * Compile target libraries with '-ffunction-sections -fdata-sections'.
   * Configure gcc with '--libexecdir=/usr/lib'.
+  * Add convenience package 'djgpp'.
 
- -- jwt27 <jwjagersma@gmail.com>  Sun, 18 Sep 2022 20:00:31 +0200
+ -- jwt27 <jwjagersma@gmail.com>  Sun, 18 Sep 2022 23:46:06 +0200
 
 djgpp-toolchain (5) unstable; urgency=low
 
