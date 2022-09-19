@@ -25,12 +25,10 @@ override_dh_gencontrol:
 	dh_gencontrol -pdjgpp-doc          -- -v$(DJGPP_VERSION)+$(DEB_VERSION)
 	dh_gencontrol -pgcc-djgpp          -- -v$(GCC_VERSION)+$(DEB_VERSION)
 	dh_gencontrol -pgcc-djgpp-doc      -- -v$(GCC_VERSION)+$(DEB_VERSION)
-	dh_gencontrol -pgcc-djgpp-extra    -- -v$(GCC_VERSION)+$(DEB_VERSION)
 	dh_gencontrol -pbinutils-djgpp     -- -v$(BINUTILS_VERSION)+$(DEB_VERSION)
 	dh_gencontrol -pbinutils-djgpp-doc -- -v$(BINUTILS_VERSION)+$(DEB_VERSION)
 	dh_gencontrol -pgdb-djgpp          -- -v$(GDB_VERSION)+$(DEB_VERSION)
 	dh_gencontrol -pgdb-djgpp-doc      -- -v$(GDB_VERSION)+$(DEB_VERSION)
-	dh_gencontrol -pgdb-djgpp-extra    -- -v$(GDB_VERSION)+$(DEB_VERSION)
 	dh_gencontrol -plibwatt-djgpp-dev  -- -v$(WATT32_VERSION)+$(DEB_VERSION)
 
 override_dh_strip:
@@ -43,17 +41,16 @@ override_dh_auto_clean:
 	cp debian/djgpp-dev.copyright debian/djgpp-utils.copyright
 	cp debian/djgpp-dev.copyright debian/djgpp-doc.copyright
 	cp debian/gcc-djgpp.copyright debian/gcc-djgpp-doc.copyright
-	cp debian/gcc-djgpp.copyright debian/gcc-djgpp-extra.copyright
 	cp debian/binutils-djgpp.copyright debian/binutils-djgpp-doc.copyright
 	cp debian/gdb-djgpp.copyright debian/gdb-djgpp-doc.copyright
-	cp debian/gdb-djgpp.copyright debian/gdb-djgpp-extra.copyright
 	./build-djgpp.sh --batch --build-deb --only-download $(PACKAGES)
 	-rm -rf build/ install/
 
 override_dh_auto_configure:
 
 override_dh_auto_build:
-	GCC_CONFIGURE_OPTIONS='--libexecdir=/usr/lib' \
+	GCC_CONFIGURE_OPTIONS='--datarootdir=/usr/i386-pc-msdosdjgpp/share --libexecdir=/usr/lib' \
+	GDB_CONFIGURE_OPTIONS='--datarootdir=/usr/i386-pc-msdosdjgpp/share' \
 	CFLAGS="$(CFLAGS) -Wno-error=format-security" \
 	CXXFLAGS="$(CXXFLAGS) -Wno-error=format-security" \
 	./build-djgpp.sh --batch --build-deb --no-download --prefix=/usr --destdir=$(CURDIR)/install $(PACKAGES)

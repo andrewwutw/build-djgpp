@@ -23,3 +23,7 @@ usr/bin/i*86-pc-msdosdjgpp-gcc-ar
 usr/bin/i*86-pc-msdosdjgpp-g++-*.*.*
 usr/bin/i*86-pc-msdosdjgpp-gcov-dump
 usr/bin/i*86-pc-msdosdjgpp-gcov
+usr/i386-pc-msdosdjgpp/share/gcc-*/python/libstdcxx/v6/printers.py
+usr/i386-pc-msdosdjgpp/share/gcc-*/python/libstdcxx/v6/__init__.py
+usr/i386-pc-msdosdjgpp/share/gcc-*/python/libstdcxx/v6/xmethods.py
+usr/i386-pc-msdosdjgpp/share/gcc-*/python/libstdcxx/__init__.py

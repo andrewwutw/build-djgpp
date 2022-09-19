@@ -5,8 +5,9 @@ djgpp-toolchain (6) unstable; urgency=low
   * Configure gcc with '--libexecdir=/usr/lib'.
   * Add convenience package 'djgpp'.
   * Install documentation in exec-prefix (/usr/i386-pc-msdosdjgpp/).
+  * Drop 'extra' packages and install their contents in exec-prefix.
 
- -- jwt27 <jwjagersma@gmail.com>  Mon, 19 Sep 2022 02:04:59 +0200
+ -- jwt27 <jwjagersma@gmail.com>  Mon, 19 Sep 2022 17:20:39 +0200
 
 djgpp-toolchain (5) unstable; urgency=low
 

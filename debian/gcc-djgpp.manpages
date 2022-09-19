@@ -1,6 +1,6 @@
-usr/share/man/man1/i*86-pc-msdosdjgpp-gcov-dump.1
-usr/share/man/man1/i*86-pc-msdosdjgpp-cpp.1
-usr/share/man/man1/i*86-pc-msdosdjgpp-gcov.1
-usr/share/man/man1/i*86-pc-msdosdjgpp-g++.1
-usr/share/man/man1/i*86-pc-msdosdjgpp-gcov-tool.1
-usr/share/man/man1/i*86-pc-msdosdjgpp-gcc.1
+usr/i386-pc-msdosdjgpp/share/man/man1/i386-pc-msdosdjgpp-gcov-dump.1
+usr/i386-pc-msdosdjgpp/share/man/man1/i386-pc-msdosdjgpp-cpp.1
+usr/i386-pc-msdosdjgpp/share/man/man1/i386-pc-msdosdjgpp-gcov.1
+usr/i386-pc-msdosdjgpp/share/man/man1/i386-pc-msdosdjgpp-g++.1
+usr/i386-pc-msdosdjgpp/share/man/man1/i386-pc-msdosdjgpp-gcov-tool.1
+usr/i386-pc-msdosdjgpp/share/man/man1/i386-pc-msdosdjgpp-gcc.1

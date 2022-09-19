@@ -1,9 +1,9 @@
-usr/share/info/libquadmath.info  usr/i386-pc-msdosdjgpp/share/info
-usr/share/info/gccint.info       usr/i386-pc-msdosdjgpp/share/info
-usr/share/info/gcc.info          usr/i386-pc-msdosdjgpp/share/info
-usr/share/info/cpp.info          usr/i386-pc-msdosdjgpp/share/info
-usr/share/info/cppinternals.info usr/i386-pc-msdosdjgpp/share/info
-usr/share/info/gccinstall.info   usr/i386-pc-msdosdjgpp/share/info
-usr/share/man/man7/fsf-funding.7 usr/i386-pc-msdosdjgpp/share/man/man7
-usr/share/man/man7/gpl.7         usr/i386-pc-msdosdjgpp/share/man/man7
-usr/share/man/man7/gfdl.7        usr/i386-pc-msdosdjgpp/share/man/man7
+usr/i386-pc-msdosdjgpp/share/info/libquadmath.info
+usr/i386-pc-msdosdjgpp/share/info/gccint.info
+usr/i386-pc-msdosdjgpp/share/info/gcc.info
+usr/i386-pc-msdosdjgpp/share/info/cpp.info
+usr/i386-pc-msdosdjgpp/share/info/cppinternals.info
+usr/i386-pc-msdosdjgpp/share/info/gccinstall.info
+usr/i386-pc-msdosdjgpp/share/man/man7/fsf-funding.7
+usr/i386-pc-msdosdjgpp/share/man/man7/gpl.7
+usr/i386-pc-msdosdjgpp/share/man/man7/gfdl.7
