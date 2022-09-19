@@ -91,12 +91,13 @@ The following command line options are recognized:
 
 Several environment variables also control the build process:
 ```sh
-MAKE_JOBS=                  # Number of parallel build threads (auto-detected)
 GCC_CONFIGURE_OPTIONS=      # Extra options to pass to gcc's ./configure
 BINUTILS_CONFIGURE_OPTIONS= # Same, for binutils
 GDB_CONFIGURE_OPTIONS=      # Same, for gdb
 NEWLIB_CONFIGURE_OPTIONS=   # Same, for newlib
 AVRLIBC_CONFIGURE_OPTIONS=  # Same, for avr-libc
+GLOBAL_CONFIGURE_OPTIONS=   # Extra options added to all variables listed above
+MAKE_JOBS=                  # Number of parallel build threads (auto-detected)
 CFLAGS_FOR_TARGET=          # CFLAGS used to build target libraries
 HOST=                       # The platform you are building for, when building a cross-cross compiler
 BUILD=                      # The platform you are building on (auto-detected)

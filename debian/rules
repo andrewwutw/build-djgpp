@@ -50,8 +50,7 @@ override_dh_auto_clean:
 override_dh_auto_configure:
 
 override_dh_auto_build:
-	GCC_CONFIGURE_OPTIONS='--datarootdir=/usr/i386-pc-msdosdjgpp/share --libexecdir=/usr/lib' \
-	GDB_CONFIGURE_OPTIONS='--datarootdir=/usr/i386-pc-msdosdjgpp/share' \
+	GLOBAL_CONFIGURE_OPTIONS='--datarootdir=/usr/i386-pc-msdosdjgpp/share --libexecdir=/usr/lib' \
 	CFLAGS="$(CFLAGS) -Wno-error=format-security" \
 	CXXFLAGS="$(CXXFLAGS) -Wno-error=format-security" \
 	./build-djgpp.sh --batch --build-deb --no-download --prefix=/usr --destdir=$(CURDIR)/install $(PACKAGES)
