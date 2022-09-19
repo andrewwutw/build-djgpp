@@ -31,23 +31,33 @@ Tag: role::metapackage
 Depends:
  djgpp-dev,
  djgpp-utils,
- djgpp-doc,
  gcc-djgpp,
- gcc-djgpp-doc,
  binutils-djgpp,
- binutils-djgpp-doc,
  gdb-djgpp,
- gdb-djgpp-doc,
  libwatt-djgpp-dev
+Suggests: djgpp-doc
 Description: DJGPP toolchain
  This meta-package installs all available components of the djgpp toolchain,
- including documentation and additional libraries.
+ including additional libraries.  For documentation see djgpp-doc.
+
+Package: djgpp-doc
+Architecture: any
+Tag: role::metapackage
+Depends:
+ djgpp-dev-doc,
+ gcc-djgpp-doc,
+ binutils-djgpp-doc,
+ gdb-djgpp-doc
+Suggests: djgpp
+Description: DJGPP toolchain documentation
+ This meta-package installs the documentation for all available components of
+ the djgpp toolchain.
 
 Package: djgpp-dev
 Architecture: any
 Depends: ${misc:Depends}
 Recommends: binutils-djgpp, gcc-djgpp, djgpp-utils
-Suggests: djgpp-doc
+Suggests: djgpp-dev-doc
 Description: DJGPP development kit -- libraries
 
 Package: djgpp-utils
@@ -65,7 +75,7 @@ Description: DJGPP development kit -- utilities
  * stubedit
  * stubify
 
-Package: djgpp-doc
+Package: djgpp-dev-doc
 Architecture: all
 Depends: ${misc:Depends}
 Suggests: djgpp-dev

@@ -20,9 +20,10 @@ WATT32_VERSION   = 2.2.11.git-$(call git_date, download/Watt-32)
 override_dh_gencontrol:
 	dh_gencontrol
 	dh_gencontrol -pdjgpp              -- -v0+$(DEB_VERSION)
-	dh_gencontrol -pdjgpp-dev          -- -v$(DJGPP_VERSION)+$(DEB_VERSION)
+	dh_gencontrol -pdjgpp-doc          -- -v0+$(DEB_VERSION)
 	dh_gencontrol -pdjgpp-utils        -- -v$(DJGPP_VERSION)+$(DEB_VERSION)
-	dh_gencontrol -pdjgpp-doc          -- -v$(DJGPP_VERSION)+$(DEB_VERSION)
+	dh_gencontrol -pdjgpp-dev          -- -v$(DJGPP_VERSION)+$(DEB_VERSION)
+	dh_gencontrol -pdjgpp-dev-doc      -- -v$(DJGPP_VERSION)+$(DEB_VERSION)
 	dh_gencontrol -pgcc-djgpp          -- -v$(GCC_VERSION)+$(DEB_VERSION)
 	dh_gencontrol -pgcc-djgpp-doc      -- -v$(GCC_VERSION)+$(DEB_VERSION)
 	dh_gencontrol -pbinutils-djgpp     -- -v$(BINUTILS_VERSION)+$(DEB_VERSION)
@@ -39,7 +40,7 @@ override_dh_auto_clean:
 	cp LICENSE debian/binutils-djgpp.copyright
 	cp LICENSE debian/gdb-djgpp.copyright
 	cp debian/djgpp-dev.copyright debian/djgpp-utils.copyright
-	cp debian/djgpp-dev.copyright debian/djgpp-doc.copyright
+	cp debian/djgpp-dev.copyright debian/djgpp-dev-doc.copyright
 	cp debian/gcc-djgpp.copyright debian/gcc-djgpp-doc.copyright
 	cp debian/binutils-djgpp.copyright debian/binutils-djgpp-doc.copyright
 	cp debian/gdb-djgpp.copyright debian/gdb-djgpp-doc.copyright
