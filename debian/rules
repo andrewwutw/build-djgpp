@@ -12,8 +12,8 @@ git_date = $(shell date --date='$(shell cd $(1) && git log -1 --format=%cI)' -u 
 GCC_VERSION      = $(shell source ./djgpp/gcc      && echo $$GCC_VERSION)
 BINUTILS_VERSION = $(shell source ./djgpp/binutils && echo $$BINUTILS_VERSION)
 GDB_VERSION      = $(shell source ./djgpp/gdb      && echo $$GDB_VERSION)
-DJGPP_VERSION    = 2.05.cvs-$(call git_date, download/djgpp-cvs)
-WATT32_VERSION   = 2.2.11.git-$(call git_date, download/Watt-32)
+DJGPP_VERSION    = 2.05.cvs.$(call git_date, download/djgpp-cvs)
+WATT32_VERSION   = 2.2.11.git.$(call git_date, download/Watt-32)
 
 %:
 	dh $@
