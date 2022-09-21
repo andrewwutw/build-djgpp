@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 
-include /usr/share/dpkg/pkg-info.mk
+DPKG_EXPORT_BUILDFLAGS := 1
+include /usr/share/dpkg/default.mk
 
 SHELL := /bin/bash
 
