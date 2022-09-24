@@ -25,34 +25,6 @@ Build-Depends:
 Standards-Version: 4.1.2
 Homepage: https://github.com/jwt27/build-gcc
 
-Package: djgpp
-Architecture: any
-Tag: role::metapackage
-Depends:
- djgpp-dev,
- djgpp-utils,
- gcc-djgpp,
- binutils-djgpp,
- gdb-djgpp,
- libwatt-djgpp-dev
-Suggests: djgpp-doc
-Description: DJGPP toolchain
- This meta-package installs all available components of the djgpp toolchain,
- including additional libraries.  For documentation see djgpp-doc.
-
-Package: djgpp-doc
-Architecture: any
-Tag: role::metapackage
-Depends:
- djgpp-dev-doc,
- gcc-djgpp-doc,
- binutils-djgpp-doc,
- gdb-djgpp-doc
-Suggests: djgpp
-Description: DJGPP toolchain documentation
- This meta-package installs the documentation for all available components of
- the djgpp toolchain.
-
 Package: djgpp-dev
 Architecture: any
 Depends: ${misc:Depends}
@@ -76,24 +48,28 @@ Description: DJGPP development kit -- utilities
  * stubify
 
 Package: djgpp-dev-doc
-Architecture: all
+Architecture: any
 Depends: ${misc:Depends}
 Suggests: djgpp-dev
 Description: DJGPP development kit -- documentation
 
 Package: gcc-djgpp
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, djgpp-utils, binutils-djgpp (>= 2.35.2)
+Depends: ${shlibs:Depends}, ${misc:Depends},
+ djgpp-utils,
+ binutils-djgpp (>= 2.35.2)
 Recommends: djgpp-dev
 Suggests: gcc-djgpp-doc
 Description: GNU Compiler Collection
- Cross-compiler targeting djgpp.  Supports C and C++.
+ Cross-compiler targeting djgpp.  This package contains both gcc, g++, and
+ libstdc++.
+ If you need compiler support for other languages, please let me know.
 
 Package: gcc-djgpp-doc
-Architecture: all
+Architecture: any
 Depends: ${misc:Depends}
 Suggests: gcc-djgpp
-Description: Documentation for gcc-djgpp
+Description: GNU Compiler Collection -- documentation
 
 Package: binutils-djgpp
 Architecture: any
@@ -104,10 +80,10 @@ Description: GNU Binutils
  Linker, assembler and other binary utilities targeting djgpp.
 
 Package: binutils-djgpp-doc
-Architecture: all
+Architecture: any
 Depends: ${misc:Depends}
 Suggests: binutils-djgpp
-Description: Documentation for binutils-djgpp.
+Description: GNU Binutils -- documentation
 
 Package: gdb-djgpp
 Architecture: any
@@ -117,10 +93,10 @@ Description: GNU Debugger
  Used to debug djgpp programs over a serial connection.
 
 Package: gdb-djgpp-doc
-Architecture: all
+Architecture: any
 Depends: ${misc:Depends}
 Suggests: gdb-djgpp
-Description: Documentation for gdb-djgpp
+Description: GNU Debugger -- documentation
 
 Package: libwatt-djgpp-dev
 Architecture: any

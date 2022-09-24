@@ -1,3 +1,9 @@
+djgpp-toolchain (7) UNRELEASED; urgency=low
+
+  * Move meta-packages to new repository.
+
+ -- jwt27 <jwjagersma@gmail.com>  Sat, 24 Sep 2022 18:36:43 +0200
+
 djgpp-toolchain (6) unstable; urgency=low
 
   * Improve Debian package system.
