@@ -5,8 +5,21 @@ on:
     branches: djgpp-ppa
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      good: ${{ steps.docheck.outputs.good }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: docheck
+        name: Check release state
+        run: |
+          echo "::set-output name=good::$([ -z "$(head -n 1 debian/changelog | grep 'UNRELEASED')" ] && echo 'true' || echo 'false')"
+
   build:
     runs-on: ubuntu-latest
+    needs: check
+    if: needs.check.outputs.good == 'true'
     strategy:
       matrix:
         ubuntu-version: [ bionic, focal, jammy, kinetic ]
@@ -28,7 +41,7 @@ jobs:
 
       - name: Make source package
         run: |
-          debuild -S -us -uc -d
+          debuild -S --no-sign -d
 
       - name: Import signing key
         env:
