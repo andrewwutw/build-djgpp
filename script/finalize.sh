@@ -38,11 +38,11 @@ exit 1
 ;;
 esac
 
-export PATH="${PREFIX}/${TARGET}/bin:${PREFIX}/bin:\$PATH"
+export PATH="${PREFIX}/${TARGET}/local/bin:${PREFIX}/${TARGET}/bin:${PREFIX}/bin:\$PATH"
 export GCC_EXEC_PREFIX="${PREFIX}/lib/gcc/"
-export MANPATH="${PREFIX}/${TARGET}/share/man:${PREFIX}/share/man:\$MANPATH"
-export INFOPATH="${PREFIX}/${TARGET}/share/info:${PREFIX}/share/info:\$INFOPATH"
-export PKG_CONFIG_LIBDIR="${PREFIX}/${TARGET}/lib/pkgconfig:${PREFIX}/${TARGET}/share/pkgconfig"
+export MANPATH="${PREFIX}/${TARGET}/local/share/man:${PREFIX}/${TARGET}/share/man:${PREFIX}/share/man:\$MANPATH"
+export INFOPATH="${PREFIX}/${TARGET}/local/share/info:${PREFIX}/${TARGET}/share/info:${PREFIX}/share/info:\$INFOPATH"
+export PKG_CONFIG_LIBDIR="${PREFIX}/${TARGET}/local/lib/pkgconfig:${PREFIX}/${TARGET}/local/share/pkgconfig:${PREFIX}/${TARGET}/lib/pkgconfig:${PREFIX}/${TARGET}/share/pkgconfig"
 unset PKG_CONFIG_PATH
 STOP
 
@@ -59,6 +59,15 @@ case $TARGET in
   ;;
 esac
 
+prepend_specs()
+{
+  sed -i "/\*$1:/{n;s#\(.*\)#$2 \1#}" ${BASE}/build/specs
+}
+
+if [ ! -z "$(get_version gcc)" ]; then
+  ${TARGET}-gcc -dumpspecs > ${BASE}/build/specs
+fi
+
 if [ ! -z "$(get_version watt32)" ]; then
   WATT_ROOT="${PREFIX}/${TARGET}/watt"
   WATT_INCLUDE="${WATT_ROOT}/inc"
@@ -71,11 +80,16 @@ if [ ! -z "$(get_version watt32)" ]; then
   esac
   echo "set WATT_ROOT=${WATT_ROOT}" >> ${BASE}/build/${TARGET}-setenv.cmd
 
-  ${TARGET}-gcc -dumpspecs > ${BASE}/build/specs
-
   for i in cpp cc1plus; do
-    sed -i "/\*$i:/{n;s#\(.*\)#-isystem ${WATT_INCLUDE} \1#}" ${BASE}/build/specs
+    prepend_specs $i "-isystem ${WATT_INCLUDE}"
   done
+fi
+
+if [ ! -z "$(get_version gcc)" ]; then
+  for i in cpp cc1plus; do
+    prepend_specs $i "-I${PREFIX}/${TARGET}/local/include"
+  done
+  prepend_specs link "-L${PREFIX}/${TARGET}/local/lib"
 
   echo "Installing specs file"
   install_files ${BASE}/build/specs ${DST}/lib/gcc/${TARGET}/$(get_version gcc)/ || exit 1

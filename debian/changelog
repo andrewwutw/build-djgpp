@@ -1,8 +1,10 @@
-djgpp-toolchain (7) UNRELEASED; urgency=low
+djgpp-toolchain (7) unstable; urgency=low
 
   * Move meta-packages to new repository.
+  * The compiler now looks for locally-installed libraries in
+    /usr/i386-pc-msdosdjgpp/local/.
 
- -- jwt27 <jwjagersma@gmail.com>  Sat, 24 Sep 2022 18:36:43 +0200
+ -- jwt27 <jwjagersma@gmail.com>  Sat, 24 Sep 2022 23:09:08 +0200
 
 djgpp-toolchain (6) unstable; urgency=low
 
