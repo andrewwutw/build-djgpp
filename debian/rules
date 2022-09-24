@@ -46,7 +46,7 @@ override_dh_auto_clean:
 	cp debian/binutils-djgpp.copyright debian/binutils-djgpp-doc.copyright
 	cp debian/gdb-djgpp.copyright debian/gdb-djgpp-doc.copyright
 	./build-djgpp.sh --batch --build-deb --only-download $(PACKAGES)
-	-rm -rf build/ install/
+	-rm -rf build/ install/ debian/pgp-secret.asc
 
 override_dh_auto_configure:
 
