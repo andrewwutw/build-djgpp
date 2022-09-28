@@ -50,7 +50,7 @@ Description: DJGPP development kit -- utilities
  * stubify
 
 Package: djgpp-dev-doc
-Architecture: any
+Architecture: all
 Depends: ${misc:Depends}
 Suggests: djgpp-dev
 Description: DJGPP development kit -- documentation
@@ -78,7 +78,7 @@ Description: GNU Compiler Collection
  If you need compiler support for other languages, please let me know.
 
 Package: gcc-djgpp-doc
-Architecture: any
+Architecture: all
 Depends: ${misc:Depends}
 Suggests: gcc-djgpp
 Description: GNU Compiler Collection -- documentation
@@ -92,7 +92,7 @@ Description: GNU Binutils
  Linker, assembler and other binary utilities targeting djgpp.
 
 Package: binutils-djgpp-doc
-Architecture: any
+Architecture: all
 Depends: ${misc:Depends}
 Suggests: binutils-djgpp
 Description: GNU Binutils -- documentation
@@ -105,7 +105,7 @@ Description: GNU Debugger
  Used to debug djgpp programs over a serial connection.
 
 Package: gdb-djgpp-doc
-Architecture: any
+Architecture: all
 Depends: ${misc:Depends}
 Suggests: gdb-djgpp
 Description: GNU Debugger -- documentation
