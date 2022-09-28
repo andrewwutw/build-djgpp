@@ -1,3 +1,9 @@
+djgpp-toolchain (8) UNRELEASED; urgency=low
+
+  * Add virtual packages for gcc and libc.
+
+ -- jwt27 <jwjagersma@gmail.com>  Wed, 28 Sep 2022 18:29:52 +0200
+
 djgpp-toolchain (7.1) unstable; urgency=low
 
   * Move meta-packages to new repository.

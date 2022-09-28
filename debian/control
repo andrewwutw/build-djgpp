@@ -30,6 +30,8 @@ Architecture: any
 Depends: ${misc:Depends}
 Recommends: binutils-djgpp, gcc-djgpp, djgpp-utils
 Suggests: djgpp-dev-doc
+Provides: libc-djgpp-dev (= ${binary:Version})
+Conflicts: libc-djgpp-dev
 Description: DJGPP development kit -- libraries
 
 Package: djgpp-utils
@@ -60,6 +62,16 @@ Depends: ${shlibs:Depends}, ${misc:Depends},
  binutils-djgpp (>= 2.35.2)
 Recommends: djgpp-dev
 Suggests: gcc-djgpp-doc
+Provides:
+ gcc-i386-pc-msdosdjgpp (= ${binary:Version}),
+ g++-i386-pc-msdosdjgpp (= ${binary:Version}),
+ g++-djgpp (= ${binary:Version}),
+ libstdc++-djgpp-dev (= ${binary:Version})
+Conflicts:
+ gcc-i386-pc-msdosdjgpp,
+ g++-i386-pc-msdosdjgpp,
+ g++-djgpp,
+ libstdc++-djgpp-dev
 Description: GNU Compiler Collection
  Cross-compiler targeting djgpp.  This package contains both gcc, g++, and
  libstdc++.
