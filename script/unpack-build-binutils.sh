@@ -5,14 +5,17 @@ if [ ! -z ${BINUTILS_VERSION} ]; then
     echo "Unpacking binutils..."
     untar ${BINUTILS_ARCHIVE} || exit 1
 
+    cd binutils-${BINUTILS_VERSION}/ || exit 1
     case ${BINUTILS_VERSION} in
-    2.33.1) patch binutils-${BINUTILS_VERSION}/libctf/swap.h ${BASE}/patch/patch-binutils-2.33.1-swap.txt || exit 1 ;;
-    2.34)   patch binutils-${BINUTILS_VERSION}/libctf/swap.h ${BASE}/patch/patch-binutils-2.34-swap.txt || exit 1 ;;
+    2.33.1) patch libctf/swap.h ${BASE}/patch/patch-binutils-2.33.1-swap.txt || exit 1 ;;
+    2.34)   patch libctf/swap.h ${BASE}/patch/patch-binutils-2.34-swap.txt || exit 1 ;;
     esac
+    cat ${BASE}/patch/binutils-${BINUTILS_VERSION}/* | patch -p1 -u || exit 1
 
-    touch binutils-${BINUTILS_VERSION}/binutils-unpacked
+    touch binutils-unpacked
+  else
+    cd binutils-${BINUTILS_VERSION}/ || exit 1
   fi
 
-  cd binutils-${BINUTILS_VERSION} || exit 1
   source ${BASE}/script/build-binutils.sh
 fi
