@@ -22,7 +22,7 @@ jobs:
     if: needs.check.outputs.good == 'true'
     strategy:
       matrix:
-        ubuntu-version: [ bionic, focal, jammy, kinetic ]
+        ubuntu-version: [ bionic, focal, jammy, kinetic, lunar ]
 
     steps:
       - uses: actions/checkout@v3
