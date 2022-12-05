@@ -64,14 +64,14 @@ jobs:
           sudo apt-get install bison flex curl make texinfo zlib1g-dev tar bzip2 gzip xz-utils unzip dos2unix libtool-bin gcc-11 g++-11 cmake help2man python2-dev nasm libslang2-dev ccache
           echo "CC=gcc-12" >> $GITHUB_ENV
           echo "CXX=g++-12" >> $GITHUB_ENV
-          echo "PATH='/usr/lib/ccache:$PATH'" >> $GITHUB_ENV
+          echo "/usr/lib/ccache" >> $GITHUB_PATH
 
       - name: Install dependencies (macos)
         if: contains(matrix.os, 'macos')
         run: |
           brew update
           brew install bash bison flex curl make texinfo zlib bzip2 gzip xz unzip dos2unix libtool cmake help2man nasm s-lang ccache
-          echo "PATH='$(brew --prefix)/opt/ccache/libexec:$PATH'" >> $GITHUB_ENV
+          echo "$(brew --prefix)/opt/ccache/libexec" >> $GITHUB_PATH
 
       - name: Cache sources
         uses: actions/cache@v3
