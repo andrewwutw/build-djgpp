@@ -10,7 +10,7 @@ jobs:
     outputs:
       good: ${{ steps.docheck.outputs.good }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - id: docheck
         name: Check release state
         run: |
@@ -25,7 +25,7 @@ jobs:
         ubuntu-version: [ bionic, focal, jammy, kinetic ]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install dependencies
         run: |
