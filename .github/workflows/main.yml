@@ -42,33 +42,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Clear apt package cache
-        if: contains(matrix.os, 'ubuntu')
-        run: |
-          sudo apt-get clean
-
       - name: Clear brew package cache
         if: contains(matrix.os, 'macos')
         run: |
           rm -rf $(brew --cache)
-
-      - name: Cache apt package lists
-        uses: jwt27/cache@dist
-        if: contains(matrix.os, 'ubuntu')
-        with:
-          path: /var/lib/apt/lists
-          key: testbuild-apt-lists-${{ github.sha }}
-          restore-keys: |
-            testbuild-apt-lists-
-
-      - name: Cache apt package cache
-        uses: jwt27/cache@dist
-        if: contains(matrix.os, 'ubuntu')
-        with:
-          path: /var/cache/apt
-          key: testbuild-apt-cache-${{ github.sha }}
-          restore-keys: |
-            testbuild-apt-cache-
 
       - name: Cache brew package cache
         uses: jwt27/cache@dist
@@ -95,7 +72,7 @@ jobs:
           brew install bash bison flex curl make texinfo zlib bzip2 gzip xz unzip dos2unix libtool cmake help2man nasm s-lang
 
       - name: Cache sources
-        uses: jwt27/cache@dist
+        uses: actions/cache@v3
         with:
           path: download
           key: testbuild-sources-${{ matrix.os }}-${{ matrix.env.TARGET }}-${{ matrix.env.PACKAGES }}-${{ github.sha }}
@@ -109,7 +86,7 @@ jobs:
         run: ./script/select-script.sh --only-download
 
       - name: Cache build output
-        uses: jwt27/cache@dist
+        uses: actions/cache@v3
         if: matrix.build-type == 'rebuild'
         id: cache-build
         with:
