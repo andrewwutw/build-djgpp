@@ -1,4 +1,4 @@
-djgpp-toolchain (9) UNRELEASED; urgency=medium
+djgpp-toolchain (9) unstable; urgency=medium
 
   * Update go32 stub in binutils to match libc version.
 
