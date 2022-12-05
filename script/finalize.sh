@@ -92,7 +92,7 @@ if [ ! -z "$(get_version gcc)" ]; then
   prepend_specs link "-L${PREFIX}/${TARGET}/local/lib"
 
   echo "Installing specs file"
-  install_files ${BASE}/build/specs ${DST}/lib/gcc/${TARGET}/$(get_version gcc)/ || exit 1
+  install_files ${BASE}/build/specs ${DST}/lib/gcc/${TARGET}/$(${TARGET}-gcc -dumpversion)/ || exit 1
 fi
 
 cat << STOP >> ${BASE}/build/${TARGET}-setenv
