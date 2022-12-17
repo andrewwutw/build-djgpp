@@ -5,7 +5,7 @@
 * 2020-02-13: default target for djgpp has changed to `i386-pc-msdosdjgpp`.  
 If you require compatibility with distributions that use `i586`, you can either:
     - run `sudo i386-pc-msdosdjgpp-link-i586` after installing, or
-    - build with `./build-djgpp.sh --prefix=i586-pc-msdosdjgpp`.
+    - build with `./build-djgpp.sh --target=i586-pc-msdosdjgpp`.
 * 2020-02-07: setenv script is now installed to `$PREFIX/bin/$TARGET-setenv`.
 * 2019-06-06: `master` is now the default branch again.
 
