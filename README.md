@@ -54,6 +54,7 @@ Before running this script, you need to install these programs first:
 * python3 headers (for gdb >= 9.0)
 * m4
 * dos2unix
+* nasm
 
 Depending on your system, installation procedure maybe different.
 
@@ -61,19 +62,19 @@ On Debian/Ubuntu, you can install these programs by :
 
 ```console
 $ sudo apt-get update
-$ sudo apt-get install bison flex curl gcc g++ make texinfo zlib1g-dev tar bzip2 gzip xz-utils unzip python{2,3}-dev m4 dos2unix
+$ sudo apt-get install bison flex curl gcc g++ make texinfo zlib1g-dev tar bzip2 gzip xz-utils unzip python{2,3}-dev m4 dos2unix nasm
 ```
 
 Fedora :
 
 ```console
-$ sudo yum install gcc-c++ bison flex texinfo patch zlib-devel tar bzip2 gzip xz unzip python-devel m4 dos2unix
+$ sudo yum install gcc-c++ bison flex texinfo patch zlib-devel tar bzip2 gzip xz unzip python-devel m4 dos2unix nasm
 ```
 
 mingw-w64 (msys2) :
 
 ```console
-$ pacman -Syuu base-devel mingw-w64-x86_64-{toolchain,curl,zlib,python{2,3}} compression m4 dos2unix
+$ pacman -Syuu base-devel mingw-w64-x86_64-{toolchain,curl,zlib,python{2,3}} compression m4 dos2unix nasm
 ```
 
 ### Configuration
