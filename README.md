@@ -68,7 +68,7 @@ $ sudo apt-get install bison flex curl gcc g++ make texinfo zlib1g-dev tar bzip2
 Fedora :
 
 ```console
-$ sudo yum install gcc-c++ bison flex texinfo patch zlib-devel tar bzip2 gzip xz unzip python-devel m4 dos2unix nasm
+$ sudo yum install gcc-c++ which bison flex texinfo patch zlib-devel tar bzip2 gzip xz unzip python-devel m4 dos2unix nasm
 ```
 
 mingw-w64 (msys2) :
