@@ -155,13 +155,13 @@ for A in "$@"; do
   esac
 done
 
-if [ -z ${ANY_PACKAGES_SPECIFIED} ]; then
+if [ -z "${ANY_PACKAGES_SPECIFIED}" ]; then
   echo "Usage: $0 [options...] [packages...]"
-  echo "Supported options:"
+  echo "Commonly used options:"
   echo "    --prefix=[...]"
   echo "    --target=[...]"
   echo "    --enable-languages=[...]"
-  echo "Supported packages:"
+  echo "Available packages:"
   for DIR in ${PACKAGE_SOURCES}; do
     ls $DIR
   done
