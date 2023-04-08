@@ -1,0 +1,2 @@
+NEWLIB_VERSION=4.2.0.20211231
+NEWLIB_ARCHIVE="http://sourceware.org/pub/newlib/newlib-${NEWLIB_VERSION}.tar.gz"
