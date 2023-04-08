@@ -118,30 +118,20 @@ set_version()
   ${SUDO} sh -c "echo ${!var} > ${DST}/${TARGET}/etc/build-gcc/${name}-version"
 }
 
+unset ANY_PACKAGES_SPECIFIED
+
 add_pkg()
 {
   for DIR in ${PACKAGE_SOURCES}; do
     if [ -e $DIR/$1 ]; then
       source $DIR/$1
+      ANY_PACKAGES_SPECIFIED=y
       return
     fi
   done
   echo "Unrecognized option or invalid package: $1"
   exit 1
 }
-
-if [ -z $1 ]; then
-  echo "Usage: $0 [options...] [packages...]"
-  echo "Supported options:"
-  echo "    --prefix=[...]"
-  echo "    --target=[...]"
-  echo "    --enable-languages=[...]"
-  echo "Supported packages:"
-  for DIR in ${PACKAGE_SOURCES}; do
-    ls $DIR
-  done
-  exit 1
-fi
 
 prepend      GCC_CONFIGURE_OPTIONS "$GLOBAL_CONFIGURE_OPTIONS"
 prepend      GDB_CONFIGURE_OPTIONS "$GLOBAL_CONFIGURE_OPTIONS"
@@ -164,6 +154,19 @@ for A in "$@"; do
   *) add_pkg $A ;;
   esac
 done
+
+if [ -z ${ANY_PACKAGES_SPECIFIED} ]; then
+  echo "Usage: $0 [options...] [packages...]"
+  echo "Supported options:"
+  echo "    --prefix=[...]"
+  echo "    --target=[...]"
+  echo "    --enable-languages=[...]"
+  echo "Supported packages:"
+  for DIR in ${PACKAGE_SOURCES}; do
+    ls $DIR
+  done
+  exit 1
+fi
 
 # install directory
 PREFIX=${PREFIX-/usr/local/cross}
