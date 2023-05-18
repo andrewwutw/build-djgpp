@@ -1,11 +1,11 @@
-djgpp-toolchain (10) UNRELEASED; urgency=medium
+djgpp-toolchain (10) unstable; urgency=medium
 
   * dxe3gen version 1.0.5.  This now uses gcc to invoke the assembler and
     linker.  As a result, it is no longer necessary to set any environment
     variables before use.
   * binutils version 2.40.
 
- -- jwt27 <jwjagersma@gmail.com>  Tue, 04 Apr 2023 14:14:40 +0200
+ -- jwt27 <jwjagersma@gmail.com>  Thu, 18 May 2023 14:32:45 +0200
 
 djgpp-toolchain (9) unstable; urgency=medium
 
