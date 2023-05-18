@@ -1,0 +1,3 @@
+source ia16/binutils
+source ia16/gcc
+source ia16/newlib

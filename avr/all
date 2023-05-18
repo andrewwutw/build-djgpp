@@ -1,6 +1,4 @@
-source avr/avr-libc
-source binutils/binutils
-source common/gcc
+source avr/minimal
 source common/gdb
 source avr/avrdude
 source avr/avarice
