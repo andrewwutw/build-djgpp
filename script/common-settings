@@ -14,3 +14,22 @@ FTPMIRROR_GNU_DOWNLOAD_BASE="https://www.mirrorservice.org/sites/ftp.gnu.org/gnu
 
 #FTP_GNU_DOWNLOAD_BASE="http://ftp.gnu.org/gnu"
 FTP_GNU_DOWNLOAD_BASE="https://www.mirrorservice.org/sites/ftp.gnu.org/gnu"
+
+CC=gcc
+CXX=g++
+
+# use gmake under FreeBSD
+if [ `uname` = "FreeBSD" ]; then
+  MAKE=gmake
+  CC=clang
+  CXX=clang++
+else
+  MAKE=make
+fi
+
+export CC CXX CFLAGS MAKE
+
+# MinGW doesn't have curl, so we use wget.
+if uname|grep "^MINGW32" > /dev/null; then
+  USE_WGET=1
+fi

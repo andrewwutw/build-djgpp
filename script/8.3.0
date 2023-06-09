@@ -18,20 +18,7 @@ MPC_VERSION=1.1.0
 AUTOCONF_VERSION=2.64
 AUTOMAKE_VERSION=1.11.6
 
-CC=gcc
-CXX=g++
-
-# use gmake under FreeBSD
-if [ `uname` = "FreeBSD" ]; then
-  MAKE=gmake
-  CC=clang
-  CXX=clang++
-else
-  MAKE=make
-fi
 #CFLAGS="-O2 -g $CFLAGS -std=gnu11"
-
-export CC CXX CFLAGS MAKE
 
 # tarball location
 BINUTILS_ARCHIVE="${DJGPP_DOWNLOAD_BASE}/djgpp/deleted/v2gnu/bnu${BINUTILS_VERSION}s.zip"
@@ -48,11 +35,6 @@ AUTOMAKE_ARCHIVE="${FTP_GNU_DOWNLOAD_BASE}/automake/automake-${AUTOMAKE_VERSION}
 
 # check required programs
 REQ_PROG_LIST="${CXX} ${CC} unzip bison flex ${MAKE} makeinfo patch"
-
-# MinGW doesn't have curl, so we use wget.
-if uname|grep "^MINGW32" > /dev/null; then
-  USE_WGET=1
-fi
 
 # use curl or wget?
 if [ ! -z $USE_WGET ]; then
