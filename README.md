@@ -93,11 +93,12 @@ Currently supported gcc-version :
 * 10.2.0
 * 10.3.0
 * 12.1.0
+* 12.2.0
 
-For example, to build DJGPP for gcc 12.1.0 :
+For example, to build DJGPP for gcc 12.2.0 :
 
 ```
-./build-djgpp.sh 12.1.0
+./build-djgpp.sh 12.2.0
 ```
 
 It will download all necessary files, build DJGPP compiler and binutils, and install it.

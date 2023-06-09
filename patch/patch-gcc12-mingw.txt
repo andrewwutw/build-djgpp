@@ -1,6 +1,6 @@
-diff -Naur gnu-orig/gcc-12.10/gcc/cp/fstat-mingw-fix.h gnu/gcc-12.10/gcc/cp/fstat-mingw-fix.h
---- gnu-orig/gcc-12.10/gcc/cp/fstat-mingw-fix.h	1970-01-01 08:00:00.000000000 +0800
-+++ gnu/gcc-12.10/gcc/cp/fstat-mingw-fix.h	2022-05-30 18:06:48.000000000 +0800
+diff -Naur gcc-orig/cp/fstat-mingw-fix.h gcc/cp/fstat-mingw-fix.h
+--- gcc-orig/cp/fstat-mingw-fix.h	1970-01-01 08:00:00.000000000 +0800
++++ gcc/cp/fstat-mingw-fix.h	2023-06-10 18:01:52.000000000 +0800
 @@ -0,0 +1,23 @@
 +#ifndef __H_FSTAT_MINGW_FIX
 +#define __H_FSTAT_MINGW_FIX
@@ -25,9 +25,9 @@ diff -Naur gnu-orig/gcc-12.10/gcc/cp/fstat-mingw-fix.h gnu/gcc-12.10/gcc/cp/fsta
 +#endif
 +
 +#endif  /* __H_FSTAT_MINGW_FIX */
-diff -Naur gnu-orig/gcc-12.10/gcc/cp/module.cc gnu/gcc-12.10/gcc/cp/module.cc
---- gnu-orig/gcc-12.10/gcc/cp/module.cc	2022-05-30 18:06:44.000000000 +0800
-+++ gnu/gcc-12.10/gcc/cp/module.cc	2022-05-30 18:06:48.000000000 +0800
+diff -Naur gcc-orig/cp/module.cc gcc/cp/module.cc
+--- gcc-orig/cp/module.cc	2023-06-10 18:04:43.000000000 +0800
++++ gcc/cp/module.cc	2023-06-10 18:01:52.000000000 +0800
 @@ -229,6 +229,8 @@
  #define CODY_NETWORKING 0
  #include "mapper-client.h"
