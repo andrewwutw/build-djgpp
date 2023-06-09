@@ -32,4 +32,8 @@ export CC CXX CFLAGS MAKE
 # MinGW doesn't have curl, so we use wget.
 if uname|grep "^MINGW32" > /dev/null; then
   USE_WGET=1
+  # MinGW wget doesn't support https, replace download URLs with http.
+  DJGPP_DOWNLOAD_BASE=${DJGPP_DOWNLOAD_BASE/#https:/http:}
+  FTPMIRROR_GNU_DOWNLOAD_BASE=${FTPMIRROR_GNU_DOWNLOAD_BASE/#https:/http:}
+  FTP_GNU_DOWNLOAD_BASE=${FTP_GNU_DOWNLOAD_BASE/#https:/http:}
 fi
