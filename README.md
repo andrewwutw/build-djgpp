@@ -6,6 +6,11 @@ build-djgpp : Build DJGPP cross compiler and binutils on Windows (MinGW/Cygwin),
 
 If you don't want build DJGPP by yourself, you can download prebuilt DJGPP binary files for MinGW, OSX and Linux from GitHub Release page.
 
+Nix users can access prebuilt binaries using:
+```
+nix-shell -p djgpp # i586 by default, djgpp_i686 also available
+```
+
 ### Requirement
 
 Before running this script, you need to install these programs first :
