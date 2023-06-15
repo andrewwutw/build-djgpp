@@ -6,6 +6,25 @@ build-djgpp : Build DJGPP cross compiler and binutils on Windows (MinGW/Cygwin),
 
 If you don't want build DJGPP by yourself, you can download prebuilt DJGPP binary files for MinGW, OSX and Linux from GitHub Release page.
 
+djgpp is also available on Nixpkgs Unstable. You can run a development shell by executing the following Nix command:
+
+`$ nix develop nixpkgs#djgpp`
+
+Alternatively, you can run 
+
+`$ nix develop nixpkgs#djgpp_i686`
+
+for the i686 version.
+
+For the oldschool tools, the commands are, respectively,
+
+
+`$ nix-shell -p djgpp`
+
+
+`$ nix-shell -p djgpp_i686`
+
+
 ### Requirement
 
 Before running this script, you need to install these programs first :
