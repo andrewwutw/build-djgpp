@@ -122,12 +122,21 @@ STOP
   ;;
 esac
 
+cat << STOP > ${BASE}/build/${TARGET}-pkg-config
+#!/usr/bin/env bash
+exec ${TARGET}-setenv pkg-config "\$@"
+STOP
+
 echo "Installing ${TARGET}-setenv"
 chmod +x ${BASE}/build/${TARGET}-setenv
 install_files ${BASE}/build/${TARGET}-setenv ${DST}/bin/
 case `uname` in
 MINGW*|MSYS*) install_files ${BASE}/build/setenv-${TARGET}.cmd ${DST}/bin/ 2> /dev/null ;;
 esac
+
+echo "Installing ${TARGET}-pkg-config"
+chmod +x ${BASE}/build/${TARGET}-pkg-config
+install_files ${BASE}/build/${TARGET}-pkg-config ${DST}/bin/
 
 if [ ! -z "$(get_version gcc)" ]; then
   for x in $(echo $ENABLE_LANGUAGES | tr "," " ")

@@ -14,3 +14,4 @@ usr/bin/i*86-pc-msdosdjgpp-dxegen
 usr/bin/i*86-pc-msdosdjgpp-stubedit
 usr/bin/i*86-pc-msdosdjgpp-dxe3res
 usr/bin/i*86-pc-msdosdjgpp-setenv
+usr/bin/i*86-pc-msdosdjgpp-pkg-config
