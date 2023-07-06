@@ -1,8 +1,10 @@
 djgpp-toolchain (11) UNRELEASED; urgency=medium
 
   * Add wrapper script for pkg-config: i386-pc-msdosdjgpp-pkg-config
+  * Fix libc bug in ioctl()/fcntl() that prevented arguments from being passed
+    through to fsext handlers (socket library).
 
- -- jwt27 <jwjagersma@gmail.com>  Thu, 06 Jul 2023 18:50:44 +0200
+ -- jwt27 <jwjagersma@gmail.com>  Thu, 06 Jul 2023 23:43:08 +0200
 
 djgpp-toolchain (10) unstable; urgency=medium
 
