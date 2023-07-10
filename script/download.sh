@@ -125,5 +125,18 @@ echo "Creating install directory: ${DST}"
 
 export PATH="${DST}/bin:${PREFIX}/bin:$PATH"
 
+remove_if_exists()
+{
+  if [ -e $1 ]; then
+    ${SUDO} rm -f $1 || exit 1
+  fi
+}
+
+if which ${TARGET}-gcc 2>&1 > /dev/null; then
+  echo "Removing previously-installed specs file"
+  remove_if_exists "${DST}/lib/gcc/${TARGET}/$(${TARGET}-gcc -dumpversion)/specs"
+  remove_if_exists "${PREFIX}/lib/gcc/${TARGET}/$(${TARGET}-gcc -dumpversion)/specs"
+fi
+
 rm -rf ${BASE}/tests
 mkdir -p ${BASE}/tests
