@@ -53,7 +53,7 @@ done
 
 # check GNU sed is installed or not.
 # It is for OSX, which doesn't ship with GNU sed.
-if ! sed --version 2>/dev/null |grep "GNU sed" > /dev/null ;then
+if ! sed --version 2>/dev/null |grep "GNU sed" > /dev/null || sed --version 2>/dev/null |grep "This is not GNU sed" > /dev/null ;then
   echo GNU sed is not installed, need to download.
   SED_VERSION=4.2.2
   SED_ARCHIVE="${FTP_GNU_DOWNLOAD_BASE}/sed/sed-${SED_VERSION}.tar.bz2"
