@@ -111,7 +111,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   cd src
   unset COMSPEC
   sed -i "50cCROSS_PREFIX = ${TARGET}-" makefile.def
-  sed -i "61cGCC = \$(CC) -g -O2 ${CFLAGS}" makefile.def
+  sed -i "61cGCC = ${CC} -g -O2 ${CFLAGS}" makefile.def
   if [ ! -z ${GCC_VERSION} ] || [ ! "`cat configure-options 2> /dev/null`" == "${TARGET}:${DST}:${CFLAGS_FOR_TARGET}" ]; then
     ${MAKE_J} clean
     rm -f ../lib/*.{a,o}
@@ -339,7 +339,7 @@ if [ ! -z ${DJGPP_VERSION} ]; then
   ${MAKE_J} -C libemu || exit 1
   ${MAKE_J} -C libm || exit 1
   ${MAKE_J} -C docs || exit 1
-  ${MAKE_J} -C ../zoneinfo/src 2> /dev/null
+  ${MAKE_J} -C ../zoneinfo/src
   ${MAKE_J} -f makempty || exit 1
   LDFLAGS="$TEMP_LDFLAGS"
   CFLAGS="$TEMP_CFLAGS"
