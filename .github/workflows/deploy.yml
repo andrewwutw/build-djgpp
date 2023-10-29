@@ -14,7 +14,7 @@ jobs:
       - id: docheck
         name: Check release state
         run: |
-          echo "::set-output name=good::$([ -z "$(head -n 1 debian/changelog | grep 'UNRELEASED')" ] && echo 'true' || echo 'false')"
+          echo "good=$([ -z "$(head -n 1 debian/changelog | grep 'UNRELEASED')" ] && echo 'true' || echo 'false')" >> "$GITHUB_OUTPUT"
 
   build:
     runs-on: ubuntu-latest
