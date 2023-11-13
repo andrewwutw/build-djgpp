@@ -28,9 +28,9 @@ if [ ! -z ${BUILD_DEB} ] && [ ! -z ${GCC_VERSION} ]; then
   MPC_VERSION=${MPC_VERSION:-1.1.0}
   ISL_VERSION=${ISL_VERSION:-0.18}
 
-  GMP_ARCHIVE="http://ftp.gnu.org/gnu/gmp/gmp-${GMP_VERSION}.tar.xz"
-  MPFR_ARCHIVE="http://ftp.gnu.org/gnu/mpfr/mpfr-${MPFR_VERSION}.tar.xz"
-  MPC_ARCHIVE="http://ftp.gnu.org/gnu/mpc/mpc-${MPC_VERSION}.tar.gz"
+  GMP_ARCHIVE="http://ftpmirror.gnu.org/gnu/gmp/gmp-${GMP_VERSION}.tar.xz"
+  MPFR_ARCHIVE="http://ftpmirror.gnu.org/gnu/mpfr/mpfr-${MPFR_VERSION}.tar.xz"
+  MPC_ARCHIVE="http://ftpmirror.gnu.org/gnu/mpc/mpc-${MPC_VERSION}.tar.gz"
   ISL_ARCHIVE="http://gcc.gnu.org/pub/gcc/infrastructure/isl-${ISL_VERSION}.tar.bz2"
 fi
 
