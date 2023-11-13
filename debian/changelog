@@ -1,3 +1,9 @@
+djgpp-toolchain (12) UNRELEASED; urgency=medium
+
+  * Set 'Architecture: all' for library packages.
+
+ -- jwt27 <jwjagersma@gmail.com>  Mon, 13 Nov 2023 17:22:09 +0100
+
 djgpp-toolchain (11) unstable; urgency=medium
 
   * Add wrapper script for pkg-config: i386-pc-msdosdjgpp-pkg-config

@@ -26,7 +26,7 @@ Standards-Version: 4.1.2
 Homepage: https://github.com/jwt27/build-gcc
 
 Package: djgpp-dev
-Architecture: any
+Architecture: all
 Depends: ${misc:Depends}
 Recommends: binutils-djgpp, gcc-djgpp, djgpp-utils
 Suggests: djgpp-dev-doc
@@ -111,7 +111,7 @@ Suggests: gdb-djgpp
 Description: GNU Debugger -- documentation
 
 Package: libwatt-djgpp-dev
-Architecture: any
+Architecture: all
 Depends: ${misc:Depends}
 Recommends: djgpp-dev, gcc-djgpp
 Description: Watt-32 TCP socket library for DJGPP
