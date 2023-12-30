@@ -48,6 +48,7 @@ fi
 
 export CFLAGS_FOR_TARGET=${CFLAGS_FOR_TARGET-"-O2 -g -ffunction-sections -fdata-sections"}
 export CXXFLAGS_FOR_TARGET=${CXXFLAGS_FOR_TARGET-"-O2 -g -ffunction-sections -fdata-sections"}
+export CFLAGS CXXFLAGS LDFLAGS
 
 # check if cp understands --preserve (for MacOS)
 if cp --preserve=mode,timestamps script/hello.c ./hello.c > /dev/null 2>&1; then
