@@ -239,7 +239,9 @@ if [ ! -z ${GCC_VERSION} ]; then
   cd djcross || exit 1
 
   TEMP_CFLAGS="$CFLAGS"
+  TEMP_CXXFLAGS="$CXXFLAGS"
   export CFLAGS="$CFLAGS $GCC_EXTRA_CFLAGS"
+  export CXXFLAGS="$CXXFLAGS $GCC_EXTRA_CXXFLAGS"
 
   GCC_CONFIGURE_OPTIONS+=" --target=${TARGET} --prefix=${PREFIX} ${HOST_FLAG} ${BUILD_FLAG}
                            --enable-languages=${ENABLE_LANGUAGES}"
@@ -260,7 +262,8 @@ if [ ! -z ${GCC_VERSION} ]; then
   echo "Installing gcc (stage 1)"
   ${SUDO} ${MAKE_J} install-gcc || exit 1
 
-  export CFLAGS="$TEMP_CFLAGS"
+  CFLAGS="$TEMP_CFLAGS"
+  CXXFLAGS="$TEMP_CXXFLAGS"
 fi
 
 if [ ! -z ${DJGPP_VERSION} ]; then
@@ -313,7 +316,10 @@ if [ ! -z ${GCC_VERSION} ]; then
   cd $BUILDDIR/djcross || exit 1
 
   TEMP_CFLAGS="$CFLAGS"
+  TEMP_CXXFLAGS="$CXXFLAGS"
   export CFLAGS="$CFLAGS $GCC_EXTRA_CFLAGS"
+  export CXXFLAGS="$CXXFLAGS $GCC_EXTRA_CXXFLAGS"
+
   export STAGE_CC_WRAPPER="${BASE}/script/destdir-hack.sh ${DST}/${TARGET}"
   ${MAKE_J} || exit 1
   [ ! -z $MAKE_CHECK_GCC ] && ${MAKE_J} -s check-gcc | tee ${BASE}/tests/gcc.log
@@ -321,7 +327,9 @@ if [ ! -z ${GCC_VERSION} ]; then
   ${SUDO} ${MAKE_J} install-strip || \
   ${SUDO} ${MAKE_J} install-strip || exit 1
   ${SUDO} ${MAKE_J} -C mpfr install DESTDIR=${BASE}/build/tmpinst
+
   CFLAGS="$TEMP_CFLAGS"
+  CXXFLAGS="$TEMP_CXXFLAGS"
 
   set_version gcc
 fi

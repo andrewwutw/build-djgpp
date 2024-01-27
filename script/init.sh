@@ -63,8 +63,8 @@ MINGW*)
   # Make sure MSYS2 Perl is used on mingw-w64 (see issue #27)
   export PERL=/usr/bin/perl
   # Required to build gcc on recent mingw-w64 (see issue #41)
-  CFLAGS+=' -DWIN32_LEAN_AND_MEAN'
-  CXXFLAGS+=' -DWIN32_LEAN_AND_MEAN'
+  GCC_EXTRA_CFLAGS+=' -DWIN32_LEAN_AND_MEAN'
+  GCC_EXTRA_CXXFLAGS+=' -DWIN32_LEAN_AND_MEAN'
   ;;
 esac
 
