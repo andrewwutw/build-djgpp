@@ -158,3 +158,15 @@ diff -ur djlsr205-orig/src/stub/exe2coff.c djlsr205/src/stub/exe2coff.c
  
  static void
  exe2aout(char *fname)
+diff -u djlsr205-orig/src/djasm/djasm.y djlsr205/src/djasm/djasm.y
+--- djlsr205-orig/src/djasm/djasm.y	2026-05-28 21:57:14.871321442 +0200
++++ djlsr205/src/djasm/djasm.y	2026-05-28 21:58:03.701196071 +0200
+@@ -179,7 +179,7 @@
+ void modrm(int mod, int reg, int rm);
+ void reg(int reg);
+ void addr32(int sib);
+-void sortsyms();
++void sortsyms(int (*sortf)(void const *,void const *));
+ 
+ int istemp(char *symname, char which);
+ int islocal(char *symname);

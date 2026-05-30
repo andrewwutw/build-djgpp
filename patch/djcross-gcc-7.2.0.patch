@@ -1,0 +1,11 @@
+--- gmp-6.1.2/configure.orig	2026-05-28 21:31:41.000403593 +0200
++++ gmp-6.1.2/configure	2026-05-28 21:36:28.248055255 +0200
+@@ -6458,7 +6458,7 @@
+ 
+ #if defined (__GNUC__) && ! defined (__cplusplus)
+ typedef unsigned long long t1;typedef t1*t2;
+-void g(){}
++void g(int i, t1 *src, t1 n, t1 *got, t1 *want, int n2){}
+ void h(){}
+ static __inline__ t1 e(t2 rp,t2 up,int n,t1 v0)
+ {t1 c,x,r;int i;if(v0){c=1;for(i=1;i<n;i++){x=up[i];r=x+1;rp[i]=r;}}return c;}

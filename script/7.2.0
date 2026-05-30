@@ -245,6 +245,10 @@ cd -
 # copy stubify programs
 cp $DJGPP_PREFIX/i586-pc-msdosdjgpp/bin/stubify $BUILDDIR/tmpinst/bin
 
+echo "Patching gmp"
+cd $BUILDDIR
+patch -p0 < ../../patch/djcross-gcc-7.2.0.patch
+
 echo "Building gmp"
 cd $BUILDDIR/gmp-*/
 # On some systems, building gmp will fail if CFLAGS is set.
